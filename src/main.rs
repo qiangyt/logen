@@ -1,17 +1,23 @@
-use std::collections::BTreeMap;
+use std::{io, cmp::Ordering};
+use rand::Rng;
 
-fn main() -> Result<(), serde_yaml::Error> {
-    // You have some type.
-    let mut map = BTreeMap::new();
-    map.insert("x".to_string(), 1.0);
-    map.insert("y".to_string(), 2.0);
+fn main() {
+    println!("Guess the number!");
+    let secret_number = rand::thread_rng().gen_range(1..101);
+    println!("The secret number is {}", secret_number);
+    
+    println!("Please input your guess.");
+    let mut guess = String::new();
+    io::stdin().read_line(&mut guess)
+        .expect("Failed to read line");
 
-    // Serialize it to a YAML string.
-    let s = serde_yaml::to_string(&map)?;
-    print!("{}\n", s);
+    let guess: u32 = guess.trim().parse().expect("Please type a number!");
 
-    // Deserialize it back to a Rust type.
-    let deserialized_map: BTreeMap<String, f64> = serde_yaml::from_str(&s)?;
-    //debug!("{}\n", deserialized_map);
-    Ok(())
+    println!("You guessed: {}", guess);
+
+    match guess.cmp(&secret_number) {
+        Ordering::Less => println!("Too small!"),
+        Ordering::Greater => println!("Too big!"),
+        Ordering::Equal => println!("You win!")
+    }
 }
