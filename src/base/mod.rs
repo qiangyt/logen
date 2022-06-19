@@ -1,6 +1,7 @@
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use serde::{Deserialize, Serialize};
 
-
+#[derive(Serialize, Deserialize)]
 pub enum LevelDef {
     Trace,
     Debug,
@@ -9,7 +10,7 @@ pub enum LevelDef {
     Error,
     Fatal,
 }
-
+#[derive(Serialize, Deserialize)]
 pub struct TimestampDef {
     begin: SystemTime,
     end: SystemTime,
@@ -23,11 +24,15 @@ impl TimestampDef {
     }
 }
 
+
+#[derive(Serialize, Deserialize)]
 pub enum FormatDef {
     Flat,
     Json,
 }
 
+
+#[derive(Serialize, Deserialize)]
 pub enum StyleDef {
     Bunyan,
 }
