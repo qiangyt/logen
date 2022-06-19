@@ -1,0 +1,20 @@
+- fcsonline/drill — A HTTP load testing application inspired by Ansible syntax
+- Fractalide — Simple Rust Microservices
+- habitat — A tool created by Chef to build, deploy, and manage applications
+- Herd — an experimental HTTP load testing application
+- !!! jedisct1/flowgger — A fast, simple and lightweight data collector
+- Skytable — A multi-model NoSQL database
+- !!! Qdrant - An open source vector similarity search engine with extended filtering support
+- !!! Quickwit-oss/quickwit - Cloud-native and highly cost-efficient search engine for log management.
+- !!! quickwit-oss/tantivy - Tantivy is a full-text search engine library inspired by Apache Lucene and written in Rust 
+- mask — A CLI task runner defined by a simple markdown file
+- !!! ddh — Fast duplicate file finder
+- !!! brocode/fblog — Small command-line JSON Log viewer
+- tokio-rs/tokio — A network application framework for rapid development and highly scalable production deployments of clients and servers.
+- getzola/zola - A fast static site generator in a single binary with everything built-in.
+- !!! pyrossh/rust-embed - Rust Macro which loads files into the rust binary at compile time during release and loads the file from the fs during dev. 
+- !!! actix/actix-web - Actix Web is a powerful, pragmatic, and extremely fast web framework for Rust. 
+- !!! BurntSushi/fst - Represent large sets and maps compactly with finite state transducers.
+- !!! andylokandy/simsearch-rs - A simple and lightweight fuzzy search engine that works in memory, searching for similar strings (a pun here). 
+- !!! Keats/tera - A template engine for Rust based on Jinja2/Django 
+- !!! djc/askama - Type-safe, compiled Jinja-like templates for Rust 
