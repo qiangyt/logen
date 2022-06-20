@@ -2,6 +2,7 @@ use std::time::{Duration, SystemTime};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum LevelDef {
     Trace,
     Debug,
@@ -11,6 +12,7 @@ pub enum LevelDef {
     Fatal,
 }
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct TimestampDef {
     begin: SystemTime,
     end: SystemTime,
@@ -26,6 +28,7 @@ impl TimestampDef {
 
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum FormatDef {
     Flat,
     Json,
@@ -33,6 +36,7 @@ pub enum FormatDef {
 
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum StyleDef {
     Bunyan,
 }

@@ -8,12 +8,10 @@ pub use message::{Message, MessageDef};
 
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct LoggerDef {
     name: String,
     template: String,
-    file: String,
-    line: usize,
-    method: String,
     messages: Vec<MessageDef>,
 }
 
@@ -51,9 +49,6 @@ impl<'a> Logger<'a> {
             self.next_message().next(handlebars, message_data)?
         };
 
-        data.insert("file".to_string(), to_json(def.file.as_str()));
-        data.insert("line".to_string(), to_json(def.line));
-        data.insert("method".to_string(), to_json(def.method.as_str()));
         data.insert("name".to_string(), to_json(def.name.as_str()));
         data.insert("message".to_string(), to_json(message_text));
 

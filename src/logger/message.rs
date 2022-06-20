@@ -1,11 +1,15 @@
 
 use serde_json::value::{Map, Value};
 use serde::{Deserialize, Serialize};
-use handlebars::{Handlebars, RenderError};
+use handlebars::{Handlebars, RenderError, to_json};
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct MessageDef {
     template: String,
+    file: String,
+    line: usize,
+    method: String,
 }
 
 pub struct Message<'a> {
@@ -21,8 +25,14 @@ impl<'a> Message<'a> {
         Message {def, id}
     }
 
-    #[allow(unused_mut)]
+    //#[allow(unused_mut)]
     pub fn next(&self, handlebars: &Handlebars, mut data: Map<String, Value>) -> Result<String, RenderError> {
+        let def = &self.def;
+
+        data.insert("file".to_string(), to_json(def.file.as_str()));
+        data.insert("line".to_string(), to_json(def.line));
+        data.insert("method".to_string(), to_json(def.method.as_str()));
+
         handlebars.render(&self.id, &data)
     }
 }
