@@ -8,19 +8,19 @@ loggers:
   messages:
   - template: '{{file}}/{{line}} {{method}} blah'
     file: req_handler.c
-    line: 62
+    line: 11
     method: main
 - name: resp
   template: '{{name}} {{message}}'
   messages:
   - template: '{{file}}/{{line}} {{method}} blah'
-    file: resp_handler.c
-    line: 62
+    file: req_handler.c
+    line: 18
     method: main
-- name: req
+- name: session
   template: '{{name}} {{message}}'
   messages:
   - template: '{{file}}/{{line}} {{method}} blah'
-    file: req_handler.c
-    line: 62
+    file: session_handler.c
+    line: 25
     method: main

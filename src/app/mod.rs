@@ -1,4 +1,5 @@
 use std::time::{Duration, SystemTime};
+use rand::Rng;
 use serde::{Serialize, Deserialize};
 use serde_json::value::{Map};
 use handlebars::{Handlebars, RenderError, to_json};
@@ -61,7 +62,8 @@ impl<'a> App<'a> {
     }
 
     fn next_logger(&self) -> &Logger {
-        &self.loggers[0]
+        let i = rand::thread_rng().gen_range(0..self.loggers.len());
+        &self.loggers[i]
     }
 
     pub fn generate(&self, handlebars: &Handlebars) {
