@@ -1,4 +1,4 @@
-use handlebars::{Handlebars, RenderError, to_json};
+use handlebars::{Handlebars, to_json};
 use serde::{Serialize, Deserialize};
 use serde_json::value::{Map, Value};
 use rand::Rng;
@@ -11,48 +11,32 @@ pub use message::{Message, MessageDef};
 #[serde(rename_all = "snake_case")]
 pub struct LoggerDef {
     name: String,
-    template: String,
     messages: Vec<MessageDef>,
 }
 
 pub struct Logger<'a> {
     def: &'a LoggerDef,
-    id: String,
     messages: Vec<Message<'a>>,
 }
 
 impl<'a> Logger<'a> {
-    pub fn new(def: &'a LoggerDef, id: String, handlebars: &mut Handlebars) -> Logger<'a> {
-        handlebars.register_template_string(&id, &def.template)
-            .expect(format!("failed to register logger handlebars template {}: {}", id, &def.template).as_str());
-
+    pub fn new(def: &'a LoggerDef, id: String, handlbars: &mut Handlebars) -> Logger<'a> {
         Logger {
             messages: {
                 let mut v = Vec::new();
                 for (i, message_def) in def.messages.iter().enumerate() {
                     let msg_id = format!("{}/{}", id, i);
-                    v.push(Message::new(message_def, msg_id, handlebars));
+                    v.push(Message::new(message_def, msg_id, handlbars));
                 }
                 v
             },
-            def, id,
+            def,
         }
     }
 
-    pub fn next(&self, handlebars: &Handlebars, mut data: Map<String, Value>) -> Result<String, RenderError> {
-        let def = &self.def;
-
-        let message_text = {
-            let mut message_data = Map::new();
-            message_data.insert("logger".to_string(), to_json(def));
-
-            self.next_message().next(handlebars, message_data)?
-        };
-
-        data.insert("name".to_string(), to_json(def.name.as_str()));
-        data.insert("message".to_string(), to_json(message_text));
-
-        handlebars.render(&self.id, &data)
+    pub fn next(&self, data: &mut Map<String, Value>, handlbars: &Handlebars) {
+        data.insert("logger".to_string(), to_json(self.def));
+        self.next_message().next(data, handlbars);
     }
 
     fn next_message(&self) -> &Message {

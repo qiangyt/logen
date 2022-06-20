@@ -44,21 +44,13 @@ impl<'a> App<'a> {
         }
     }
 
-    pub fn next(&self, handlbars: &Handlebars) -> Result<String, RenderError> {
-        let def = &self.def;
-
-        let logger_text = {
-            let mut logger_data = Map::new();
-            logger_data.insert("app".to_string(), to_json(def));
-
-            self.next_logger().next(handlbars, logger_data)?
-        };
-
+    pub fn next(&self, handlebars: &Handlebars) -> Result<String, RenderError> {
         let mut data = Map::new();
-        data.insert("name".to_string(), to_json(def.name.as_str()));
-        data.insert("logger".to_string(), to_json(logger_text));
+        data.insert("app".to_string(), to_json(self.def));
 
-        handlbars.render(&def.name, &data)
+        self.next_logger().next(&mut data, handlebars);
+
+        handlebars.render(self.def.name.as_str(), &data)
     }
 
     fn next_logger(&self) -> &Logger {

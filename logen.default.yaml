@@ -1,26 +1,23 @@
 name: nginx
 format: flat
 style: bunyan
-template: '{{timestamp}} {{logger}}'
+template: '{{timestamp}} {{logger.name}} {{file}}/{{line}} {{method}} {{message}}'
 loggers:
 - name: req
-  template: '{{name}} {{message}}'
   messages:
-  - template: '{{file}}/{{line}} {{method}} blah'
+  - template: 'request'
     file: req_handler.c
     line: 11
     method: main
 - name: resp
-  template: '{{name}} {{message}}'
   messages:
-  - template: '{{file}}/{{line}} {{method}} blah'
+  - template: 'response'
     file: req_handler.c
     line: 18
     method: main
 - name: session
-  template: '{{name}} {{message}}'
   messages:
-  - template: '{{file}}/{{line}} {{method}} blah'
+  - template: 'session'
     file: session_handler.c
     line: 25
     method: main
