@@ -7,24 +7,21 @@ apps:
   - name: req
     template: '{{name}} {{message}}'
     messages:
-    - name:
-      template: '{{file}}/{{line}} {{method}} blah'
+    - template: '{{file}}/{{line}} {{method}} blah'
       file: req_handler.c
       line: 62
       method: main
   - name: resp
     template: '{{name}} {{message}}'
     messages:
-    - name:
-      template: '{{file}}/{{line}} {{method}} blah'
+    - template: '{{file}}/{{line}} {{method}} blah'
       file: resp_handler.c
       line: 62
       method: main
   - name: req
     template: '{{name}} {{message}}'
     messages:
-    - name:
-      template: '{{file}}/{{line}} {{method}} blah'
+    - template: '{{file}}/{{line}} {{method}} blah'
       file: req_handler.c
       line: 62
       method: main
