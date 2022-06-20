@@ -1,0 +1,30 @@
+apps:
+- name: nginx
+  format: flat
+  style: bunyan
+  template: '{{timestamp}} {{logger}}'
+  loggers:
+  - name: req
+    template: '{{name}} {{message}}'
+    messages:
+    - name:
+      template: '{{file}}/{{line}} {{method}} blah'
+      file: req_handler.c
+      line: 62
+      method: main
+  - name: resp
+    template: '{{name}} {{message}}'
+    messages:
+    - name:
+      template: '{{file}}/{{line}} {{method}} blah'
+      file: resp_handler.c
+      line: 62
+      method: main
+  - name: req
+    template: '{{name}} {{message}}'
+    messages:
+    - name:
+      template: '{{file}}/{{line}} {{method}} blah'
+      file: req_handler.c
+      line: 62
+      method: main

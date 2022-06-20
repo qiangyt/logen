@@ -5,7 +5,7 @@ use handlebars::{Handlebars, RenderError, to_json};
 use super::base::*;
 use super::logger::LoggerDef;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AppDef {
     name: String,
     template: String,

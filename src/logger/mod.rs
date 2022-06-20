@@ -7,17 +7,20 @@ mod message;
 pub use message::MessageDef;
 
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LoggerDef {
     id: String,
     name: String,
     template: String,
+    file: String,
+    line: usize,
+    method: String,
     messages: Vec<MessageDef>,
 }
 
 impl LoggerDef {
     pub fn new(id: String, name: String, handlebars: &mut Handlebars) -> LoggerDef {
-        let tpl = "{{name}} {{message}}";
+        let tpl = "<{{name}}>({{file}}/{{line}} {{method}}()) {{message}}";
         handlebars.register_template_string(&id, tpl)
             .expect(format!("failed to register logger handlebars template {}: {}", id, tpl).as_str());
 
@@ -26,7 +29,10 @@ impl LoggerDef {
             messages: vec![
                 MessageDef::new(format!("{}/{}", id, 0), handlebars)
             ],
-            id, name
+            id, name,
+            file: "app.cpp".to_string(),
+            line: 62,
+            method: "main".to_string(),
         }
     }
 
@@ -38,6 +44,9 @@ impl LoggerDef {
             self.next_message().next(handlebars, message_data)?
         };
 
+        data.insert("file".to_string(), to_json(self.file.as_str()));
+        data.insert("line".to_string(), to_json(self.line));
+        data.insert("method".to_string(), to_json(self.method.as_str()));
         data.insert("name".to_string(), to_json(self.name.as_str()));
         data.insert("message".to_string(), to_json(message_text));
 
