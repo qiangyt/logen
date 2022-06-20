@@ -1,6 +1,7 @@
 use handlebars::{Handlebars, RenderError, to_json};
 use serde::{Serialize, Deserialize};
 use serde_json::value::{Map, Value};
+use rand::Rng;
 
 mod message;
 pub use message::MessageDef;
@@ -44,6 +45,7 @@ impl LoggerDef {
     }
 
     fn next_message(&self) -> &MessageDef {
+        rand::thread_rng().gen_range(0..self.messages.len());
         &self.messages[0]
     }
 
