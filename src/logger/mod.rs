@@ -56,8 +56,8 @@ impl<'a> Logger<'a> {
     }
 
     fn next_message(&self) -> &Message {
-        rand::thread_rng().gen_range(0..self.messages.len());
-        &self.messages[0]
+        let i = rand::thread_rng().gen_range(0..self.messages.len());
+        &self.messages[i]
     }
 
 }
