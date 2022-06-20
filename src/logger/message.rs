@@ -12,14 +12,18 @@ pub struct MessageDef {
     format: FormatDef,
     file: String,
     line: usize,
-    method: String,
+    method: String
 }
 
 impl MessageDef {
-    pub fn new(id: String) -> MessageDef {
+    pub fn new(id: String, handlebars: &mut Handlebars) -> MessageDef {
+        let tpl = "{{file}}/{{line}} {{method}} blah ";
+        handlebars.register_template_string(&id, tpl)
+            .expect(format!("failed to register message handlebars template {}: {}", id, tpl).as_str());
+
         MessageDef {
-            id, 
-            template: "{{file}}/{{line}} {{method}} blah ".to_string(),
+            id,
+            template: tpl.to_string(),
             format: FormatDef::Flat,
             file: "app.cpp".to_string(),
             line: 62,
@@ -27,11 +31,11 @@ impl MessageDef {
         }
     }
 
-    pub fn next(&self, handlebars: &Handlebars, data: &mut Map<String, Value>) -> Result<String, RenderError> {
-        data.insert("file".to_string(), to_json(self.file));
+    pub fn next(&self, handlebars: &Handlebars, mut data: Map<String, Value>) -> Result<String, RenderError> {
+        data.insert("file".to_string(), to_json(self.file.as_str()));
         data.insert("line".to_string(), to_json(self.line));
-        data.insert("method".to_string(), to_json(self.method));
+        data.insert("method".to_string(), to_json(self.method.as_str()));
 
-        handlebars.render(&self.id, data)
+        handlebars.render(&self.id, &data)
     }
 }

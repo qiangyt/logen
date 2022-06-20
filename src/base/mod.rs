@@ -1,4 +1,4 @@
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, SystemTime};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
@@ -14,13 +14,13 @@ pub enum LevelDef {
 pub struct TimestampDef {
     begin: SystemTime,
     end: SystemTime,
-    intervalMin: Duration,
-    intervalMax: Duration,
+    interval_min: Duration,
+    interval_max: Duration,
 }
 
 impl TimestampDef {
-    pub fn new(begin: SystemTime, end: SystemTime, intervalMax: Duration, intervalMin: Duration) -> TimestampDef {
-        TimestampDef {begin, end, intervalMax, intervalMin}
+    pub fn new(begin: SystemTime, end: SystemTime, interval_max: Duration, interval_min: Duration) -> TimestampDef {
+        TimestampDef {begin, end, interval_max, interval_min}
     }
 }
 
@@ -42,5 +42,5 @@ pub struct AppContext {
 }
 
 pub struct LineContext {
-    
+
 }

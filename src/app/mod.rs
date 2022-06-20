@@ -16,42 +16,45 @@ pub struct AppDef {
 }
 
 impl AppDef {
-    
-    pub fn new(name: String) -> AppDef {
+
+    pub fn new(name: String, handlebars: &mut Handlebars) -> AppDef {
+        let tpl = "{{timestamp}} {{logger}}";
+        handlebars.register_template_string(&name, tpl)
+        .expect(format!("failed to register app handlebars template {}: {}", name, tpl).as_str());
+
         let timestamp =  TimestampDef::new(SystemTime::now(), SystemTime::now(), Duration::from_millis(10), Duration::from_secs(10));
         AppDef {
-            template: "{{timestamp}} {{logger}}".to_string(),
+            template: tpl.to_string(),
             timestamp,
             style: StyleDef::Bunyan,
             format: FormatDef::Flat,
             loggers: vec![
-                LoggerDef::new(format!("{}/{}", name, 0), "HttpFilter".to_string()),
+                LoggerDef::new(format!("{}/{}", name, 0), "HttpFilter".to_string(), handlebars),
             ],
-            name, 
+            name,
         }
     }
 
     pub fn next(&self, handlbars: &Handlebars) -> Result<String, RenderError> {
-        let loggerText = {
-            let mut loggerData = Map::new();
-            loggerData.insert("app".to_string(), to_json(self));
+        let logger_text = {
+            let mut logger_data = Map::new();
+            logger_data.insert("app".to_string(), to_json(self));
 
-            self.nextLogger().next(handlbars, loggerData)?
+            self.next_logger().next(handlbars, logger_data)?
         };
 
-        let data = Map::new();
-        data.insert("name".to_string(), to_json(self.name));
-        data.insert("logger".to_string(), to_json(loggerText));
+        let mut data = Map::new();
+        data.insert("name".to_string(), to_json(self.name.as_str()));
+        data.insert("logger".to_string(), to_json(logger_text));
 
-        handlbars.render(&self.id, &data)
+        handlbars.render(&self.name, &data)
     }
 
-    fn nextLogger(&self) -> &LoggerDef {
+    fn next_logger(&self) -> &LoggerDef {
         &self.loggers[0]
     }
 
-    pub fn generate(&self) {
-        let handlebars = Handlebars::new();
+    pub fn generate(&self, handlebars: &Handlebars) {
         for i in 1..10 {
             println!("{} {}", i, self.next(&handlebars).unwrap());
         }

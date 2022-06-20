@@ -15,31 +15,35 @@ pub struct LoggerDef {
 }
 
 impl LoggerDef {
-    pub fn new(id: String, name: String) -> LoggerDef {
+    pub fn new(id: String, name: String, handlebars: &mut Handlebars) -> LoggerDef {
+        let tpl = "{{name}} {{message}}";
+        handlebars.register_template_string(&id, tpl)
+            .expect(format!("failed to register logger handlebars template {}: {}", id, tpl).as_str());
+
         LoggerDef {
-            template: "{{name}} {{message}}".to_string(),
+            template: tpl.to_string(),
             messages: vec![
-                MessageDef::new(format!("{}/{}", id.clone(), 0))
+                MessageDef::new(format!("{}/{}", id, 0), handlebars)
             ],
             id, name
         }
     }
 
-    pub fn next(&self, handlebars: &Handlebars, data: &mut Map<String, Value>) -> Result<String, RenderError> {
-        let messageText = {
-            let mut messageData = Map::new();
-            messageData.insert("logger".to_string(), to_json(self));
-            
-            self.nextMessage().next(handlebars, messageData)?
-        };
-        
-        data.insert("name".to_string(), to_json(self.name));
-        data.insert("message".to_string(), to_json(messageText));
+    pub fn next(&self, handlebars: &Handlebars, mut data: Map<String, Value>) -> Result<String, RenderError> {
+        let message_text = {
+            let mut message_data = Map::new();
+            message_data.insert("logger".to_string(), to_json(self));
 
-        handlebars.render(&self.id, data)
+            self.next_message().next(handlebars, message_data)?
+        };
+
+        data.insert("name".to_string(), to_json(self.name.as_str()));
+        data.insert("message".to_string(), to_json(message_text));
+
+        handlebars.render(&self.id, &data)
     }
 
-    fn nextMessage(&self) -> &MessageDef {
+    fn next_message(&self) -> &MessageDef {
         &self.messages[0]
     }
 

@@ -1,8 +1,9 @@
 use logen::app::AppDef;
-use serde_json::json;
+use handlebars::{Handlebars};
 
 fn main() {
-    let mut app = AppDef::new("hello".to_string());
-    app.generate();
+    let mut handlebars = Handlebars::new();
+    let app = AppDef::new("hello".to_string(), &mut handlebars);
+    app.generate(&handlebars);
 }
 
