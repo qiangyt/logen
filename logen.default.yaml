@@ -4,10 +4,8 @@ style: bunyan
 lines: 100
 timestamp:
   format: "%Y-%m-%d %H:%M:%S"
-  begin: 2014-11-28T21:00:09+09:00
-  end: 2014-11-28T22:00:09+09:00
-  interval_min: 10
-  interval_max: 10000
+  begin: 2014-11-28T21:00:09+08:00
+  end: 2014-11-28T22:00:09+08:00
 
 template: '{{timestamp}} {{logger.name}} {{file}}/{{line}} {{method}} {{message}}'
 loggers:

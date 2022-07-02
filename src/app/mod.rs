@@ -31,7 +31,7 @@ impl<'a> App<'a> {
         handlebars.register_template_string(&name, &def.template)
         .expect(format!("failed to register app handlebars template {}: {}", name, def.template).as_str());
 
-        let timestamp = Timestamp::new(&def.timestamp);
+        let timestamp = Timestamp::new(&def.timestamp, def.lines);
         App {
             def, timestamp,
             loggers: {

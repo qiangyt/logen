@@ -1,6 +1,7 @@
 use chrono::prelude::*;
 use chrono::{Utc, Duration};
 use serde::{Deserialize, Serialize};
+use rand::Rng;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -18,31 +19,32 @@ pub struct TimestampDef {
     format: String,
     begin: DateTime<Utc>,//rfc3339
     end: DateTime<Utc>,
-    interval_min: u32,
-    interval_max: u32,
 }
 
 impl TimestampDef {
-    pub fn new(format: String, begin: DateTime<Utc>, end: DateTime<Utc>, interval_max: u32, interval_min: u32) -> TimestampDef {
-        TimestampDef {format, begin, end, interval_max, interval_min}
+    pub fn new(format: String, begin: DateTime<Utc>, end: DateTime<Utc>) -> TimestampDef {
+        TimestampDef {format, begin, end}
     }
 }
 
 pub struct Timestamp<'a> {
     def: &'a TimestampDef,
     value: DateTime<Utc>,
+    interval: i64,
 }
 
 impl<'a> Timestamp<'a> {
-    pub fn new(def: &TimestampDef) -> Timestamp {
+    pub fn new(def: &TimestampDef, lines: u32) -> Timestamp {
         Timestamp {
             def,
             value: def.begin,
+            interval: (def.end.timestamp_millis() - def.begin.timestamp_millis()) / lines as i64,
         }
     }
 
     pub fn next(&mut self) -> String {
-        self.value = self.value + Duration::seconds(1);
+        let i = rand::thread_rng().gen_range(0..self.interval);
+        self.value = self.value + Duration::milliseconds(i);
         self.value.format(self.def.format.as_str()).to_string()
     }
 }
