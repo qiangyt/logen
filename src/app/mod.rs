@@ -11,6 +11,7 @@ pub struct AppDef {
     name: String,
     template: String,
     style: StyleDef,
+    lines: u32,
     format: FormatDef,
     timestamp: TimestampDef,
     loggers: Vec<LoggerDef>,
@@ -49,18 +50,18 @@ impl<'a> App<'a> {
         data.insert("app".to_string(), to_json(self.def));
         data.insert("timestamp".to_string(), to_json(self.timestamp.next()));
 
-        self.next_logger().next(&mut data, handlebars);
+        self.choose_logger().next(&mut data, handlebars);
 
         handlebars.render(self.def.name.as_str(), &data)
     }
 
-    fn next_logger(&self) -> &Logger {
+    fn choose_logger(&self) -> &Logger {
         let i = rand::thread_rng().gen_range(0..self.loggers.len());
         &self.loggers[i]
     }
 
     pub fn generate(&mut self, handlebars: &Handlebars) {
-        for i in 1..10 {
+        for i in 0..self.def.lines {
             println!("{} {}", i, self.next(&handlebars).unwrap());
         }
     }

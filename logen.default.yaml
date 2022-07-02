@@ -1,6 +1,7 @@
 name: nginx
 format: flat
 style: bunyan
+lines: 100
 timestamp:
   format: "%Y-%m-%d %H:%M:%S"
   begin: 2014-11-28T21:00:09+09:00
