@@ -40,8 +40,18 @@ impl<'a> Logger<'a> {
     }
 
     fn next_message(&self) -> &Message {
-        let i = rand::thread_rng().gen_range(0..self.messages.len());
-        &self.messages[i]
+        let mut i = 0;
+        let max = self.messages.len();
+        while i < 10   {
+            let index = rand::thread_rng().gen_range(0..max * 2);
+            if index < max {
+                return &self.messages[index]
+            }
+
+            i = i+1;
+        }
+
+        return &self.messages[0];
     }
 
 }

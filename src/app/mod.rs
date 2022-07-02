@@ -56,8 +56,18 @@ impl<'a> App<'a> {
     }
 
     fn choose_logger(&self) -> &Logger {
-        let i = rand::thread_rng().gen_range(0..self.loggers.len());
-        &self.loggers[i]
+        let mut i = 0;
+        let max = self.loggers.len();
+        while i < 10 {
+            let index = rand::thread_rng().gen_range(0..max * 2);
+            if index < max {
+                return &self.loggers[index];
+            }
+
+            i = i+1;
+        }
+
+        return &self.loggers[0];
     }
 
     pub fn generate(&mut self, handlebars: &Handlebars) {

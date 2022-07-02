@@ -43,9 +43,21 @@ impl<'a> Timestamp<'a> {
     }
 
     pub fn next(&mut self) -> String {
-        let i = rand::thread_rng().gen_range(0..self.interval);
-        self.value = self.value + Duration::milliseconds(i);
-        self.value.format(self.def.format.as_str()).to_string()
+        let mut i = 0;
+        let max = self.interval;
+        while i < 10 {
+            let itvl = rand::thread_rng().gen_range(0..((max as f64) * 1.8) as i64);
+            let new_value = self.value + Duration::milliseconds(itvl);
+            if new_value < self.def.end {
+                self.value = new_value;
+                return self.value.format(self.def.format.as_str()).to_string();
+            }
+
+            i = i+1;
+        }
+
+        self.value = self.def.end;
+        return self.value.format(self.def.format.as_str()).to_string();
     }
 }
 
