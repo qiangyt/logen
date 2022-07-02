@@ -1,4 +1,5 @@
-use std::time::{Duration, SystemTime};
+use chrono::prelude::*;
+use chrono::{Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -14,14 +15,14 @@ pub enum LevelDef {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub struct TimestampDef {
-    begin: SystemTime,
-    end: SystemTime,
-    interval_min: Duration,
-    interval_max: Duration,
+    begin: DateTime<Utc>,
+    end: DateTime<Utc>,
+    interval_min: u32,
+    interval_max: u32,
 }
 
 impl TimestampDef {
-    pub fn new(begin: SystemTime, end: SystemTime, interval_max: Duration, interval_min: Duration) -> TimestampDef {
+    pub fn new(begin: DateTime<Utc>, end: DateTime<Utc>, interval_max: u32, interval_min: u32) -> TimestampDef {
         TimestampDef {begin, end, interval_max, interval_min}
     }
 }

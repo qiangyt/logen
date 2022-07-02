@@ -1,4 +1,4 @@
-use std::time::{Duration, SystemTime};
+use chrono::{Utc};
 use rand::Rng;
 use serde::{Serialize, Deserialize};
 use serde_json::value::{Map};
@@ -30,7 +30,7 @@ impl<'a> App<'a> {
         handlebars.register_template_string(&name, &def.template)
         .expect(format!("failed to register app handlebars template {}: {}", name, def.template).as_str());
 
-        let timestamp = TimestampDef::new(SystemTime::now(), SystemTime::now(), Duration::from_millis(10), Duration::from_secs(10));
+        let timestamp = TimestampDef::new(Utc::now(), Utc::now(), 10_000, 10);
         App {
             def, timestamp,
             loggers: {
