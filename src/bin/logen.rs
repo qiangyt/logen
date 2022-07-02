@@ -10,8 +10,32 @@ fn main() {
 
     let mut handlebars = Handlebars::new();
     handlebars.register_escape_fn(|s| s.to_string());
+    handlebars.register_helper("align_left", Box::new(handlebars_helper__align_left));
+
 
     let mut app = App::new(&app_def, &mut handlebars);
     app.generate(&handlebars);
 }
 
+
+fn handlebars_helper__align_left(
+    h: &handlebars::Helper,
+    _: &Handlebars,
+    _: &handlebars::Context,
+    _: &mut handlebars::RenderContext,
+    out: &mut dyn handlebars::Output,
+) -> Result<(), handlebars::RenderError> {
+
+    let value = h.param(0)
+        .ok_or(handlebars::RenderError::new("align_left(): invalid parameter 0 'value'"))?;
+    
+    let width = h
+        .param(1)
+        .and_then(|v| v.value().as_u64())
+        .ok_or(handlebars::RenderError::new("align_left(): invalid parameter 1 'width'"))? as u64;
+    
+    let rendered = format!("{} xx", value.render());
+    out.write(rendered.as_ref())?;
+
+    Ok(())
+}

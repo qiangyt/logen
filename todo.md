@@ -2,4 +2,3 @@
 - https://github.com/aws-cloudformation/cloudformation-guard
 - A parser and formatter for std::time::{SystemTime, Duration} : https://github.com/tailhook/humantime
 - https://github.com/y2kappa/timed： Rust crate to time your function using derive annotations.
-- https://github.com/chronotope/chrono：Date and time library for Rust 
