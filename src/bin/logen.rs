@@ -11,7 +11,7 @@ fn main() {
     let mut handlebars = Handlebars::new();
     handlebars.register_escape_fn(|s| s.to_string());
 
-    let app = App::new(&app_def, &mut handlebars);
+    let mut app = App::new(&app_def, &mut handlebars);
     app.generate(&handlebars);
 }
 

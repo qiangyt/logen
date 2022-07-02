@@ -44,7 +44,7 @@ impl<'a> App<'a> {
         }
     }
 
-    pub fn next(&self, handlebars: &Handlebars) -> Result<String, RenderError> {
+    pub fn next(&mut self, handlebars: &Handlebars) -> Result<String, RenderError> {
         let mut data = Map::new();
         data.insert("app".to_string(), to_json(self.def));
         data.insert("timestamp".to_string(), to_json(self.timestamp.next()));
@@ -59,7 +59,7 @@ impl<'a> App<'a> {
         &self.loggers[i]
     }
 
-    pub fn generate(&self, handlebars: &Handlebars) {
+    pub fn generate(&mut self, handlebars: &Handlebars) {
         for i in 1..10 {
             println!("{} {}", i, self.next(&handlebars).unwrap());
         }

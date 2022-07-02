@@ -3,6 +3,8 @@ format: flat
 style: bunyan
 timestamp:
   format: "%Y-%m-%d %H:%M:%S"
+  begin: 2014-11-28T21:00:09+09:00
+  end: 2014-11-28T22:00:09+09:00
   interval_min: 10
   interval_max: 10000
 

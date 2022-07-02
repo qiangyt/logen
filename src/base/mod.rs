@@ -1,5 +1,5 @@
 use chrono::prelude::*;
-use chrono::{Utc};
+use chrono::{Utc, Duration};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -16,7 +16,7 @@ pub enum LevelDef {
 #[serde(rename_all = "snake_case")]
 pub struct TimestampDef {
     format: String,
-    begin: DateTime<Utc>,
+    begin: DateTime<Utc>,//rfc3339
     end: DateTime<Utc>,
     interval_min: u32,
     interval_max: u32,
@@ -41,7 +41,8 @@ impl<'a> Timestamp<'a> {
         }
     }
 
-    pub fn next(&self) -> String {
+    pub fn next(&mut self) -> String {
+        self.value = self.value + Duration::seconds(1);
         self.value.format(self.def.format.as_str()).to_string()
     }
 }
