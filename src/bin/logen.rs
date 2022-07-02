@@ -12,6 +12,8 @@ fn main() {
     handlebars.register_escape_fn(|s| s.to_string());
     handlebars.register_helper("align_left", Box::new(handlebars_helper_align_left));
     handlebars.register_helper("align_right", Box::new(handlebars_helper_align_right));
+    handlebars.register_helper("to_uppercase", Box::new(handlebars_helper_to_uppercase));
+    handlebars.register_helper("to_lowercase", Box::new(handlebars_helper_to_lowercase));
 
     let mut app = App::new(&app_def, &mut handlebars);
     app.generate(&handlebars);
@@ -83,6 +85,44 @@ fn handlebars_helper_align_right(
     }
 
     out.write(rendered.as_ref())?;
+
+    Ok(())
+}
+
+
+fn handlebars_helper_to_uppercase (
+    h: &handlebars::Helper,
+    _: &Handlebars,
+    _: &handlebars::Context,
+    _: &mut handlebars::RenderContext,
+    out: &mut dyn handlebars::Output,
+) -> Result<(), handlebars::RenderError> {
+    let value = h.param(0)
+        .and_then(|v| v.value().as_str())
+        .ok_or(handlebars::RenderError::new(
+        "to_uppercase(): invalid parameter 0 'value'",
+        ))?;
+
+    out.write(value.to_uppercase().as_ref())?;
+
+    Ok(())
+}
+
+
+fn handlebars_helper_to_lowercase (
+    h: &handlebars::Helper,
+    _: &Handlebars,
+    _: &handlebars::Context,
+    _: &mut handlebars::RenderContext,
+    out: &mut dyn handlebars::Output,
+) -> Result<(), handlebars::RenderError> {
+    let value = h.param(0)
+        .and_then(|v| v.value().as_str())
+        .ok_or(handlebars::RenderError::new(
+        "to_lowercase(): invalid parameter 0 'value'",
+        ))?;
+
+    out.write(value.to_lowercase().as_ref())?;
 
     Ok(())
 }

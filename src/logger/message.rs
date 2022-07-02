@@ -2,6 +2,7 @@
 use serde_json::value::{Map, Value};
 use serde::{Deserialize, Serialize};
 use handlebars::{Handlebars, to_json};
+use crate::base::Level;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -10,6 +11,7 @@ pub struct MessageDef {
     file: String,
     line: usize,
     method: String,
+    level: Level,
 }
 
 pub struct Message<'a> {
@@ -31,6 +33,7 @@ impl<'a> Message<'a> {
         data.insert("file".to_string(), to_json(def.file.as_str()));
         data.insert("line".to_string(), to_json(def.line));
         data.insert("method".to_string(), to_json(def.method.as_str()));
+        data.insert("level".to_string(), to_json(&def.level));
 
         let text = handlebars.render(self.id.as_str(), &data).unwrap();
         data.insert("message".to_string(), to_json(text));

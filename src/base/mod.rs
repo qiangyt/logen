@@ -5,7 +5,7 @@ use rand::Rng;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub enum LevelDef {
+pub enum Level {
     Trace,
     Debug,
     Info,
