@@ -1,4 +1,3 @@
-use chrono::{Utc};
 use rand::Rng;
 use serde::{Serialize, Deserialize};
 use serde_json::value::{Map};
@@ -13,12 +12,13 @@ pub struct AppDef {
     template: String,
     style: StyleDef,
     format: FormatDef,
+    timestamp: TimestampDef,
     loggers: Vec<LoggerDef>,
 }
 
 pub struct App<'a> {
     def: &'a AppDef,
-    timestamp: TimestampDef,
+    timestamp: Timestamp<'a>,
     loggers: Vec<Logger<'a>>,
 }
 
@@ -30,7 +30,7 @@ impl<'a> App<'a> {
         handlebars.register_template_string(&name, &def.template)
         .expect(format!("failed to register app handlebars template {}: {}", name, def.template).as_str());
 
-        let timestamp = TimestampDef::new(Utc::now(), Utc::now(), 10_000, 10);
+        let timestamp = Timestamp::new(&def.timestamp);
         App {
             def, timestamp,
             loggers: {
@@ -47,6 +47,7 @@ impl<'a> App<'a> {
     pub fn next(&self, handlebars: &Handlebars) -> Result<String, RenderError> {
         let mut data = Map::new();
         data.insert("app".to_string(), to_json(self.def));
+        data.insert("timestamp".to_string(), to_json(self.timestamp.next()));
 
         self.next_logger().next(&mut data, handlebars);
 

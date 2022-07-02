@@ -15,6 +15,7 @@ pub enum LevelDef {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub struct TimestampDef {
+    format: String,
     begin: DateTime<Utc>,
     end: DateTime<Utc>,
     interval_min: u32,
@@ -22,8 +23,26 @@ pub struct TimestampDef {
 }
 
 impl TimestampDef {
-    pub fn new(begin: DateTime<Utc>, end: DateTime<Utc>, interval_max: u32, interval_min: u32) -> TimestampDef {
-        TimestampDef {begin, end, interval_max, interval_min}
+    pub fn new(format: String, begin: DateTime<Utc>, end: DateTime<Utc>, interval_max: u32, interval_min: u32) -> TimestampDef {
+        TimestampDef {format, begin, end, interval_max, interval_min}
+    }
+}
+
+pub struct Timestamp<'a> {
+    def: &'a TimestampDef,
+    value: DateTime<Utc>,
+}
+
+impl<'a> Timestamp<'a> {
+    pub fn new(def: &TimestampDef) -> Timestamp {
+        Timestamp {
+            def,
+            value: def.begin,
+        }
+    }
+
+    pub fn next(&self) -> String {
+        self.value.format(self.def.format.as_str()).to_string()
     }
 }
 

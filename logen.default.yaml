@@ -1,6 +1,11 @@
 name: nginx
 format: flat
 style: bunyan
+timestamp:
+  format: "%Y-%m-%d %H:%M:%S"
+  interval_min: 10
+  interval_max: 10000
+
 template: '{{timestamp}} {{logger.name}} {{file}}/{{line}} {{method}} {{message}}'
 loggers:
 - name: req
