@@ -1,13 +1,13 @@
 name: nginx
 format: flat
 style: bunyan
-lines: 100
+lines: 10
 timestamp:
   format: "%Y-%m-%d %H:%M:%S"
   begin: 2014-11-28T21:00:09+08:00
   end: 2014-11-28T22:00:09+08:00
 
-template: '{{timestamp}} [{{align_left "abc" 6}}] {{logger.name}} {{file}}/{{line}} {{method}} {{message}}'
+template: '{{timestamp}} [{{align_left "abc" }}] {{logger.name}} {{file}}/{{line}} {{method}} {{message}}'
 loggers:
 - name: req
   messages:
