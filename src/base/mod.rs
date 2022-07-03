@@ -34,7 +34,7 @@ pub struct Timestamp<'a> {
 }
 
 impl<'a> Timestamp<'a> {
-    pub fn new(def: &TimestampDef, lines: u32) -> Timestamp {
+    pub fn new(def: &TimestampDef, lines: u64) -> Timestamp {
         Timestamp {
             def,
             value: def.begin,
@@ -76,10 +76,3 @@ pub enum StyleDef {
     Bunyan,
 }
 
-pub struct AppContext {
-
-}
-
-pub struct LineContext {
-
-}

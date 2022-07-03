@@ -1,6 +1,8 @@
 use crate::base::Level;
 use serde::{Deserialize, Serialize};
 use crate::logger::template::Template;
+use crate::app::Line;
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub struct MessageDef {
@@ -24,15 +26,16 @@ impl<'a> Message<'a> {
     }
 
     //#[allow(unused_mut)]
-    pub fn next(&self, data: &mut tera::Context, tmpl: &Template) {
+    pub fn next(&self, line: &mut Line) {
         let def = self.def;
-
+        let data = &mut line.data;
+        
         data.insert("file", &def.file);
         data.insert("line", &def.line);
         data.insert("method", &def.method);
         data.insert("level", &def.level);
 
-        let text = tmpl.render(self.id.as_str(), data);
+        let text = line.template.render(&self.id, data);
         data.insert("message".to_string(), &text);
     }
 }

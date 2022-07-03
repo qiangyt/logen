@@ -7,6 +7,8 @@ pub use message::{Message, MessageDef};
 pub mod template;
 pub use template::Template;
 
+pub use crate::app::Line;
+
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -35,9 +37,9 @@ impl<'a> Logger<'a> {
         }
     }
 
-    pub fn next(&self, data: &mut tera::Context, tmpl: &Template) {
-        data.insert("logger", &self.def);
-        self.next_message().next(data, tmpl);
+    pub fn next(&self, line: &mut Line) {
+        line.data.insert("logger", &self.def);
+        self.next_message().next(line);
     }
 
     fn next_message(&self) -> &Message {
