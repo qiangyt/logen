@@ -7,7 +7,7 @@ timestamp:
   begin: 2014-11-28T21:00:09+08:00
   end: 2014-11-28T22:00:09+08:00
 
-template: '{{timestamp}} {{to_uppercase "level" }} {{logger.name}} {{file}}/{{line}} {{method}} {{message}}'
+template: '{{timestamp}} <{{align_right level 8}}> {{logger.name}} {{file}}/{{line}} {{method}} {{message}}'
 loggers:
 - name: req
   messages:
