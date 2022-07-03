@@ -27,7 +27,9 @@ impl<'a> Logger<'a> {
 
     pub fn next(&self, line: &mut Line) {
         line.var("logger", &self.def);
-        self.next_message().next(line);
+
+        let msg = self.next_message();
+        msg.next(line);
     }
 
     fn next_message(&self) -> &Message {

@@ -33,7 +33,8 @@ impl<'a> App<'a> {
     pub fn next(&mut self, index: u64) -> String {
         let mut line = Line::new(index, self.template, &self.timestamp.next());
 
-        self.choose_logger().next(&mut line);
+        let logger = self.choose_logger();
+        logger.next(&mut line);
 
         line.render(&self.def.name)
     }
