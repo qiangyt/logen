@@ -2,3 +2,8 @@
 - https://github.com/aws-cloudformation/cloudformation-guard
 - A parser and formatter for std::time::{SystemTime, Duration} : https://github.com/tailhook/humantime
 - https://github.com/y2kappa/timed： Rust crate to time your function using derive annotations.
+- lazy_static
+- globwalk： Recursively find files in a directory using globs.
+- pest：The Elegant Parser： https://github.com/pest-parser/pest
+- https://github.com/rust-lang/regex
+- https://docs.rs/crate/unic-segment/latest：UNIC — Unicode Text Segmentation Algorithms

@@ -1,6 +1,8 @@
 use logen::app::App;
+use serde_json::value::Value;
 use tera::Tera;
 use std::fs;
+use std::collections::HashMap;
 
 fn main() {
     let config_yaml = fs::read_to_string("logen.default.yaml")
@@ -12,10 +14,12 @@ fn main() {
     // disable autoescaping completely
     tera.autoescape_on(vec![]);
 
-    //handlebars.register_helper("align_left", Box::new(handlebars_helper_align_left));
+    tera.register_filter("align_left", Box::new(tera_filter_align_left));
     //handlebars.register_helper("align_right", Box::new(handlebars_helper_align_right));
     //handlebars.register_helper("to_uppercase", Box::new(handlebars_helper_to_uppercase));
     //handlebars.register_helper("to_lowercase", Box::new(handlebars_helper_to_lowercase));
+
+   // tera.register_filter("to_upper", filter);
 
     let mut app = App::new(&app_def, &mut tera);
     app.generate(&tera);
@@ -43,3 +47,22 @@ fn main() {
     }
 */
 
+pub fn tera_filter_align_left(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
+    let mut value = tera::try_get_value!("align_left", "value", String, value);
+
+    let width = match args.get("width") {
+        Some(width) => tera::try_get_value!("align_left", "width", i32, width),
+        None => return Err(tera::Error::msg("Filter `trim_start_matches` expected an arg called `pat`")),
+    };
+
+    let mut len = 0;
+    for _ in value.chars() {
+        len = len + 1;
+    }
+    while len < width {
+        value.push(' ');
+        len = len + 1;
+    }
+
+    Ok(tera::to_value(value).unwrap())
+}
