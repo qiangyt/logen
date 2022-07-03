@@ -10,12 +10,15 @@ pub struct Line<'a> {
 
 impl<'a> Line<'a> {
 
-    pub fn new(index: u64, template: &'a Template) -> Line<'a> {
+    pub fn new(index: u64, template: &'a Template, timestamp: &str) -> Line<'a> {
         let mut r = Line {
             data: tera::Context::new(),
-            template
+            template,
         };
+
         r.var("index", &index);
+        r.var("timestamp", timestamp);
+
         r
     }
 

@@ -27,14 +27,14 @@ impl<'a> Timestamp<'a> {
             let new_value = self.value + Duration::milliseconds(itvl);
             if new_value < self.def.end {
                 self.value = new_value;
-                return self.value.format(self.def.format.as_str()).to_string();
+                return self.value.format(&self.def.format).to_string();
             }
 
             i = i+1;
         }
 
         self.value = self.def.end;
-        return self.value.format(self.def.format.as_str()).to_string();
+        return self.value.format(&self.def.format).to_string();
     }
 }
 

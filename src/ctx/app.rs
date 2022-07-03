@@ -31,9 +31,7 @@ impl<'a> App<'a> {
     }
 
     pub fn next(&mut self, index: u64) -> String {
-        let mut line = Line::new(index, self.template);
-        line.var("app", self.def);
-        line.var("timestamp", &self.timestamp.next());
+        let mut line = Line::new(index, self.template, &self.timestamp.next());
 
         self.choose_logger().next(&mut line);
 

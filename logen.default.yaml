@@ -24,12 +24,12 @@ loggers:
 - name: resp
   messages:
   - template: response begin
-    file: req_handler.c
+    file: resp_handler.c
     line: 18
     method: main
     level: error
   - template: response end
-    file: req_handler.c
+    file: resp_handler.c
     line: 88
     method: main
     level: debug
