@@ -1,8 +1,8 @@
-use crate::def::{AppDef};
-use super::logger::Logger;
-use super::line::Line;
-use super::timestamp::Timestamp;
-use crate::template::Template;
+use crate::def::AppDef;
+use super::Logger;
+use super::Line;
+use super::Timestamp;
+use crate::Template;
 
 use rand::Rng;
 

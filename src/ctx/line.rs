@@ -1,5 +1,5 @@
-use crate::template::Template;
-use super::app::App;
+use crate::Template;
+use super::App;
 
 pub struct Line<'a> {
     pub app: &'a App<'a>,

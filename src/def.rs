@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub enum Level {
+pub enum LevelDef {
     Trace,
     Debug,
     Info,
@@ -56,7 +56,7 @@ pub struct MessageDef {
     pub file: String,
     pub line: usize,
     pub method: String,
-    pub level: Level,
+    pub level: LevelDef,
 }
 
 

@@ -1,6 +1,6 @@
 use crate::def::*;
-use crate::template::Template;
-use super::line::Line;
+use crate::Template;
+use super::Line;
 
 
 pub struct Message<'a> {
