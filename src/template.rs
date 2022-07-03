@@ -66,7 +66,7 @@ impl Template {
              .expect(&format!("failed to register template {}: {}", name, content));
     }
 
-    pub fn render(&self, template_name: &str, data: &mut tera::Context) -> String {
+    pub fn render(&self, template_name: &str, data: &tera::Context) -> String {
         self.tera.render(template_name, data).unwrap()
     }
 

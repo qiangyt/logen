@@ -27,7 +27,7 @@ impl<'a> Logger<'a> {
     }
 
     pub fn next(&self, line: &mut Line) {
-        line.data.insert("logger", &self.def);
+        line.var("logger", &self.def);
         self.next_message().next(line);
     }
 

@@ -37,21 +37,14 @@ impl<'a> App<'a> {
     }
 
     pub fn next(&mut self, index: u64) -> String {
-        let mut line = {
-            let mut data = tera::Context::new();
-            data.insert("app", self.def);
-            data.insert("timestamp", &self.timestamp.next());
+        let mut data = tera::Context::new();
+        data.insert("app", self.def);
+        data.insert("timestamp", &self.timestamp.next());
 
-            Line { 
-                app: self,
-                template: &self.template,
-                index, 
-                data,
-            }
-        };
+        let mut line = Line::new(index, &mut data, &self.template);
         self.choose_logger().next(&mut line);
 
-        self.template.render(&self.def.name, &mut line.data)
+        self.template.render(&self.def.name, &data)
     }
 
     fn choose_logger(&self) -> &Logger {

@@ -18,14 +18,13 @@ impl<'a> Message<'a> {
     //#[allow(unused_mut)]
     pub fn next(&self, line: &mut Line) {
         let def = self.def;
-        let data = &mut line.data;
         
-        data.insert("file", &def.file);
-        data.insert("line", &def.line);
-        data.insert("method", &def.method);
-        data.insert("level", &def.level);
+        line.var("file", &def.file);
+        line.var("line", &def.line);
+        line.var("method", &def.method);
+        line.var("level", &def.level);
 
-        let text = line.template.render(&self.id, data);
-        data.insert("message".to_string(), &text);
+        let message = line.render(&self.id);
+        line.var("message", &message);
     }
 }
