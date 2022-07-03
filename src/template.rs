@@ -3,8 +3,6 @@ use std::collections::HashMap;
 
 pub struct Template {
     tera: Tera,
-
-
 }
 
 

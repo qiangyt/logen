@@ -1,9 +1,9 @@
 use rand::Rng;
 
 use crate::def::{LoggerDef};
-use crate::ctx::message::Message;
+use super::message::Message;
 use crate::template::Template;
-use crate::ctx::line::Line;
+use super::line::Line;
 
 
 pub struct Logger<'a> {

@@ -1,7 +1,7 @@
 use crate::def::{AppDef};
-use crate::ctx::logger::Logger;
-use crate::ctx::line::Line;
-use crate::ctx::timestamp::Timestamp;
+use super::logger::Logger;
+use super::line::Line;
+use super::timestamp::Timestamp;
 use crate::template::Template;
 
 use rand::Rng;
