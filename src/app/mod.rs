@@ -1,9 +1,9 @@
-use rand::Rng;
-use serde::{Serialize, Deserialize};
-use serde_json::value::{Map};
-use handlebars::{Handlebars, RenderError, to_json};
 use super::base::*;
 use super::logger::{Logger,LoggerDef};
+
+use rand::Rng;
+use serde::{Serialize, Deserialize};
+use tera::Tera;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -25,11 +25,11 @@ pub struct App<'a> {
 
 impl<'a> App<'a> {
 
-    pub fn new(def: &'a AppDef, handlebars: &mut Handlebars) -> App<'a> {
+    pub fn new(def: &'a AppDef, tera: &mut Tera) -> App<'a> {
         let name = &def.name;
 
-        handlebars.register_template_string(&name, &def.template)
-        .expect(format!("failed to register app handlebars template {}: {}", name, def.template).as_str());
+        tera.add_raw_template(&name, &def.template)
+            .expect(format!("failed to register app template {}: {}", name, def.template).as_str());
 
         let timestamp = Timestamp::new(&def.timestamp, def.lines);
         App {
@@ -38,21 +38,21 @@ impl<'a> App<'a> {
                 let mut v = Vec::new();
                 for (i, logger_def) in def.loggers.iter().enumerate() {
                     let logger_id = format!("{}/{}", name, i);
-                    v.push(Logger::new(logger_def, logger_id, handlebars));
+                    v.push(Logger::new(logger_def, logger_id, tera));
                 }
                 v
             }
         }
     }
 
-    pub fn next(&mut self, handlebars: &Handlebars) -> Result<String, RenderError> {
-        let mut data = Map::new();
-        data.insert("app".to_string(), to_json(self.def));
-        data.insert("timestamp".to_string(), to_json(self.timestamp.next()));
+    pub fn next(&mut self, tera: &Tera) -> tera::Result<String> {
+        let mut data = tera::Context::new();
+        data.insert("app", self.def);
+        data.insert("timestamp", &self.timestamp.next());
 
-        self.choose_logger().next(&mut data, handlebars);
+        self.choose_logger().next(&mut data, tera);
 
-        handlebars.render(self.def.name.as_str(), &data)
+        tera.render(self.def.name.as_str(), &data)
     }
 
     fn choose_logger(&self) -> &Logger {
@@ -70,9 +70,9 @@ impl<'a> App<'a> {
         return &self.loggers[0];
     }
 
-    pub fn generate(&mut self, handlebars: &Handlebars) {
+    pub fn generate(&mut self, tera: &Tera) {
         for i in 0..self.def.lines {
-            println!("{} {}", i, self.next(&handlebars).unwrap());
+            println!("{} {}", i, self.next(&tera).unwrap());
         }
     }
 

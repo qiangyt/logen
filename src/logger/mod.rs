@@ -1,7 +1,6 @@
-use handlebars::{Handlebars, to_json};
-use serde::{Serialize, Deserialize};
-use serde_json::value::{Map, Value};
 use rand::Rng;
+use serde::{Serialize, Deserialize};
+use tera::Tera;
 
 mod message;
 pub use message::{Message, MessageDef};
@@ -20,13 +19,13 @@ pub struct Logger<'a> {
 }
 
 impl<'a> Logger<'a> {
-    pub fn new(def: &'a LoggerDef, id: String, handlbars: &mut Handlebars) -> Logger<'a> {
+    pub fn new(def: &'a LoggerDef, id: String, tera: &mut Tera) -> Logger<'a> {
         Logger {
             messages: {
                 let mut v = Vec::new();
                 for (i, message_def) in def.messages.iter().enumerate() {
                     let msg_id = format!("{}/{}", id, i);
-                    v.push(Message::new(message_def, msg_id, handlbars));
+                    v.push(Message::new(message_def, msg_id, tera));
                 }
                 v
             },
@@ -34,9 +33,9 @@ impl<'a> Logger<'a> {
         }
     }
 
-    pub fn next(&self, data: &mut Map<String, Value>, handlbars: &Handlebars) {
-        data.insert("logger".to_string(), to_json(self.def));
-        self.next_message().next(data, handlbars);
+    pub fn next(&self, data: &mut tera::Context, tera: &Tera) {
+        data.insert("logger", &self.def);
+        self.next_message().next(data, tera);
     }
 
     fn next_message(&self) -> &Message {
