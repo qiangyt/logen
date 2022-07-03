@@ -9,42 +9,35 @@ use rand::Rng;
 pub struct App<'a> {
     def: &'a AppDef,
     timestamp: Timestamp<'a>,
-    template: Template,
+    template: &'a Template,
     loggers: Vec<Logger<'a>>,
 }
 
 impl<'a> App<'a> {
 
-    pub fn new(def: &'a AppDef) -> App<'a> {
-        let name = &def.name;
-
-        let mut template = Template::new();
-        template.add_raw_template(&name, &def.template);
-
-        let loggers = {
-            let mut v = Vec::new();
-            for (i, logger_def) in def.loggers.iter().enumerate() {
-                let logger_id = format!("{}/{}", name, i);
-                v.push(Logger::new(logger_def, logger_id, &mut template));
-            }
-            v
-        };
-
-        let timestamp = Timestamp::new(&def.timestamp, def.lines);
+    pub fn new(def: &'a AppDef, template: &'a Template) -> App<'a> {
         App {
-            def, timestamp, template, loggers,
+            def, template,
+            timestamp: Timestamp::new(&def.timestamp, def.lines),
+            loggers: {
+                let mut v = Vec::new();
+                for (i, logger_def) in def.loggers.iter().enumerate() {
+                    let logger_id = format!("{}/{}", def.name, i);
+                    v.push(Logger::new(logger_def, logger_id));
+                }
+                v
+            },
         }
     }
 
     pub fn next(&mut self, index: u64) -> String {
-        let mut data = tera::Context::new();
-        data.insert("app", self.def);
-        data.insert("timestamp", &self.timestamp.next());
+        let mut line = Line::new(index, self.template);
+        line.var("app", self.def);
+        line.var("timestamp", &self.timestamp.next());
 
-        let mut line = Line::new(index, &mut data, &self.template);
         self.choose_logger().next(&mut line);
 
-        self.template.render(&self.def.name, &data)
+        line.render(&self.def.name)
     }
 
     fn choose_logger(&self) -> &Logger {

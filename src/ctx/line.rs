@@ -4,14 +4,17 @@ use serde_json::to_value;
 use crate::Template;
 
 pub struct Line<'a> {
-    data: &'a mut tera::Context,
+    data: tera::Context,
     template: &'a Template,
 }
 
 impl<'a> Line<'a> {
 
-    pub fn new(index: u64, data: &'a mut tera::Context, template: &'a Template) -> Line<'a> {
-        let mut r = Line {data, template};
+    pub fn new(index: u64, template: &'a Template) -> Line<'a> {
+        let mut r = Line {
+            data: tera::Context::new(),
+            template
+        };
         r.var("index", &index);
         r
     }

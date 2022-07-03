@@ -1,5 +1,4 @@
 use crate::def::*;
-use crate::Template;
 use super::Line;
 
 
@@ -9,9 +8,7 @@ pub struct Message<'a> {
 }
 
 impl<'a> Message<'a> {
-    pub fn new(def: &'a MessageDef, id: String, tmpl: &mut Template) -> Message<'a> {
-        tmpl.add_raw_template(&id, &def.template);
-        
+    pub fn new(def: &'a MessageDef, id: String) -> Message<'a> {        
         Message {def, id}
     }
 

@@ -2,7 +2,6 @@ use rand::Rng;
 
 use crate::def::LoggerDef;
 use super::Message;
-use crate::Template;
 use super::Line;
 
 
@@ -12,13 +11,13 @@ pub struct Logger<'a> {
 }
 
 impl<'a> Logger<'a> {
-    pub fn new(def: &'a LoggerDef, id: String, tmpl: &mut Template) -> Logger<'a> {
+    pub fn new(def: &'a LoggerDef, id: String) -> Logger<'a> {
         Logger {
             messages: {
                 let mut v = Vec::new();
                 for (i, message_def) in def.messages.iter().enumerate() {
                     let msg_id = format!("{}/{}", id, i);
-                    v.push(Message::new(message_def, msg_id, tmpl));
+                    v.push(Message::new(message_def, msg_id));
                 }
                 v
             },
