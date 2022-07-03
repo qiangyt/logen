@@ -15,9 +15,7 @@ fn main() {
     tera.autoescape_on(vec![]);
 
     tera.register_filter("align_left", Box::new(tera_filter_align_left));
-    //handlebars.register_helper("align_right", Box::new(handlebars_helper_align_right));
-    //handlebars.register_helper("to_uppercase", Box::new(handlebars_helper_to_uppercase));
-    //handlebars.register_helper("to_lowercase", Box::new(handlebars_helper_to_lowercase));
+    tera.register_filter("align_right", Box::new(tera_filter_align_right));
 
    // tera.register_filter("to_upper", filter);
 
@@ -52,7 +50,7 @@ pub fn tera_filter_align_left(value: &Value, args: &HashMap<String, Value>) -> t
 
     let width = match args.get("width") {
         Some(width) => tera::try_get_value!("align_left", "width", i32, width),
-        None => return Err(tera::Error::msg("Filter `trim_start_matches` expected an arg called `pat`")),
+        None => return Err(tera::Error::msg("filter `align_left` expected an arg called `width`")),
     };
 
     let mut len = 0;
@@ -61,6 +59,26 @@ pub fn tera_filter_align_left(value: &Value, args: &HashMap<String, Value>) -> t
     }
     while len < width {
         value.push(' ');
+        len = len + 1;
+    }
+
+    Ok(tera::to_value(value).unwrap())
+}
+
+pub fn tera_filter_align_right(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
+    let mut value = tera::try_get_value!("align_right", "value", String, value);
+
+    let width = match args.get("width") {
+        Some(width) => tera::try_get_value!("align_right", "width", i32, width),
+        None => return Err(tera::Error::msg("filter `align_right` expected an arg called `width`")),
+    };
+
+    let mut len = 0;
+    for _ in value.chars() {
+        len = len + 1;
+    }
+    while len < width {
+        value.insert(0, ' ');
         len = len + 1;
     }
 
