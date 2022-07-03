@@ -1,33 +1,10 @@
-use super::base::*;
-use super::logger::{Logger,LoggerDef};
-use super::logger::template::Template;
+use crate::def::{AppDef};
+use crate::ctx::logger::Logger;
+use crate::ctx::line::Line;
+use crate::ctx::timestamp::Timestamp;
+use crate::template::Template;
 
 use rand::Rng;
-use serde::{Serialize, Deserialize};
-
-pub struct Line<'a> {
-    pub app: &'a App<'a>,
-    pub index: u64,
-    pub data: tera::Context,
-    pub template: &'a Template,
-}
-
-impl<'a> Line<'a> {
-
-}
-
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub struct AppDef {
-    name: String,
-    template: String,
-    style: StyleDef,
-    lines: u64,
-    format: FormatDef,
-    timestamp: TimestampDef,
-    loggers: Vec<LoggerDef>,
-}
 
 pub struct App<'a> {
     def: &'a AppDef,

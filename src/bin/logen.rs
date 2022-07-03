@@ -1,4 +1,4 @@
-use logen::app::App;
+use logen::ctx::app::App;
 use std::fs;
 
 fn main() {

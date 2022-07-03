@@ -1,21 +1,10 @@
 use rand::Rng;
-use serde::{Serialize, Deserialize};
 
-pub mod message;
-pub use message::{Message, MessageDef};
+use crate::def::{LoggerDef};
+use crate::ctx::message::Message;
+use crate::template::Template;
+use crate::ctx::line::Line;
 
-pub mod template;
-pub use template::Template;
-
-pub use crate::app::Line;
-
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub struct LoggerDef {
-    name: String,
-    messages: Vec<MessageDef>,
-}
 
 pub struct Logger<'a> {
     def: &'a LoggerDef,

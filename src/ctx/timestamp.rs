@@ -1,31 +1,8 @@
-use chrono::prelude::*;
-use chrono::{Utc, Duration};
-use serde::{Deserialize, Serialize};
+use chrono::{DateTime, Utc, Duration};
 use rand::Rng;
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum Level {
-    Trace,
-    Debug,
-    Info,
-    Warn,
-    Error,
-    Fatal,
-}
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub struct TimestampDef {
-    format: String,
-    begin: DateTime<Utc>,//rfc3339
-    end: DateTime<Utc>,
-}
+use crate::def::TimestampDef;
 
-impl TimestampDef {
-    pub fn new(format: String, begin: DateTime<Utc>, end: DateTime<Utc>) -> TimestampDef {
-        TimestampDef {format, begin, end}
-    }
-}
 
 pub struct Timestamp<'a> {
     def: &'a TimestampDef,
@@ -59,20 +36,5 @@ impl<'a> Timestamp<'a> {
         self.value = self.def.end;
         return self.value.format(self.def.format.as_str()).to_string();
     }
-}
-
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum FormatDef {
-    Flat,
-    Json,
-}
-
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum StyleDef {
-    Bunyan,
 }
 

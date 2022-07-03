@@ -1,17 +1,7 @@
-use crate::base::Level;
-use serde::{Deserialize, Serialize};
-use crate::logger::template::Template;
-use crate::app::Line;
+use crate::def::*;
+use crate::template::Template;
+use crate::ctx::line::Line;
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub struct MessageDef {
-    template: String,
-    file: String,
-    line: usize,
-    method: String,
-    level: Level,
-}
 
 pub struct Message<'a> {
     def: &'a MessageDef,
