@@ -72,7 +72,7 @@ impl<'a> App<'a> {
 
     pub fn generate(&mut self, tera: &Tera) {
         for i in 0..self.def.lines {
-            println!("{} {}", i, self.next(&tera).unwrap());
+            println!("{}", self.next(&tera).unwrap());
         }
     }
 
