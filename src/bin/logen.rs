@@ -1,4 +1,3 @@
-use handlebars::Handlebars;
 use logen::app::App;
 use tera::Tera;
 use std::fs;
@@ -21,27 +20,7 @@ fn main() {
     let mut app = App::new(&app_def, &mut tera);
     app.generate(&tera);
 }
-
-fn handlebars_helper_align_left(
-    h: &handlebars::Helper,
-    _: &Handlebars,
-    _: &handlebars::Context,
-    _: &mut handlebars::RenderContext,
-    out: &mut dyn handlebars::Output,
-) -> Result<(), handlebars::RenderError> {
-    let value = h.param(0)
-        .and_then(|v| v.value().as_str())
-        .ok_or(handlebars::RenderError::new(
-        "align_left(): invalid parameter 0 'value'",
-        ))?;
-
-    let width = h
-        .param(1)
-        .and_then(|v| v.value().as_u64())
-        .ok_or(handlebars::RenderError::new(
-            "align_left(): invalid parameter 1 'width'",
-        ))? as u64;
-
+/*
     let mut rendered = String::from(value);
     let mut len = 0;
     for _ in value.chars() {
@@ -51,32 +30,8 @@ fn handlebars_helper_align_left(
         rendered.push(' ');
         len = len + 1;
     }
-
-    out.write(rendered.as_ref())?;
-
-    Ok(())
-}
-
-fn handlebars_helper_align_right(
-    h: &handlebars::Helper,
-    _: &Handlebars,
-    _: &handlebars::Context,
-    _: &mut handlebars::RenderContext,
-    out: &mut dyn handlebars::Output,
-) -> Result<(), handlebars::RenderError> {
-    let value = h.param(0)
-        .and_then(|v| v.value().as_str())
-        .ok_or(handlebars::RenderError::new(
-        "align_right(): invalid parameter 0 'value'",
-        ))?;
-
-    let width = h
-        .param(1)
-        .and_then(|v| v.value().as_u64())
-        .ok_or(handlebars::RenderError::new(
-            "align_right(): invalid parameter 1 'width'",
-        ))? as u64;
-
+*/
+/*
     let mut rendered = String::from(value);
     let mut len = 0;
     for _ in value.chars() {
@@ -86,9 +41,5 @@ fn handlebars_helper_align_right(
         rendered.insert(0, ' ');
         len = len + 1;
     }
-
-    out.write(rendered.as_ref())?;
-
-    Ok(())
-}
+*/
 
