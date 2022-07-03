@@ -1,9 +1,11 @@
 use rand::Rng;
 use serde::{Serialize, Deserialize};
-use tera::Tera;
 
-mod message;
+pub mod message;
 pub use message::{Message, MessageDef};
+
+pub mod template;
+pub use template::Template;
 
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -19,13 +21,13 @@ pub struct Logger<'a> {
 }
 
 impl<'a> Logger<'a> {
-    pub fn new(def: &'a LoggerDef, id: String, tera: &mut Tera) -> Logger<'a> {
+    pub fn new(def: &'a LoggerDef, id: String, tmpl: &mut Template) -> Logger<'a> {
         Logger {
             messages: {
                 let mut v = Vec::new();
                 for (i, message_def) in def.messages.iter().enumerate() {
                     let msg_id = format!("{}/{}", id, i);
-                    v.push(Message::new(message_def, msg_id, tera));
+                    v.push(Message::new(message_def, msg_id, tmpl));
                 }
                 v
             },
@@ -33,9 +35,9 @@ impl<'a> Logger<'a> {
         }
     }
 
-    pub fn next(&self, data: &mut tera::Context, tera: &Tera) {
+    pub fn next(&self, data: &mut tera::Context, tmpl: &Template) {
         data.insert("logger", &self.def);
-        self.next_message().next(data, tera);
+        self.next_message().next(data, tmpl);
     }
 
     fn next_message(&self) -> &Message {
