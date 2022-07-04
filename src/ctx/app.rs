@@ -34,33 +34,44 @@ impl<'a> App<'a> {
         })
     }
 
-    pub fn next(&mut self, index: u64) -> Result<String> {
+    pub fn next(&mut self, index: u64) -> Result<Option<String>> {
         let mut line = Line::new(index, &self.template, &self.timestamp.next());
 
-        let logger = self.choose_logger();
-        logger.next(&mut line)?;
+        if let Some(logger) = self.choose_logger() {
+            if let Some(_) = logger.next(&mut line)? {
+                return Ok(Some(line.render(&self.def.name)?))
+            }
+        }
 
-        line.render(&self.def.name)
+        Ok(None)
     }
 
-    fn choose_logger(&self) -> &Logger {
+    fn choose_logger(&self) -> Option<&Logger> {
         let mut i = 0;
         let max = self.loggers.len();
         while i < 10 {
             let index = rand::thread_rng().gen_range(0..max * 2);
             if index < max {
-                return &self.loggers[index];
+                return Some(&self.loggers[index]);
             }
 
             i = i+1;
         }
 
-        return &self.loggers[0];
+        if self.loggers.len() > 0 {
+            return Some(&self.loggers[0]);
+        }
+
+        None
     }
 
     pub fn generate(&mut self) -> Result<()> {
         for i in 0..self.def.lines {
-            println!("{}", self.next(i)?);
+            if let Some(line_text) = self.next(i)? {
+                println!("{}", line_text);
+            } else {
+                break;
+            }
         }
 
         Ok(())

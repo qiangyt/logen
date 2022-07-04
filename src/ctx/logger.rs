@@ -26,26 +26,34 @@ impl<'a> Logger<'a> {
         }
     }
 
-    pub fn next(&self, line: &mut Line) -> Result<()>{
+    pub fn next(&self, line: &mut Line) -> Result<Option<()>>{
         line.var("logger", &self.def);
 
-        let msg = self.next_message();
-        msg.next(line)
+        if let Some(msg) = self.next_message() {
+            msg.next(line)?;
+            return Ok(Some(()));
+        }
+
+        Ok(None)
     }
 
-    fn next_message(&self) -> &Message {
+    fn next_message(&self) -> Option<&Message> {
         let mut i = 0;
         let max = self.messages.len();
         while i < 10   {
             let index = rand::thread_rng().gen_range(0..max * 2);
             if index < max {
-                return &self.messages[index]
+                return Some(&self.messages[index])
             }
 
             i = i+1;
         }
 
-        return &self.messages[0];
+        if self.messages.len() == 0 {
+            return Some(&self.messages[0]);
+        }
+
+        None
     }
 
 }
