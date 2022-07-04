@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use lazy_static::lazy_static;
 
 lazy_static! {
-    static ref DEFAULT:Template = Template::new();
+    pub static ref DEFAULT:Template = Template::new();
 }
 
 pub struct Template {
