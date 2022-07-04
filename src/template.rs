@@ -8,9 +8,9 @@ pub struct Template {
 
 impl Template {
 
-    pub fn new() -> Template {
+    pub fn new() -> Self {
         let mut tera = Tera::default();
-        
+
         // disable autoescaping completely
         tera.autoescape_on(vec![]);
 
@@ -20,7 +20,7 @@ impl Template {
         Template {tera}
     }
 
-        
+
     pub fn tera_filter_align_left(value: &tera::Value, args: &HashMap<String, tera::Value>) -> tera::Result<tera::Value> {
         let mut value = tera::try_get_value!("align_left", "value", String, value);
 

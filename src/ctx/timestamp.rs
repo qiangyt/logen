@@ -11,11 +11,11 @@ pub struct Timestamp<'a> {
 }
 
 impl<'a> Timestamp<'a> {
-    pub fn new(def: &TimestampDef, lines: u64) -> Timestamp {
+    pub fn new(def: &'a TimestampDef, lines: u64) -> Self {
+        let interval = (def.end.timestamp_millis() - def.begin.timestamp_millis()) / lines as i64;
         Timestamp {
-            def,
+            def, interval,
             value: def.begin,
-            interval: (def.end.timestamp_millis() - def.begin.timestamp_millis()) / lines as i64,
         }
     }
 

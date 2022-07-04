@@ -8,14 +8,14 @@ pub struct Message<'a> {
 }
 
 impl<'a> Message<'a> {
-    pub fn new(def: &'a MessageDef, id: String) -> Message<'a> {        
+    pub fn new(def: &'a MessageDef, id: String) -> Self {
         Message {def, id}
     }
 
     //#[allow(unused_mut)]
     pub fn next(&self, line: &mut Line) {
         let def = self.def;
-        
+
         line.var("file", &def.file);
         line.var("line", &def.line);
         line.var("method", &def.method);

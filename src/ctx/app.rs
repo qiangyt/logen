@@ -15,7 +15,7 @@ pub struct App<'a> {
 
 impl<'a> App<'a> {
 
-    pub fn new(def: &'a AppDef, template: &'a Template) -> App<'a> {
+    pub fn new(def: &'a AppDef, template: &'a Template) -> Self {
         App {
             def, template,
             timestamp: Timestamp::new(&def.timestamp, def.lines),

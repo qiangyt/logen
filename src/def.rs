@@ -43,7 +43,7 @@ pub struct TimestampDef {
 }
 
 impl TimestampDef {
-    pub fn new(format: String, begin: DateTime<Utc>, end: DateTime<Utc>) -> TimestampDef {
+    pub fn new(format: String, begin: DateTime<Utc>, end: DateTime<Utc>) -> Self {
         TimestampDef {format, begin, end}
     }
 }
@@ -77,7 +77,7 @@ impl LoggerDef {
         for (i, message_def) in self.messages.iter().enumerate() {
             let msg_id = format!("{}/{}", id, i);
             message_def.post_init(&msg_id, tmpl);
-        }    
+        }
     }
 }
 

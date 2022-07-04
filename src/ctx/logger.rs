@@ -11,7 +11,7 @@ pub struct Logger<'a> {
 }
 
 impl<'a> Logger<'a> {
-    pub fn new(def: &'a LoggerDef, id: String) -> Logger<'a> {
+    pub fn new(def: &'a LoggerDef, id: String) -> Self {
         Logger {
             messages: {
                 let mut v = Vec::new();

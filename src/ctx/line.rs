@@ -10,7 +10,7 @@ pub struct Line<'a> {
 
 impl<'a> Line<'a> {
 
-    pub fn new(index: u64, template: &'a Template, timestamp: &str) -> Line<'a> {
+    pub fn new(index: u64, template: &'a Template, timestamp: &str) -> Self {
         let mut r = Line {
             data: tera::Context::new(),
             template,
@@ -24,7 +24,7 @@ impl<'a> Line<'a> {
 
     pub fn var<T: Serialize + ?Sized, S: Into<String>>(&mut self, key: S, val: &T) {
         self.data.insert(key.into(), &to_value(val).unwrap());
-    }    
+    }
 
     pub fn render(&self, template_name: &str) -> String {
         self.template.render(template_name, &self.data)
