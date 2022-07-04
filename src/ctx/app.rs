@@ -3,6 +3,7 @@ use super::Logger;
 use super::Line;
 use super::Timestamp;
 use crate::Template;
+use anyhow::Result;
 
 use rand::Rng;
 
@@ -15,11 +16,11 @@ pub struct App<'a> {
 
 impl<'a> App<'a> {
 
-    pub fn new(def: &'a AppDef) -> Self {
+    pub fn new(def: &'a AppDef) -> Result<Self> {
         let mut template = Template::new();
-        def.post_init(&mut template);
+        def.post_init(&mut template)?;
 
-        App {
+        Ok(App {
             def, template,
             timestamp: Timestamp::new(&def.timestamp, def.lines),
             loggers: {
@@ -30,14 +31,14 @@ impl<'a> App<'a> {
                 }
                 v
             },
-        }
+        })
     }
 
-    pub fn next(&mut self, index: u64) -> String {
+    pub fn next(&mut self, index: u64) -> Result<String> {
         let mut line = Line::new(index, &self.template, &self.timestamp.next());
 
         let logger = self.choose_logger();
-        logger.next(&mut line);
+        logger.next(&mut line)?;
 
         line.render(&self.def.name)
     }
@@ -57,10 +58,12 @@ impl<'a> App<'a> {
         return &self.loggers[0];
     }
 
-    pub fn generate(&mut self) {
+    pub fn generate(&mut self) -> Result<()> {
         for i in 0..self.def.lines {
-            println!("{}", self.next(i));
+            println!("{}", self.next(i)?);
         }
+
+        Ok(())
     }
 
 }

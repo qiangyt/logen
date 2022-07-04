@@ -3,6 +3,7 @@ use rand::Rng;
 use crate::def::LoggerDef;
 use super::Message;
 use super::Line;
+use anyhow::Result;
 
 
 pub struct Logger<'a> {
@@ -25,11 +26,11 @@ impl<'a> Logger<'a> {
         }
     }
 
-    pub fn next(&self, line: &mut Line) {
+    pub fn next(&self, line: &mut Line) -> Result<()>{
         line.var("logger", &self.def);
 
         let msg = self.next_message();
-        msg.next(line);
+        msg.next(line)
     }
 
     fn next_message(&self) -> &Message {

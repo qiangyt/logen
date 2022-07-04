@@ -1,5 +1,6 @@
 use crate::def::*;
 use super::Line;
+use anyhow::Result;
 
 
 pub struct Message<'a> {
@@ -13,7 +14,7 @@ impl<'a> Message<'a> {
     }
 
     //#[allow(unused_mut)]
-    pub fn next(&self, line: &mut Line) {
+    pub fn next(&self, line: &mut Line) -> Result<()> {
         let def = self.def;
 
         line.var("file", &def.file);
@@ -21,7 +22,9 @@ impl<'a> Message<'a> {
         line.var("method", &def.method);
         line.var("level", &def.level);
 
-        let message = line.render(&self.id);
+        let message = line.render(&self.id)?;
         line.var("message", &message);
+
+        Ok(())
     }
 }

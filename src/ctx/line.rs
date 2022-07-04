@@ -1,5 +1,6 @@
 use serde::Serialize;
 use serde_json::to_value;
+use anyhow::Result;
 
 use crate::Template;
 
@@ -26,7 +27,7 @@ impl<'a> Line<'a> {
         self.data.insert(key.into(), &to_value(val).unwrap());
     }
 
-    pub fn render(&self, template_name: &str) -> String {
+    pub fn render(&self, template_name: &str) -> Result<String> {
         self.template.render(template_name, &self.data)
     }
 

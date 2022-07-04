@@ -5,11 +5,19 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+#[profile.dev]
+#panic = "unwind"
+
+#[profile.release]
+#panic = "unwind"
+
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
 lazy_static = "1.4.0"
+anyhow = "1.0"
 rand = "0.8.5"
 serde = {version = "1.0", features = ["derive"]}
 serde_yaml = "0.8"
 serde_json = "1.0"
 tera = "1.16"
+thiserror = "1.0"
