@@ -61,6 +61,10 @@ pub struct MessageDef {
 
 impl MessageDef {
     pub fn post_init(&self, id: &str, tmpl: &mut Template) {
+        self.with_template(id, tmpl);
+    }
+
+    pub fn with_template(&self, id: &str, tmpl: &mut Template) {
         tmpl.add_template(id, &self.template);
     }
 }
@@ -74,6 +78,10 @@ pub struct LoggerDef {
 
 impl LoggerDef {
     pub fn post_init(&self, id: &str, tmpl: &mut Template) {
+        self.post_init_messagess(id, tmpl);
+    }
+
+    pub fn post_init_messagess(&self, id: &str, tmpl: &mut Template) {
         for (i, message_def) in self.messages.iter().enumerate() {
             let msg_id = format!("{}/{}", id, i);
             message_def.post_init(&msg_id, tmpl);
@@ -95,11 +103,19 @@ pub struct AppDef {
 
 impl AppDef {
     pub fn post_init(&self, tmpl: &mut Template) {
-        tmpl.add_template(&self.name, &self.template);
+        self.post_init_loggers(tmpl);
+    }
+
+    pub fn post_init_loggers(&self, tmpl: &mut Template) {
+        self.with_template(tmpl);
 
         for (i, logger_def) in self.loggers.iter().enumerate() {
             let logger_id = format!("{}/{}", self.name, i);
             logger_def.post_init(&logger_id, tmpl);
         }
+    }
+
+    pub fn with_template(&self, tmpl: &mut Template) {
+        tmpl.add_template(&self.name, &self.template);
     }
 }
