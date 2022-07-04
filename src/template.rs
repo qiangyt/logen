@@ -1,4 +1,4 @@
-use tera::Tera;
+use tera::{Tera, try_get_value, Value, Error, Result, to_value, Context};
 use std::collections::HashMap;
 
 pub struct Template {
@@ -14,19 +14,25 @@ impl Template {
         // disable autoescaping completely
         tera.autoescape_on(vec![]);
 
-        tera.register_filter("align_left", Box::new(Template::tera_filter_align_left));
-        tera.register_filter("align_right", Box::new(Template::tera_filter_align_right));
+        let mut r = Template {tera};
+        r.register_default_filters();
 
-        Template {tera}
+        return r;
     }
 
 
-    pub fn tera_filter_align_left(value: &tera::Value, args: &HashMap<String, tera::Value>) -> tera::Result<tera::Value> {
-        let mut value = tera::try_get_value!("align_left", "value", String, value);
+    pub fn register_default_filters(&mut self) {
+        self.tera.register_filter("align_left", Box::new(Template::tera_filter_align_left));
+        self.tera.register_filter("align_right", Box::new(Template::tera_filter_align_right));
+    }
+
+
+    pub fn tera_filter_align_left(value: &Value, args: &HashMap<String, Value>) -> Result<Value> {
+        let mut value = try_get_value!("align_left", "value", String, value);
 
         let width = match args.get("width") {
-            Some(width) => tera::try_get_value!("align_left", "width", i32, width),
-            None => return Err(tera::Error::msg("filter `align_left` expected an arg called `width`")),
+            Some(width) => try_get_value!("align_left", "width", i32, width),
+            None => return Err(Error::msg("filter `align_left` expected an arg called `width`")),
         };
 
         let mut len = 0;
@@ -38,15 +44,15 @@ impl Template {
             len = len + 1;
         }
 
-        Ok(tera::to_value(value).unwrap())
+        Ok(to_value(value).unwrap())
     }
 
-    pub fn tera_filter_align_right(value: &tera::Value, args: &HashMap<String, tera::Value>) -> tera::Result<tera::Value> {
-        let mut value = tera::try_get_value!("align_right", "value", String, value);
+    pub fn tera_filter_align_right(value: &Value, args: &HashMap<String, Value>) -> Result<Value> {
+        let mut value = try_get_value!("align_right", "value", String, value);
 
         let width = match args.get("width") {
-            Some(width) => tera::try_get_value!("align_right", "width", i32, width),
-            None => return Err(tera::Error::msg("filter `align_right` expected an arg called `width`")),
+            Some(width) => try_get_value!("align_right", "width", i32, width),
+            None => return Err(Error::msg("filter `align_right` expected an arg called `width`")),
         };
 
         let mut len = 0;
@@ -58,7 +64,7 @@ impl Template {
             len = len + 1;
         }
 
-        Ok(tera::to_value(value).unwrap())
+        Ok(to_value(value).unwrap())
     }
 
     pub fn add_raw_template(&mut self, name: &str, content: &str) {
@@ -66,7 +72,7 @@ impl Template {
              .expect(&format!("failed to register template {}: {}", name, content));
     }
 
-    pub fn render(&self, template_name: &str, data: &tera::Context) -> String {
+    pub fn render(&self, template_name: &str, data: &Context) -> String {
         self.tera.render(template_name, data).unwrap()
     }
 
