@@ -61,7 +61,7 @@ pub struct MessageDef {
 
 impl MessageDef {
     pub fn post_init(&self, id: &str, tmpl: &mut Template) {
-        tmpl.add_raw_template(id, &self.template);
+        tmpl.add_template(id, &self.template);
     }
 }
 
@@ -95,7 +95,7 @@ pub struct AppDef {
 
 impl AppDef {
     pub fn post_init(&self, tmpl: &mut Template) {
-        tmpl.add_raw_template(&self.name, &self.template);
+        tmpl.add_template(&self.name, &self.template);
 
         for (i, logger_def) in self.loggers.iter().enumerate() {
             let logger_id = format!("{}/{}", self.name, i);

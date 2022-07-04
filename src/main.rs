@@ -1,6 +1,5 @@
 use logen::ctx::App;
 use logen::def::AppDef;
-use logen::Template;
 use std::fs;
 
 fn main() {
@@ -9,9 +8,6 @@ fn main() {
     let def: AppDef = serde_yaml::from_str(&config_yaml)
         .expect(&format!("failed to parse config yaml: {}", config_yaml));
 
-    let mut template = Template::new();
-    def.post_init(&mut template);
-
-    let mut app = App::new(&def, &template);
+    let mut app = App::new(&def);
     app.generate();
 }

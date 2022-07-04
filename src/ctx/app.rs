@@ -9,13 +9,16 @@ use rand::Rng;
 pub struct App<'a> {
     def: &'a AppDef,
     timestamp: Timestamp<'a>,
-    template: &'a Template,
+    template: Template,
     loggers: Vec<Logger<'a>>,
 }
 
 impl<'a> App<'a> {
 
-    pub fn new(def: &'a AppDef, template: &'a Template) -> Self {
+    pub fn new(def: &'a AppDef) -> Self {
+        let mut template = Template::new();
+        def.post_init(&mut template);
+
         App {
             def, template,
             timestamp: Timestamp::new(&def.timestamp, def.lines),
@@ -31,7 +34,7 @@ impl<'a> App<'a> {
     }
 
     pub fn next(&mut self, index: u64) -> String {
-        let mut line = Line::new(index, self.template, &self.timestamp.next());
+        let mut line = Line::new(index, &self.template, &self.timestamp.next());
 
         let logger = self.choose_logger();
         logger.next(&mut line);

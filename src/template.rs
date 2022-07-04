@@ -67,9 +67,9 @@ impl Template {
         Ok(to_value(value).unwrap())
     }
 
-    pub fn add_raw_template(&mut self, name: &str, content: &str) {
+    pub fn add_template(&mut self, name: &str, content: &str) {
         self.tera.add_raw_template(name, content)
-             .expect(&format!("failed to register template {}: {}", name, content));
+             .expect(&format!("failed to register template {}: {}", name, content))
     }
 
     pub fn render(&self, template_name: &str, data: &Context) -> String {
