@@ -1,10 +1,5 @@
 use tera::Tera;
 use std::collections::HashMap;
-use lazy_static::lazy_static;
-
-lazy_static! {
-    pub static ref DEFAULT:Template = Template::new();
-}
 
 pub struct Template {
     tera: Tera,
