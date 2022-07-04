@@ -3,7 +3,6 @@ use rand::Rng;
 
 use crate::def::TimestampDef;
 
-
 pub struct Timestamp<'a> {
     def: &'a TimestampDef,
     value: DateTime<Utc>,
