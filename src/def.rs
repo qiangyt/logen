@@ -106,6 +106,11 @@ pub struct AppDef {
 }
 
 impl AppDef {
+    pub fn from_yaml(yaml: &str) -> Self {
+        serde_yaml::from_str::<Self>(yaml)
+            .expect(&format!("failed to parse config yaml: {}", yaml))
+    }
+
     pub fn post_init(&self, tmpl: &mut Template) -> Result<()> {
         self.post_init_loggers(tmpl)
     }
