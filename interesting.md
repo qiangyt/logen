@@ -1,0 +1,26 @@
+- https://github.com/autopilot-rs/autopilot-rs: A simple, cross-platform GUI automation module for Rust.
+- https://github.com/dioxuslabs/dioxus: Friendly React-like GUI library for desktop, web, mobile, and more.
+- https://github.com/fschutt/azul:  a free, functional, reactive GUI framework for Rust, C and C++, built using the WebRender rendering engine and a CSS / HTML-like document object model for rapid development of beautiful, native desktop applications
+- https://github.com/tauri-apps/tauri: Build smaller, faster, and more secure desktop applications with a web frontend
+- https://github.com/metacall/core： MetaCall: The ultimate polyglot programming experience.
+- https://github.com/mun-lang/mun： Source code for the Mun language and runtime.
+- https://github.com/rhaiscript/rhai： An embedded scripting language for Rust.
+- https://github.com/rune-rs/rune：An embeddable dynamic programming language for Rust.
+- https://github.com/djc/askama：Type-safe, compiled Jinja-like templates for Rust
+- https://github.com/w4/chartered：a private, authenticated, permissioned cargo registry
+- https://github.com/emilk/egui：an easy-to-use immediate mode GUI in Rust that runs on both web and native
+- https://github.com/cloudflare/boringtun：Userspace WireGuard® Implementation in Rust
+- https://github.com/fcsonline/drill：an HTTP load testing application written in Rust
+- https://github.com/habitat-sh/habitat：Modern applications with built-in automation
+- https://github.com/seppo0010/rsedis：Redis re-implemented in Rust.
+- https://github.com/paritytech/parity-db：Experimental blockchain database 
+- https://github.com/nebulet/nebulet：A proof-of-concept microkernel that implements a WebAssembly "usermode" that runs in Ring 0.
+- https://github.com/pier-cli/pier：A Linux script management CLI written in Rust
+- https://github.com/firecracker-microvm/firecracker: Secure and fast microVMs for serverless computing.
+- https://github.com/tailhook/vagga: a containerization tool without daemons
+- https://github.com/datafuselabs/databend: A modern Elasticity and Performance cloud data warehouse, activate your object storage for real-time analytics.
+- https://github.com/ChillFish8/lust:A fast, auto-optimizing image server designed for high throughput and caching
+- https://github.com/thecoshman/http: Host These Things Please - a basic http server for hosting a folder fast and simply
+- https://github.com/sagiegurari/shell2batch：Coverts simple basic shell scripts to windows batch scripts. 
+- https://github.com/neon-bindings/neon: Rust bindings for writing safe and fast native Node.js modules.
+- https://github.com/sharkdp/hyperfine：A command-line benchmarking tool
