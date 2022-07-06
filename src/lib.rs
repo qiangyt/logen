@@ -1,3 +1,4 @@
+pub mod assets;
 pub mod ctx;
 pub mod def;
 
