@@ -1,5 +1,6 @@
 [package]
 name = "logen"
+author = "Yiting Qiang"
 version = "0.1.0"
 edition = "2021"
 
@@ -12,6 +13,7 @@ edition = "2021"
 #panic = "unwind"
 
 [dependencies]
+clap = { version = "3.2.5", features = ["derive", "cargo", "env", "regex", "unicode", "wrap_help"] }
 chrono = { version = "0.4.19", features = ["serde"] }
 lazy_static = "1.4.0"
 anyhow = "1.0.58"
