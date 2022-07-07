@@ -1,0 +1,14 @@
+- JSON formatter
+- default value
+- multi app
+- imitate nginx log
+- imitate k8s event log
+- imitate bizx log
+- imitate mysql log
+- imitate kafka log
+- imitate redis log
+- imitate consul log
+- noise (non log)
+- story
+- splunk client
+- elk client
