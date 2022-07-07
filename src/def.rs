@@ -4,10 +4,12 @@ use chrono::{Utc};
 use serde::{Deserialize, Serialize};
 use anyhow::Result;
 
-use super::template::Template;
+use crate::template::Template;
+use crate::formatter::FlatFormatterDef;
+use crate::formatter::JsonFormatterDef;
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum LevelDef {
     Trace,
     Debug,
@@ -17,18 +19,25 @@ pub enum LevelDef {
     Fatal,
 }
 
-
-
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum FormatDef {
-    Flat,
-    Json,
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
+pub enum FormatterDef {
+    Flat(FlatFormatterDef),
+    Json(JsonFormatterDef),
+}
+
+impl FormatterDef {
+    pub fn with_template(&self, tmpl_name: &str, tmpl: &mut Template) -> Result<()> {
+        match self {
+            FormatterDef::Flat(flat) => flat.with_template(tmpl_name, tmpl),
+            FormatterDef::Json(_) => Ok(()),
+        }
+    }
 }
 
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum StyleDef {
     Bunyan,
 }
@@ -37,7 +46,7 @@ pub enum StyleDef {
 
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct TimestampDef {
     pub format: String,
     pub begin: DateTime<Utc>,//rfc3339
@@ -52,7 +61,7 @@ impl TimestampDef {
 
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct MessageDef {
     pub template: String,
     pub file: String,
@@ -72,7 +81,7 @@ impl MessageDef {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct LoggerDef {
     pub name: String,
     pub messages: Vec<MessageDef>,
@@ -94,13 +103,12 @@ impl LoggerDef {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct AppDef {
     pub name: String,
-    pub template: String,
     pub style: StyleDef,
     pub lines: u64,
-    pub format: FormatDef,
+    pub formatter: FormatterDef,
     pub timestamp: TimestampDef,
     pub loggers: Vec<LoggerDef>,
 }
@@ -116,7 +124,7 @@ impl AppDef {
     }
 
     pub fn post_init_loggers(&self, tmpl: &mut Template) -> Result<()> {
-        self.with_template(tmpl)?;
+        self.formatter.with_template(&self.name, tmpl)?;
 
         for (i, logger_def) in self.loggers.iter().enumerate() {
             let logger_id = format!("{}/{}", self.name, i);
@@ -124,9 +132,5 @@ impl AppDef {
         }
 
         Ok(())
-    }
-
-    pub fn with_template(&self, tmpl: &mut Template) -> Result<()> {
-        tmpl.add_template(&self.name, &self.template)
     }
 }

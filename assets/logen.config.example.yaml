@@ -1,5 +1,7 @@
 name: nginx
-format: flat
+formatter:
+  flat:
+    template: '{{timestamp}} <{{level | upper | align_left(width=5)}}> {{logger.name}} {{file}}/{{line}} {{method}} - {{message}}'
 style: bunyan
 lines: 10
 timestamp:
@@ -7,7 +9,6 @@ timestamp:
   begin: 2014-11-28T21:00:09+08:00
   end: 2014-11-28T22:00:09+08:00
 
-template: '{{timestamp}} <{{level | upper | align_left(width=5)}}> {{logger.name}} {{file}}/{{line}} {{method}} - {{message}}'
 loggers:
 - name: req
   messages:
