@@ -22,12 +22,12 @@ impl<'a> App<'a> {
 
         Ok(App {
             def, template,
-            timestamp: Timestamp::new(&def.timestamp, def.lines),
+            timestamp: Timestamp::new(&def.timestamp, def.num_of_lines),
             loggers: {
                 let mut v = Vec::new();
-                for (i, logger_def) in def.loggers.iter().enumerate() {
+                for (i, logger_d) in def.loggers.iter().enumerate() {
                     let logger_id = format!("{}/{}", def.name, i);
-                    v.push(Logger::new(logger_def, logger_id));
+                    v.push(Logger::new(logger_d, logger_id));
                 }
                 v
             },
@@ -39,7 +39,7 @@ impl<'a> App<'a> {
 
         if let Some(logger) = self.choose_logger() {
             if let Some(_) = logger.next(&mut line)? {
-                return Ok(Some(line.render(&self.def.name)?))
+                return Ok(Some(line.render_with_template(&self.def.name)?))
             }
         }
 
@@ -66,7 +66,7 @@ impl<'a> App<'a> {
     }
 
     pub fn generate(&mut self) -> Result<()> {
-        for i in 0..self.def.lines {
+        for i in 0..self.def.num_of_lines {
             if let Some(line_text) = self.next(i)? {
                 println!("{}", line_text);
             } else {

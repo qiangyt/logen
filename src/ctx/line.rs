@@ -27,7 +27,7 @@ impl<'a> Line<'a> {
         self.data.insert(key.into(), &to_value(val).unwrap());
     }
 
-    pub fn render(&self, template_name: &str) -> Result<String> {
+    pub fn render_with_template(&self, template_name: &str) -> Result<String> {
         self.template.render(template_name, &self.data)
     }
 

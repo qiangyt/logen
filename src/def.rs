@@ -38,15 +38,6 @@ impl FormatterD {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub enum StyleD {
-    Bunyan,
-}
-
-
-
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct TimestampD {
     pub format: String,
     pub begin: DateTime<Utc>,//rfc3339
@@ -106,8 +97,7 @@ impl LoggerDef {
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct AppDef {
     pub name: String,
-    pub style: StyleD,
-    pub lines: u64,
+    pub num_of_lines: u64,
     pub formatter: FormatterD,
     pub timestamp: TimestampD,
     pub loggers: Vec<LoggerDef>,

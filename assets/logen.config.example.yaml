@@ -2,8 +2,9 @@ name: nginx
 formatter:
   flat:
     template: '{{timestamp}} <{{level | upper | align_left(width=5)}}> {{logger.name}} {{file}}/{{line}} {{method}} - {{message}}'
-style: bunyan
-lines: 10
+  #json:
+  #  style: bunyan
+num_of_lines: 10
 timestamp:
   format: "%Y-%m-%d %H:%M:%S"
   begin: 2014-11-28T21:00:09+08:00

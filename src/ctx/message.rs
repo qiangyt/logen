@@ -22,7 +22,7 @@ impl<'a> Message<'a> {
         line.var("method", &def.method);
         line.var("level", &def.level);
 
-        let message = line.render(&self.id)?;
+        let message = line.render_with_template(&self.id)?;
         line.var("message", &message);
 
         Ok(())
