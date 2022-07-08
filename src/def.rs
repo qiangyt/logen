@@ -5,12 +5,12 @@ use serde::{Deserialize, Serialize};
 use anyhow::Result;
 
 use crate::template::Template;
-use crate::formatter::FlatFormatterDef;
-use crate::formatter::JsonFormatterDef;
+use crate::formatter::FlatFormatterD;
+use crate::formatter::JsonFormatterD;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub enum LevelDef {
+pub enum LevelD {
     Trace,
     Debug,
     Info,
@@ -21,16 +21,16 @@ pub enum LevelDef {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub enum FormatterDef {
-    Flat(FlatFormatterDef),
-    Json(JsonFormatterDef),
+pub enum FormatterD {
+    Flat(FlatFormatterD),
+    Json(JsonFormatterD),
 }
 
-impl FormatterDef {
+impl FormatterD {
     pub fn with_template(&self, tmpl_name: &str, tmpl: &mut Template) -> Result<()> {
         match self {
-            FormatterDef::Flat(flat) => flat.with_template(tmpl_name, tmpl),
-            FormatterDef::Json(_) => Ok(()),
+            FormatterD::Flat(flat) => flat.with_template(tmpl_name, tmpl),
+            FormatterD::Json(_) => Ok(()),
         }
     }
 }
@@ -38,7 +38,7 @@ impl FormatterDef {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub enum StyleDef {
+pub enum StyleD {
     Bunyan,
 }
 
@@ -47,30 +47,30 @@ pub enum StyleDef {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub struct TimestampDef {
+pub struct TimestampD {
     pub format: String,
     pub begin: DateTime<Utc>,//rfc3339
     pub end: DateTime<Utc>,
 }
 
-impl TimestampDef {
+impl TimestampD {
     pub fn new(format: String, begin: DateTime<Utc>, end: DateTime<Utc>) -> Self {
-        TimestampDef {format, begin, end}
+        TimestampD {format, begin, end}
     }
 }
 
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub struct MessageDef {
+pub struct MessageD {
     pub template: String,
     pub file: String,
     pub line: usize,
     pub method: String,
-    pub level: LevelDef,
+    pub level: LevelD,
 }
 
-impl MessageDef {
+impl MessageD {
     pub fn post_init(&self, id: &str, tmpl: &mut Template) -> Result<()> {
         self.with_template(id, tmpl)
     }
@@ -84,7 +84,7 @@ impl MessageDef {
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct LoggerDef {
     pub name: String,
-    pub messages: Vec<MessageDef>,
+    pub messages: Vec<MessageD>,
 }
 
 impl LoggerDef {
@@ -106,10 +106,10 @@ impl LoggerDef {
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct AppDef {
     pub name: String,
-    pub style: StyleDef,
+    pub style: StyleD,
     pub lines: u64,
-    pub formatter: FormatterDef,
-    pub timestamp: TimestampDef,
+    pub formatter: FormatterD,
+    pub timestamp: TimestampD,
     pub loggers: Vec<LoggerDef>,
 }
 

@@ -4,8 +4,8 @@ use anyhow::Result;
 use crate::Template;
 
 pub mod flat;
-pub use flat::FlatFormatterDef as FlatFormatterDef;
+pub use flat::FlatFormatterD as FlatFormatterD;
 
 pub mod json;
-pub use json::JsonFormatterDef as JsonFormatterDef;
+pub use json::JsonFormatterD as JsonFormatterD;
 

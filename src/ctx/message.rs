@@ -4,12 +4,12 @@ use anyhow::Result;
 
 
 pub struct Message<'a> {
-    def: &'a MessageDef,
+    def: &'a MessageD,
     id: String,
 }
 
 impl<'a> Message<'a> {
-    pub fn new(def: &'a MessageDef, id: String) -> Self {
+    pub fn new(def: &'a MessageD, id: String) -> Self {
         Message {def, id}
     }
 

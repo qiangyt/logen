@@ -1,16 +1,16 @@
 use chrono::{DateTime, Utc, Duration};
 use rand::Rng;
 
-use crate::def::TimestampDef;
+use crate::def::TimestampD;
 
 pub struct Timestamp<'a> {
-    def: &'a TimestampDef,
+    def: &'a TimestampD,
     value: DateTime<Utc>,
     interval: i64,
 }
 
 impl<'a> Timestamp<'a> {
-    pub fn new(def: &'a TimestampDef, lines: u64) -> Self {
+    pub fn new(def: &'a TimestampD, lines: u64) -> Self {
         let interval = (def.end.timestamp_millis() - def.begin.timestamp_millis()) / lines as i64;
         Timestamp {
             def, interval,
