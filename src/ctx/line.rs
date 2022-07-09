@@ -20,11 +20,11 @@ impl<'a> Line<'a> {
         r.var("index", &index);
         r.var("timestamp", timestamp);
 
-        r
+        return r;
     }
 
-    pub fn var<T: Serialize + ?Sized, S: Into<String>>(&mut self, key: S, val: &T) {
-        self.data.insert(key.into(), &to_value(val).unwrap());
+    pub fn var<T: Serialize + ?Sized>(&mut self, key: &str, val: &T) {
+        self.data.insert(key, &to_value(val).unwrap())
     }
 
     pub fn render_with_template(&self, template_name: &str) -> Result<String> {

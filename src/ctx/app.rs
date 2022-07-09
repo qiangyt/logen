@@ -21,7 +21,8 @@ impl<'a> App<'a> {
         def.post_init(&mut template)?;
 
         Ok(App {
-            def, template,
+            def,
+            template,
             timestamp: Timestamp::new(&def.timestamp, def.num_of_lines),
             loggers: {
                 let mut v = Vec::new();
@@ -34,44 +35,36 @@ impl<'a> App<'a> {
         })
     }
 
-    pub fn next(&mut self, index: u64) -> Result<Option<String>> {
-        let mut line = Line::new(index, &self.template, &self.timestamp.next());
-
-        if let Some(logger) = self.choose_logger() {
-            if let Some(_) = logger.next(&mut line)? {
-                return Ok(Some(line.render_with_template(&self.def.name)?))
-            }
-        }
-
-        Ok(None)
+    pub fn next_line(&mut self, line_index: u64) -> Result<Line> {
+        let mut line = Line::new(line_index, &self.template, &self.timestamp.next());
+        self.choose_logger().render(&mut line)?;
+        Ok(line)
     }
 
-    fn choose_logger(&self) -> Option<&Logger> {
+    fn choose_logger(&self) -> &Logger {
         let mut i = 0;
         let max = self.loggers.len();
+        let mut rng = rand::thread_rng();
+
         while i < 10 {
-            let index = rand::thread_rng().gen_range(0..max * 2);
+            let index = rng.gen_range(0..max * 2);
             if index < max {
-                return Some(&self.loggers[index]);
+                return &self.loggers[index];
             }
 
             i = i+1;
         }
 
-        if self.loggers.len() > 0 {
-            return Some(&self.loggers[0]);
-        }
-
-        None
+        return &self.loggers[0];
     }
 
     pub fn generate(&mut self) -> Result<()> {
-        for i in 0..self.def.num_of_lines {
-            if let Some(line_text) = self.next(i)? {
-                println!("{}", line_text);
-            } else {
-                break;
-            }
+        let def = self.def;
+
+        for i in 0..def.num_of_lines {
+            let line = self.next_line(i)?;
+            let line_text = line.render_with_template(&def.name)?;
+            println!("{}", line_text);
         }
 
         Ok(())

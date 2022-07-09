@@ -13,7 +13,8 @@ impl<'a> Timestamp<'a> {
     pub fn new(def: &'a TimestampD, num_of_lines: u64) -> Self {
         let interval = (def.end.timestamp_millis() - def.begin.timestamp_millis()) / num_of_lines as i64;
         Timestamp {
-            def, interval,
+            def,
+            interval,
             value: def.begin,
         }
     }

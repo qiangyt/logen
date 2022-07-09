@@ -44,5 +44,5 @@ pub fn with_cli_args() -> Result<Option<AppDef>> {
 
     let yaml = fs::read_to_string(&f)
         .with_context(|| format!("failed to open config file: {}", f))?;
-    Ok(Some(AppDef::from_yaml(&yaml)))
+    return Ok(Some(AppDef::from_yaml(&yaml)));
 }

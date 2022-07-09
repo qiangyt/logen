@@ -45,7 +45,7 @@ impl Template {
             len = len + 1;
         }
 
-        Ok(to_value(value).unwrap())
+        return Ok(to_value(value).unwrap());
     }
 
     pub fn tera_filter_align_right(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
@@ -65,7 +65,7 @@ impl Template {
             len = len + 1;
         }
 
-        Ok(to_value(value).unwrap())
+        return Ok(to_value(value).unwrap());
     }
 
     pub fn add_template(&mut self, template_name: &str, content: &str) -> Result<()> {

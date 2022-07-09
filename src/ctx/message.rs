@@ -14,7 +14,7 @@ impl<'a> Message<'a> {
     }
 
     //#[allow(unused_mut)]
-    pub fn next(&self, line: &mut Line) -> Result<()> {
+    pub fn render(&self, line: &mut Line) -> Result<()> {
         let def = self.def;
 
         line.var("file", &def.file);

@@ -2,7 +2,7 @@
 use chrono::prelude::*;
 use chrono::{Utc};
 use serde::{Deserialize, Serialize};
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 
 use crate::template::Template;
 use crate::formatter::FlatFormatterD;
@@ -84,12 +84,16 @@ impl LoggerDef {
     }
 
     pub fn post_init_messagess(&self, id: &str, tmpl: &mut Template) -> Result<()> {
-        for (i, message_def) in self.messages.iter().enumerate() {
-            let msg_id = format!("{}/{}", id, i);
-            message_def.post_init(&msg_id, tmpl)?;
+        if self.messages.len() == 0 {
+            return Err(anyhow!("app {} should configure at least 1 message", self.name));
         }
 
-        Ok(())
+        for (i, message_d) in self.messages.iter().enumerate() {
+            let msg_id = format!("{}/{}", id, i);
+            message_d.post_init(&msg_id, tmpl)?;
+        }
+
+        return Ok(());
     }
 }
 
@@ -116,11 +120,15 @@ impl AppDef {
     pub fn post_init_loggers(&self, tmpl: &mut Template) -> Result<()> {
         self.formatter.with_template(&self.name, tmpl)?;
 
-        for (i, logger_def) in self.loggers.iter().enumerate() {
-            let logger_id = format!("{}/{}", self.name, i);
-            logger_def.post_init(&logger_id, tmpl)?;
+        if self.loggers.len() == 0 {
+            return Err(anyhow!("app {} should configure at least 1 logger", self.name));
         }
 
-        Ok(())
+        for (i, logger_d) in self.loggers.iter().enumerate() {
+            let logger_id = format!("{}/{}", self.name, i);
+            logger_d.post_init(&logger_id, tmpl)?;
+        }
+
+        return Ok(());
     }
 }
