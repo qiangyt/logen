@@ -1,18 +1,18 @@
 use rand::Rng;
 
-use crate::def::LoggerDef;
+use crate::def::LoggerD;
 use super::Message;
 use super::Line;
 use anyhow::Result;
 
 
 pub struct Logger<'a> {
-    def: &'a LoggerDef,
+    def: &'a LoggerD,
     messages: Vec<Message<'a>>,
 }
 
 impl<'a> Logger<'a> {
-    pub fn new(def: &'a LoggerDef, id: String) -> Self {
+    pub fn new(def: &'a LoggerD, id: String) -> Self {
         Logger {
             def,
             messages: {

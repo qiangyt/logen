@@ -1,4 +1,4 @@
-use crate::def::AppDef;
+use crate::def::AppD;
 use super::Logger;
 use super::Line;
 use super::Timestamp;
@@ -8,7 +8,7 @@ use anyhow::Result;
 use rand::Rng;
 
 pub struct App<'a> {
-    def: &'a AppDef,
+    def: &'a AppD,
     timestamp: Timestamp<'a>,
     template: Template,
     loggers: Vec<Logger<'a>>,
@@ -16,7 +16,7 @@ pub struct App<'a> {
 
 impl<'a> App<'a> {
 
-    pub fn new(def: &'a AppDef) -> Result<Self> {
+    pub fn new(def: &'a AppD) -> Result<Self> {
         let mut template = Template::new();
         def.post_init(&mut template)?;
 

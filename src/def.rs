@@ -73,12 +73,12 @@ impl MessageD {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub struct LoggerDef {
+pub struct LoggerD {
     pub name: String,
     pub messages: Vec<MessageD>,
 }
 
-impl LoggerDef {
+impl LoggerD {
     pub fn post_init(&self, id: &str, tmpl: &mut Template) -> Result<()> {
         self.post_init_messagess(id, tmpl)
     }
@@ -99,15 +99,15 @@ impl LoggerDef {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub struct AppDef {
+pub struct AppD {
     pub name: String,
     pub num_of_lines: u64,
     pub formatter: FormatterD,
     pub timestamp: TimestampD,
-    pub loggers: Vec<LoggerDef>,
+    pub loggers: Vec<LoggerD>,
 }
 
-impl AppDef {
+impl AppD {
     pub fn from_yaml(yaml: &str) -> Self {
         serde_yaml::from_str::<Self>(yaml)
             .expect(&format!("failed to parse config yaml: {}", yaml))

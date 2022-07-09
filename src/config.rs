@@ -1,7 +1,7 @@
 use anyhow::Context;
 use clap::Parser;
 use crate::assets::Asset;
-use crate::def::AppDef;
+use crate::def::AppD;
 use anyhow::Result;
 use std::fs;
 use std::str;
@@ -25,13 +25,13 @@ pub struct CliArgs {
 
 
 
-pub fn with_cli_args() -> Result<Option<AppDef>> {
+pub fn with_cli_args() -> Result<Option<AppD>> {
     let args = CliArgs::parse();
 
     if args.example {
         let a = Asset::get(ASSET_EXAMPLE_CONFIG_FILE).unwrap();
         let yaml = String::from_utf8(a.data.as_ref().to_vec()).unwrap();
-        return Ok(Some(AppDef::from_yaml(&yaml)))
+        return Ok(Some(AppD::from_yaml(&yaml)))
     }
 
     let f = args.config_file;
@@ -44,5 +44,5 @@ pub fn with_cli_args() -> Result<Option<AppDef>> {
 
     let yaml = fs::read_to_string(&f)
         .with_context(|| format!("failed to open config file: {}", f))?;
-    return Ok(Some(AppDef::from_yaml(&yaml)));
+    return Ok(Some(AppD::from_yaml(&yaml)));
 }
