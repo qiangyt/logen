@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     template::{Template, TemplateEngine},
-    timestamp::Timestamp,
+    ts::Timestamp,
 };
 
 use super::Formatter;

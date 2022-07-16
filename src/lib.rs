@@ -5,7 +5,7 @@ pub mod assets;
 pub mod config;
 pub mod fmt;
 pub mod template;
-pub mod timestamp;
+pub mod ts;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]

@@ -4,7 +4,7 @@ use logen::template::TemplateEngine;
 fn main() {
     if let Some(mut app) = config::with_cli_args().unwrap() {
         let template_engine = &mut TemplateEngine::new();
-        app.post_init(template_engine).unwrap();
+        app.init(template_engine).unwrap();
         app.generate(template_engine).unwrap();
     }
 }
