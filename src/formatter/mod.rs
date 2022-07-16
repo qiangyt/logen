@@ -6,10 +6,10 @@ pub use flat::FlatFormatterD as FlatFormatterD;
 pub mod json;
 pub use json::JsonFormatterD as JsonFormatterD;
 
-use crate::ctx::line::Line;
+use crate::{template::Template, ctx::timestamp::Timestamp};
 
 pub trait Formatter {
-  fn prepare(&self, line: &mut Line);
-  fn format(&self, line: &Line) -> Result<String>;
+  fn format_timestamp(&self, timestamp: &Timestamp) -> String;
+  fn format(&self, t: &Template, template_name: &str) -> Result<String>;
 }
 

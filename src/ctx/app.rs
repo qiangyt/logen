@@ -1,58 +1,26 @@
-use crate::{def::AppD, formatter::Formatter, template::Template};
+use crate::{def::{AppD, LoggerD, MessageD, Level}, formatter::Formatter, template::{Template, TemplateEngine}};
 use anyhow::Result;
 
 use rand::Rng;
 
-use super::{timestamp::Timestamp, logger::Logger, line::Line};
+use super::timestamp::Timestamp;
 
 pub struct App<'a> {
     def: &'a AppD,
     formatter: Box<dyn Formatter + 'a>,
-    template: Template,
-    logger: Vec<Logger<'a>>,
+    template_engine: &'a TemplateEngine,
 }
 
 impl <'a> App<'a> {
 
-    pub fn new(def: &'a AppD) -> Result<App<'a>> {
-        let mut t = Template::new();
-        def.post_init(&mut t)?;
-
+    pub fn new(def: &'a AppD, template_engine: &'a mut TemplateEngine) -> Result<App<'a>> {
         Ok(App {
             def,
             formatter: def.formatter.new_formatter(),
-            template: t,
-            logger: {
-                let mut v = Vec::new();
-                for (i, logger_d) in def.logger.iter().enumerate() {
-                    let logger_id = format!("{}/{}", def.name, i);
-                    v.push(Logger::new(logger_d, logger_id));
-                }
-                v
-            },
+            template_engine,
         })
     }
 
-    pub fn name(&self) -> &str {
-        &self.def.name
-    }
-
-    fn choose_logger(&self) -> &Logger {
-        let mut k = 0;
-        let max = self.logger.len();
-        let mut rng = rand::thread_rng();
-
-        while k < 10 {
-            let i = rng.gen_range(0..max * 2);
-            if i < max {
-                return &self.logger[i];
-            }
-
-            k = k+1;
-        }
-
-        return &self.logger[0];
-    }
 
     pub fn generate(&mut self) -> Result<()> {
         let d = self.def;
@@ -62,12 +30,54 @@ impl <'a> App<'a> {
         for i in 0..d.num_of_lines {
             ts.inc();
 
-            let mut ln = Line::new(i, self, &self.template, &ts);
-            f.prepare(&mut ln);
-            self.choose_logger().render(&mut ln)?;
+            let t = &mut self.new_template(i);
+            t.set("timestamp", &f.format_timestamp(&ts));
 
-            println!("{}", f.format(&ln)?);
+            let l = self.def.choose_logger();
+            let m = l.choose_message();
+
+            self.populate_logger(t, l)?;
+            self.populate_message(t, m)?;
+
+            println!("{}", f.format(t, &self.def.name)?);
         }
+
+        Ok(())
+    }
+//
+    fn new_template(&self, index: u64) -> Template {
+        let d = self.def;
+
+        let mut r = Template::new(self.template_engine);
+        r.set("app", &d.name);
+        r.set("index", &index);
+        r.set("host", d.choose_host());
+        r.set("pid", &rand::thread_rng().gen::<u16>());
+
+        r
+    }
+
+    fn populate_logger(&self, t: &mut Template, d: &LoggerD) -> Result<()> {
+        t.set("logger", &d.name);
+        Ok(())
+    }
+
+    fn populate_message(&self, t: &mut Template, d: &MessageD) -> Result<()> {
+        t.set("file", &d.file);
+        t.set("line", &d.line);
+        t.set("method", &d.method);
+        t.set("level", match d.level {
+            Level::Fine => "FINE",
+            Level::Trace => "TRACE",
+            Level::Debug => "DEBUG",
+            Level::Info => "INFO",
+            Level::Warn => "WARN",
+            Level::Error => "ERROR",
+            Level::Fatal => "FATAL",
+        });
+
+        let msg_text = t.render(&d.id)?;
+        t.set("message", &msg_text);
 
         Ok(())
     }

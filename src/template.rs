@@ -1,13 +1,14 @@
+use serde::Serialize;
 use tera::{Tera, try_get_value, Value, to_value};
 use std::collections::HashMap;
 use anyhow::{Context, Result};
 
-pub struct Template {
+pub struct TemplateEngine {
     tera: Tera,
 }
 
 
-impl Template {
+impl TemplateEngine {
 
     pub fn new() -> Self {
         let mut tera = Tera::default();
@@ -15,7 +16,7 @@ impl Template {
         // disable autoescaping completely
         tera.autoescape_on(vec![]);
 
-        let mut r = Template {tera};
+        let mut r = TemplateEngine {tera};
         r.register_default_filters();
 
         return r;
@@ -23,8 +24,8 @@ impl Template {
 
 
     pub fn register_default_filters(&mut self) {
-        self.tera.register_filter("align_left", Box::new(Template::tera_filter_align_left));
-        self.tera.register_filter("align_right", Box::new(Template::tera_filter_align_right));
+        self.tera.register_filter("align_left", Box::new(TemplateEngine::tera_filter_align_left));
+        self.tera.register_filter("align_right", Box::new(TemplateEngine::tera_filter_align_right));
     }
 
 
@@ -76,6 +77,39 @@ impl Template {
     pub fn render(&self, template_name: &str, data: &tera::Context) -> Result<String> {
         self.tera.render(template_name, data)
             .with_context(|| format!("failed to render template '{}': {:?}", template_name, data))
+    }
+
+}
+
+
+pub struct Template<'a> {
+    data: tera::Context,
+    engine: &'a TemplateEngine,
+}
+
+impl<'a> Template<'a> {
+
+    pub fn new(engine: &'a TemplateEngine) -> Self {
+        Self {
+            data: tera::Context::new(),
+            engine,
+        }
+    }
+
+    pub fn set<T: Serialize + ?Sized>(&mut self, key: &str, val: &T) {
+        self.data.insert(key, &to_value(val).unwrap())
+    }
+
+    pub fn get(&self, key: &str) -> Option<&Value> {
+        self.data.get(key)
+    }
+
+    pub fn into_json(self) -> Value {
+        self.data.into_json()
+    }
+
+    pub fn render(&self, template_name: &str) -> Result<String> {
+        self.engine.render(template_name, &self.data)
     }
 
 }

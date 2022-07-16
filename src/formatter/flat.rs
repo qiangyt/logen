@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use anyhow::Result;
 
-use crate::{template::Template, ctx::line::Line};
+use crate::{template::{TemplateEngine, Template}, ctx::timestamp::Timestamp};
 
 use super::Formatter;
 
@@ -13,7 +13,7 @@ pub struct FlatFormatterD {
 }
 
 impl FlatFormatterD {
-    pub fn with_template(&self, tmpl_name: &str, tmpl: &mut Template) -> Result<()> {
+    pub fn with_template(&self, tmpl_name: &str, tmpl: &mut TemplateEngine) -> Result<()> {
         tmpl.add_template(tmpl_name, &self.template)
     }
 }
@@ -30,12 +30,12 @@ impl <'a> FlatFormatter<'a> {
 
 impl <'a> Formatter for FlatFormatter<'a> {
 
-    fn prepare(&self, line: &mut Line) {
-        let timestamp = line.timestamp().format(&self.def.timestamp_format);
-        line.var("timestamp", &timestamp);
+    fn format_timestamp(&self, timestamp: &Timestamp) -> String {
+        timestamp.format(&self.def.timestamp_format)
     }
 
-    fn format(&self, line: &Line) -> Result<String> {
-        line.render_with_template(line.app().name())
+    fn format(&self, t: &Template, template_name: &str) -> Result<String> {
+        t.render(template_name)
     }
+
 }
