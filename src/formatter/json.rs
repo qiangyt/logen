@@ -39,7 +39,7 @@ impl<'a> Formatter for JsonFormatter<'a> {
 
   fn format_timestamp(&self, timestamp: &Timestamp) -> String {
       let ts_format = match self.def.style {
-        Style::Bunyan => "%Y-%m-%dT%H:%M:%S.%.3f",//2020-07-09T17:47:21.918Z
+        Style::Bunyan => "%Y-%m-%dT%H:%M:%S%.3f",//2020-07-09T17:47:21.918Z
       };
 
       timestamp.format(ts_format)
