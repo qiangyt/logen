@@ -8,7 +8,7 @@ use super::Formatter;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub enum Style {
+pub enum JsonStyle {
     Bunyan,
 }
 
@@ -22,13 +22,13 @@ static BUNYAN_FATAL: u8 = 60;
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct JsonFormatter {
-    pub style: Style,
+    pub style: JsonStyle,
 }
 
 impl Formatter for JsonFormatter {
     fn format_timestamp(&self, timestamp: &Timestamp) -> String {
         let ts_format = match self.style {
-            Style::Bunyan => "%Y-%m-%dT%H:%M:%S%.3f", //2020-07-09T17:47:21.918Z
+            JsonStyle::Bunyan => "%Y-%m-%dT%H:%M:%S%.3f", //2020-07-09T17:47:21.918Z
         };
 
         timestamp.format(ts_format)
