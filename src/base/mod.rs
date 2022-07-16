@@ -4,7 +4,7 @@ pub use level::Level;
 mod output;
 pub use output::Output;
 
-mod tpl;
+pub mod tpl;
 pub use tpl::{Template, TemplateEngine};
 
 mod ts;
