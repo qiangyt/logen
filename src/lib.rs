@@ -2,9 +2,9 @@ use serde::{Deserialize, Serialize};
 
 pub mod app;
 pub mod assets;
-pub mod config;
+pub mod cfg;
 pub mod fmt;
-pub mod template;
+pub mod tpl;
 pub mod ts;
 
 #[derive(Debug, Serialize, Deserialize)]

@@ -8,7 +8,7 @@ pub use json::JsonFormatterD;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    template::{Template, TemplateEngine},
+    tpl::{Template, TemplateEngine},
     ts::Timestamp,
 };
 

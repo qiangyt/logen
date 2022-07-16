@@ -4,7 +4,7 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 
 use crate::fmt::FormatterD;
-use crate::template::{Template, TemplateEngine};
+use crate::tpl::{Template, TemplateEngine};
 use crate::ts::Timestamp;
 use crate::Level;
 
