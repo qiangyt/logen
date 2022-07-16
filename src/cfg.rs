@@ -1,4 +1,4 @@
-use crate::app::App;
+use crate::app::simple::App;
 use crate::assets::Asset;
 use anyhow::Context;
 use anyhow::Result;

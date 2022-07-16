@@ -1,8 +1,7 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 
-use crate::{level, tpl::KEY_level, Template, Timestamp};
+use crate::{tpl::KEY_LEVEL, Template, Timestamp};
 
 use super::{bunyan, Formatter};
 
@@ -28,32 +27,12 @@ impl Formatter for JsonFormatter {
     }
 
     fn format(&self, t: &Template, _: &str) -> Result<String> {
-        let lv = match t.get(KEY_level) {
+        let lv = match t.get(KEY_LEVEL) {
             None => "INFO",
             Some(l) => l.as_str().unwrap(),
         };
 
-        let level = match lv {
-            level::FINE => bunyan::LEVEL_TRACE,
-            level::TRACE => bunyan::LEVEL_TRACE,
-            level::DEBUG => bunyan::LEVEL_DEBUG,
-            level::INFO => bunyan::LEVEL_INFO,
-            level::WARN => bunyan::LEVEL_WARN,
-            level::ERROR => bunyan::LEVEL_ERROR,
-            level::FATAL => bunyan::LEVEL_FATAL,
-            _ => bunyan::LEVEL_DEFAULT,
-        };
-
-        let j = json!({
-            "name": t.get("app"),
-            "hostname": t.get("host"),
-            "pid": t.get("pid"),
-            "id": t.get("logger"),
-            "level": level,
-            "msg": t.get("message"),
-            "time": t.get("timestamp"),
-            "v": 0
-        });
+        let j = bunyan::build(t, lv);
 
         Ok(serde_json::to_string(&j)?)
     }

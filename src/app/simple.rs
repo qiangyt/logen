@@ -7,21 +7,21 @@ use crate::*;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub struct Message {
+struct Message {
     #[serde(skip_serializing, skip_deserializing)]
-    pub id: String,
+    id: String,
 
-    pub template: String,
-    pub file: String,
-    pub line: usize,
-    pub method: String,
+    template: String,
+    file: String,
+    line: usize,
+    method: String,
 
     #[serde(default)]
-    pub level: Level,
+    level: Level,
 }
 
 impl Message {
-    pub fn init(&mut self, id: String, tmpl: &mut TemplateEngine) -> Result<()> {
+    fn init(&mut self, id: String, tmpl: &mut TemplateEngine) -> Result<()> {
         self.id = id;
         self.with_template(tmpl)
     }
@@ -47,19 +47,19 @@ impl Message {
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct Logger {
     #[serde(skip_serializing, skip_deserializing)]
-    pub id: String,
+    id: String,
 
-    pub name: String,
-    pub message: Vec<Message>,
+    name: String,
+    message: Vec<Message>,
 }
 
 impl Logger {
-    pub fn init(&mut self, id: String, tmpl: &mut TemplateEngine) -> Result<()> {
+    fn init(&mut self, id: String, tmpl: &mut TemplateEngine) -> Result<()> {
         self.id = id;
         self.init_message(tmpl)
     }
 
-    pub fn init_message(&mut self, tmpl: &mut TemplateEngine) -> Result<()> {
+    fn init_message(&mut self, tmpl: &mut TemplateEngine) -> Result<()> {
         if self.message.len() == 0 {
             return Err(anyhow!(
                 "app {} should configure at least 1 message",
@@ -75,7 +75,7 @@ impl Logger {
         return Ok(());
     }
 
-    pub fn choose_message(&self) -> &Message {
+    fn choose_message(&self) -> &Message {
         let mut i = 0;
         let max = self.message.len();
         let mut rng = rand::thread_rng();
@@ -123,7 +123,7 @@ impl App {
         self.init_logger(tmpl)
     }
 
-    pub fn init_logger(&mut self, tmpl: &mut TemplateEngine) -> Result<()> {
+    fn init_logger(&mut self, tmpl: &mut TemplateEngine) -> Result<()> {
         if self.host.len() == 0 {
             return Err(anyhow!(
                 "app {} should configure at least 1 host",
@@ -146,7 +146,7 @@ impl App {
         return Ok(());
     }
 
-    pub fn choose_host(&self) -> &str {
+    fn choose_host(&self) -> &str {
         let mut k = 0;
         let max = self.host.len();
         let mut rng = rand::thread_rng();
@@ -163,7 +163,7 @@ impl App {
         return &self.host[0];
     }
 
-    pub fn choose_logger(&self) -> &Logger {
+    fn choose_logger(&self) -> &Logger {
         let mut k = 0;
         let max = self.logger.len();
         let mut rng = rand::thread_rng();

@@ -3,7 +3,7 @@ use serde::Serialize;
 use std::collections::HashMap;
 use tera::{to_value, try_get_value, Tera, Value};
 
-pub const KEY_level: &str = "level";
+pub const KEY_LEVEL: &str = "level";
 
 pub struct TemplateEngine {
     tera: Tera,
