@@ -60,11 +60,9 @@ impl <'a> App<'a> {
         let mut timestamp = Timestamp::new(&def.timestamp, def.num_of_lines);
 
         for i in 0..def.num_of_lines {
-            unsafe {
             let line = self.new_line(i, &mut timestamp)?;
             let line_text = formatter.format(&line)?;
             println!("{}", line_text);
-            }
         }
 
         Ok(())
