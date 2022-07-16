@@ -60,18 +60,16 @@ impl <'a> App<'a> {
         let mut ts = Timestamp::new(&d.timestamp, d.num_of_lines);
 
         for i in 0..d.num_of_lines {
-            let ln = self.new_line(i, &mut ts)?;
+            ts.inc();
+
+            let mut ln = Line::new(i, self, &self.template, &ts);
+            f.prepare(&mut ln);
+            self.choose_logger().render(&mut ln)?;
+
             println!("{}", f.format(&ln)?);
         }
 
         Ok(())
-    }
-
-    pub fn new_line(&self, line_index: u64, timestamp: &mut Timestamp) -> Result<Line> {
-        let ts = timestamp.inc();
-        let mut r = Line::new(line_index, self, &self.template, &ts);
-        self.choose_logger().render(&mut r)?;
-        Ok(r)
     }
 
 }

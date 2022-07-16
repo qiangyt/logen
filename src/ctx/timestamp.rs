@@ -19,7 +19,11 @@ impl<'a> Timestamp<'a> {
         }
     }
 
-    pub fn inc(&mut self) -> String {
+    pub fn format(&self, format: &str) -> String {
+        self.value.format(format).to_string()
+    }
+
+    pub fn inc(&mut self) {
         let mut i = 0;
         let max = self.interval;
         while i < 10 {
@@ -27,14 +31,14 @@ impl<'a> Timestamp<'a> {
             let new_value = self.value + Duration::milliseconds(itvl);
             if new_value < self.def.end {
                 self.value = new_value;
-                return self.value.format(&self.def.format).to_string();
+                //return self.value.format(&self.def.format).to_string();
+                return;
             }
 
             i = i+1;
         }
 
         self.value = self.def.end;
-        return self.value.format(&self.def.format).to_string();
     }
 }
 

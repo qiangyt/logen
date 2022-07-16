@@ -8,6 +8,7 @@ use super::Formatter;
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct FlatFormatterD {
+    pub timestamp_format: String,
     pub template: String,
 }
 
@@ -18,7 +19,6 @@ impl FlatFormatterD {
 }
 
 pub struct FlatFormatter<'a> {
-    #[allow(dead_code)]
     def: &'a FlatFormatterD
 }
 
@@ -29,6 +29,12 @@ impl <'a> FlatFormatter<'a> {
 }
 
 impl <'a> Formatter for FlatFormatter<'a> {
+
+    fn prepare(&self, line: &mut Line) {
+        let timestamp = line.timestamp().format(&self.def.timestamp_format);
+        line.var("timestamp", &timestamp);
+    }
+
     fn format(&self, line: &Line) -> Result<String> {
         line.render_with_template(line.app().name())
     }

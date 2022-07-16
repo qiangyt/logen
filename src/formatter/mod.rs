@@ -9,6 +9,7 @@ pub use json::JsonFormatterD as JsonFormatterD;
 use crate::ctx::line::Line;
 
 pub trait Formatter {
+  fn prepare(&self, line: &mut Line);
   fn format(&self, line: &Line) -> Result<String>;
 }
 
