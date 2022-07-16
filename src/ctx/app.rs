@@ -1,29 +1,27 @@
-use crate::def::AppD;
-use super::Logger;
-use super::Line;
-use super::Timestamp;
-use crate::Template;
+use crate::{def::AppD, formatter::Formatter, template::Template};
 use anyhow::Result;
 
 use rand::Rng;
 
+use super::{timestamp::Timestamp, logger::Logger, line::Line};
+
 pub struct App<'a> {
     def: &'a AppD,
-    timestamp: Timestamp<'a>,
+    formatter: Box<dyn Formatter + 'a>,
     template: Template,
     loggers: Vec<Logger<'a>>,
 }
 
-impl<'a> App<'a> {
+impl <'a> App<'a> {
 
-    pub fn new(def: &'a AppD) -> Result<Self> {
+    pub fn new(def: &'a AppD) -> Result<App<'a>> {
         let mut template = Template::new();
         def.post_init(&mut template)?;
 
         Ok(App {
             def,
+            formatter: def.formatter.new_formatter(),
             template,
-            timestamp: Timestamp::new(&def.timestamp, def.num_of_lines),
             loggers: {
                 let mut v = Vec::new();
                 for (i, logger_d) in def.loggers.iter().enumerate() {
@@ -35,10 +33,8 @@ impl<'a> App<'a> {
         })
     }
 
-    pub fn next_line(&mut self, line_index: u64) -> Result<Line> {
-        let mut line = Line::new(line_index, &self.template, &self.timestamp.next());
-        self.choose_logger().render(&mut line)?;
-        Ok(line)
+    pub fn name(&self) -> &str {
+        &self.def.name
     }
 
     fn choose_logger(&self) -> &Logger {
@@ -60,14 +56,25 @@ impl<'a> App<'a> {
 
     pub fn generate(&mut self) -> Result<()> {
         let def = self.def;
+        let formatter = self.formatter.as_ref();
+        let mut timestamp = Timestamp::new(&def.timestamp, def.num_of_lines);
 
         for i in 0..def.num_of_lines {
-            let line = self.next_line(i)?;
-            let line_text = line.render_with_template(&def.name)?;
+            unsafe {
+            let line = self.new_line(i, &mut timestamp)?;
+            let line_text = formatter.format(&line)?;
             println!("{}", line_text);
+            }
         }
 
         Ok(())
+    }
+
+    pub fn new_line(&self, line_index: u64, timestamp: &mut Timestamp) -> Result<Line> {
+        let timestamp = timestamp.next();
+        let mut line = Line::new(line_index, self, &self.template, &timestamp);
+        self.choose_logger().render(&mut line)?;
+        Ok(line)
     }
 
 }

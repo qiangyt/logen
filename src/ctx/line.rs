@@ -2,18 +2,22 @@ use serde::Serialize;
 use serde_json::to_value;
 use anyhow::Result;
 
-use crate::Template;
+use crate::template::Template;
+
+use super::app::App;
 
 pub struct Line<'a> {
     data: tera::Context,
+    app: &'a App<'a>,
     template: &'a Template,
 }
 
 impl<'a> Line<'a> {
 
-    pub fn new(index: u64, template: &'a Template, timestamp: &str) -> Self {
+    pub fn new(index: u64, app: &'a App, template: &'a Template, timestamp: &str) -> Self {
         let mut r = Line {
             data: tera::Context::new(),
+            app,
             template,
         };
 
@@ -21,6 +25,10 @@ impl<'a> Line<'a> {
         r.var("timestamp", timestamp);
 
         return r;
+    }
+
+    pub fn app(&self) -> &App {
+        self.app
     }
 
     pub fn var<T: Serialize + ?Sized>(&mut self, key: &str, val: &T) {

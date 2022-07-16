@@ -1,9 +1,12 @@
 
 use chrono::prelude::*;
-use chrono::{Utc};
+use chrono::Utc;
 use serde::{Deserialize, Serialize};
 use anyhow::{anyhow, Result};
 
+use crate::formatter::Formatter;
+use crate::formatter::flat::FlatFormatter;
+use crate::formatter::json::JsonFormatter;
 use crate::template::Template;
 use crate::formatter::FlatFormatterD;
 use crate::formatter::JsonFormatterD;
@@ -33,7 +36,16 @@ impl FormatterD {
             FormatterD::Json(_) => Ok(()),
         }
     }
+
+    pub fn new_formatter<'a>(&'a self) -> Box<dyn Formatter + 'a> {
+        match self {
+            FormatterD::Flat(f) => Box::new(FlatFormatter::new(f)),
+            FormatterD::Json(j) => Box::new(JsonFormatter::new(j)),
+        }
+    }
+
 }
+
 
 
 #[derive(Debug, Serialize, Deserialize)]

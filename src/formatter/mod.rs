@@ -1,11 +1,14 @@
-use serde::{Deserialize, Serialize};
 use anyhow::Result;
-
-use crate::Template;
 
 pub mod flat;
 pub use flat::FlatFormatterD as FlatFormatterD;
 
 pub mod json;
 pub use json::JsonFormatterD as JsonFormatterD;
+
+use crate::ctx::line::Line;
+
+pub trait Formatter {
+  fn format(&self, line: &Line) -> Result<String>;
+}
 

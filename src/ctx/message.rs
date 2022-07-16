@@ -1,6 +1,7 @@
 use crate::def::*;
-use super::Line;
 use anyhow::Result;
+
+use super::line::Line;
 
 
 pub struct Message<'a> {
