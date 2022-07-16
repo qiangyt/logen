@@ -3,10 +3,9 @@ use chrono::{DateTime, Utc};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
-use crate::fmt::FormatterD;
 use crate::tpl::{Template, TemplateEngine};
 use crate::ts::Timestamp;
-use crate::Level;
+use crate::{Level, Output};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -114,7 +113,7 @@ impl Logger {
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct App {
     name: String,
-    formatter: FormatterD,
+    output: Output,
     num_of_lines: u64,
     begin_time: DateTime<Utc>, //rfc3339
     end_time: DateTime<Utc>,
@@ -132,7 +131,7 @@ impl App {
     }
 
     pub fn init_logger(&mut self, tmpl: &mut TemplateEngine) -> Result<()> {
-        self.formatter.with_template(&self.name, tmpl)?;
+        self.output.with_template(&self.name, tmpl)?;
 
         if self.host.len() == 0 {
             return Err(anyhow!(
@@ -191,7 +190,7 @@ impl App {
     }
 
     pub fn generate(&self, template_engine: &TemplateEngine) -> Result<()> {
-        let f = self.formatter.new_formatter();
+        let f = self.output.formatter();
         let mut ts = Timestamp::new(&self.begin_time, &self.end_time, self.num_of_lines);
 
         for i in 0..self.num_of_lines {
@@ -228,7 +227,7 @@ mod tests {
 
     #[test]
     fn parse_url_works() {
-        let f = serde_yaml::from_str::<FormatterD>(r#"
+        let f = serde_yaml::from_str::<Output>(r#"
             flat:
                 timestamp_format: "%Y-%m-%d %H:%M:%S"
                 template: '{{timestamp}} <{{level | upper | align_left(width=5)}}> {{logger.name}} {{file}}/{{line}} {{method}} - {{message}}'

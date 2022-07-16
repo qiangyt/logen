@@ -21,23 +21,13 @@ static BUNYAN_FATAL: u8 = 60;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub struct JsonFormatterD {
+pub struct JsonFormatter {
     pub style: Style,
 }
 
-pub struct JsonFormatter<'a> {
-    def: &'a JsonFormatterD,
-}
-
-impl<'a> JsonFormatter<'a> {
-    pub fn new(def: &'a JsonFormatterD) -> Self {
-        Self { def }
-    }
-}
-
-impl<'a> Formatter for JsonFormatter<'a> {
+impl Formatter for JsonFormatter {
     fn format_timestamp(&self, timestamp: &Timestamp) -> String {
-        let ts_format = match self.def.style {
+        let ts_format = match self.style {
             Style::Bunyan => "%Y-%m-%dT%H:%M:%S%.3f", //2020-07-09T17:47:21.918Z
         };
 
