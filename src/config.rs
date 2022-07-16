@@ -1,11 +1,10 @@
-use anyhow::Context;
-use clap::Parser;
 use crate::assets::Asset;
 use crate::def::AppD;
+use anyhow::Context;
 use anyhow::Result;
+use clap::Parser;
 use std::fs;
 use std::str;
-
 
 static ASSET_EXAMPLE_CONFIG_FILE: &str = "logen.config.example.yaml";
 static ARG_EXAMPLE_CONFIG_FILE: &str = "<example>";
@@ -23,15 +22,13 @@ pub struct CliArgs {
     pub example: bool,
 }
 
-
-
 pub fn with_cli_args() -> Result<Option<AppD>> {
     let args = CliArgs::parse();
 
     if args.example {
         let a = Asset::get(ASSET_EXAMPLE_CONFIG_FILE).unwrap();
         let yaml = String::from_utf8(a.data.as_ref().to_vec()).unwrap();
-        return Ok(Some(AppD::from_yaml(&yaml)))
+        return Ok(Some(AppD::from_yaml(&yaml)));
     }
 
     let f = args.config_file;
@@ -42,7 +39,7 @@ pub fn with_cli_args() -> Result<Option<AppD>> {
         return Ok(None);
     }
 
-    let yaml = fs::read_to_string(&f)
-        .with_context(|| format!("failed to open config file: {}", f))?;
+    let yaml =
+        fs::read_to_string(&f).with_context(|| format!("failed to open config file: {}", f))?;
     return Ok(Some(AppD::from_yaml(&yaml)));
 }

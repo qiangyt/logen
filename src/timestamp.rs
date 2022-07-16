@@ -1,4 +1,4 @@
-use chrono::{DateTime, Utc, Duration};
+use chrono::{DateTime, Duration, Utc};
 use rand::Rng;
 
 use crate::def::TimestampD;
@@ -11,7 +11,8 @@ pub struct Timestamp<'a> {
 
 impl<'a> Timestamp<'a> {
     pub fn new(def: &'a TimestampD, num_of_lines: u64) -> Self {
-        let interval = (def.end.timestamp_millis() - def.begin.timestamp_millis()) / num_of_lines as i64;
+        let interval =
+            (def.end.timestamp_millis() - def.begin.timestamp_millis()) / num_of_lines as i64;
         Timestamp {
             def,
             interval,
@@ -31,14 +32,12 @@ impl<'a> Timestamp<'a> {
             let new_value = self.value + Duration::milliseconds(itvl);
             if new_value < self.def.end {
                 self.value = new_value;
-                //return self.value.format(&self.def.format).to_string();
                 return;
             }
 
-            i = i+1;
+            i = i + 1;
         }
 
         self.value = self.def.end;
     }
 }
-

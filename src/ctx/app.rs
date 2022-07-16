@@ -1,9 +1,12 @@
-use crate::{def::{AppD, LoggerD, MessageD, Level}, formatter::Formatter, template::{Template, TemplateEngine}};
+use crate::{
+    def::{AppD, Level, LoggerD, MessageD},
+    formatter::Formatter,
+    template::{Template, TemplateEngine},
+    timestamp::Timestamp,
+};
 use anyhow::Result;
 
 use rand::Rng;
-
-use super::timestamp::Timestamp;
 
 pub struct App<'a> {
     def: &'a AppD,
@@ -11,8 +14,7 @@ pub struct App<'a> {
     template_engine: &'a TemplateEngine,
 }
 
-impl <'a> App<'a> {
-
+impl<'a> App<'a> {
     pub fn new(def: &'a AppD, template_engine: &'a mut TemplateEngine) -> Result<App<'a>> {
         Ok(App {
             def,
@@ -20,7 +22,6 @@ impl <'a> App<'a> {
             template_engine,
         })
     }
-
 
     pub fn generate(&mut self) -> Result<()> {
         let d = self.def;
@@ -44,7 +45,7 @@ impl <'a> App<'a> {
 
         Ok(())
     }
-//
+    //
     fn new_template(&self, index: u64) -> Template {
         let d = self.def;
 
@@ -66,20 +67,22 @@ impl <'a> App<'a> {
         t.set("file", &d.file);
         t.set("line", &d.line);
         t.set("method", &d.method);
-        t.set("level", match d.level {
-            Level::Fine => "FINE",
-            Level::Trace => "TRACE",
-            Level::Debug => "DEBUG",
-            Level::Info => "INFO",
-            Level::Warn => "WARN",
-            Level::Error => "ERROR",
-            Level::Fatal => "FATAL",
-        });
+        t.set(
+            "level",
+            match d.level {
+                Level::Fine => "FINE",
+                Level::Trace => "TRACE",
+                Level::Debug => "DEBUG",
+                Level::Info => "INFO",
+                Level::Warn => "WARN",
+                Level::Error => "ERROR",
+                Level::Fatal => "FATAL",
+            },
+        );
 
         let msg_text = t.render(&d.id)?;
         t.set("message", &msg_text);
 
         Ok(())
     }
-
 }

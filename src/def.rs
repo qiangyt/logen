@@ -1,14 +1,13 @@
-
+use anyhow::{anyhow, Result};
 use chrono::prelude::*;
 use chrono::Utc;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
-use anyhow::{anyhow, Result};
 
-use crate::formatter::Formatter;
 use crate::formatter::flat::FlatFormatter;
 use crate::formatter::json::JsonFormatter;
 use crate::formatter::FlatFormatterD;
+use crate::formatter::Formatter;
 use crate::formatter::JsonFormatterD;
 use crate::template::TemplateEngine;
 
@@ -45,24 +44,20 @@ impl FormatterD {
             FormatterD::Json(j) => Box::new(JsonFormatter::new(j)),
         }
     }
-
 }
-
-
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct TimestampD {
-    pub begin: DateTime<Utc>,//rfc3339
+    pub begin: DateTime<Utc>, //rfc3339
     pub end: DateTime<Utc>,
 }
 
 impl TimestampD {
     pub fn new(begin: DateTime<Utc>, end: DateTime<Utc>) -> Self {
-        TimestampD {begin, end}
+        TimestampD { begin, end }
     }
 }
-
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -83,7 +78,7 @@ impl MessageD {
         self.with_template(tmpl)
     }
 
-    fn with_template(&self, tmpl: &mut TemplateEngine) -> Result<()>{
+    fn with_template(&self, tmpl: &mut TemplateEngine) -> Result<()> {
         tmpl.add_template(&self.id, &self.template)
     }
 }
@@ -106,7 +101,10 @@ impl LoggerD {
 
     pub fn post_init_message(&mut self, tmpl: &mut TemplateEngine) -> Result<()> {
         if self.message.len() == 0 {
-            return Err(anyhow!("app {} should configure at least 1 message", self.name));
+            return Err(anyhow!(
+                "app {} should configure at least 1 message",
+                self.name
+            ));
         }
 
         for (i, message_d) in self.message.iter_mut().enumerate() {
@@ -122,13 +120,13 @@ impl LoggerD {
         let max = self.message.len();
         let mut rng = rand::thread_rng();
 
-        while i < 10   {
+        while i < 10 {
             let index = rng.gen_range(0..max * 2);
             if index < max {
-                return &self.message[index]
+                return &self.message[index];
             }
 
-            i = i+1;
+            i = i + 1;
         }
 
         &self.message[0]
@@ -148,8 +146,7 @@ pub struct AppD {
 
 impl AppD {
     pub fn from_yaml(yaml: &str) -> Self {
-        serde_yaml::from_str::<Self>(yaml)
-            .expect(&format!("failed to parse config yaml: {}", yaml))
+        serde_yaml::from_str::<Self>(yaml).expect(&format!("failed to parse config yaml: {}", yaml))
     }
 
     pub fn post_init(&mut self, tmpl: &mut TemplateEngine) -> Result<()> {
@@ -160,11 +157,17 @@ impl AppD {
         self.formatter.with_template(&self.name, tmpl)?;
 
         if self.host.len() == 0 {
-            return Err(anyhow!("app {} should configure at least 1 host", self.name));
+            return Err(anyhow!(
+                "app {} should configure at least 1 host",
+                self.name
+            ));
         }
 
         if self.logger.len() == 0 {
-            return Err(anyhow!("app {} should configure at least 1 logger", self.name));
+            return Err(anyhow!(
+                "app {} should configure at least 1 logger",
+                self.name
+            ));
         }
 
         for (i, logger_d) in self.logger.iter_mut().enumerate() {
@@ -186,7 +189,7 @@ impl AppD {
                 return &self.host[i];
             }
 
-            k = k+1;
+            k = k + 1;
         }
 
         return &self.host[0];
@@ -203,16 +206,15 @@ impl AppD {
                 return &self.logger[i];
             }
 
-            k = k+1;
+            k = k + 1;
         }
 
         return &self.logger[0];
     }
-
 }
 
-
-#[cfg(test)]mod tests {
+#[cfg(test)]
+mod tests {
     use super::*;
 
     #[test]

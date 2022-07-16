@@ -1,7 +1,6 @@
-use logen::ctx::app::App;
 use logen::config;
+use logen::ctx::app::App;
 use logen::template::TemplateEngine;
-
 
 fn main() {
     if let Some(mut def) = config::with_cli_args().unwrap() {

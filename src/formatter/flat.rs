@@ -1,7 +1,10 @@
-use serde::{Deserialize, Serialize};
 use anyhow::Result;
+use serde::{Deserialize, Serialize};
 
-use crate::{template::{TemplateEngine, Template}, ctx::timestamp::Timestamp};
+use crate::{
+    template::{Template, TemplateEngine},
+    timestamp::Timestamp,
+};
 
 use super::Formatter;
 
@@ -19,17 +22,16 @@ impl FlatFormatterD {
 }
 
 pub struct FlatFormatter<'a> {
-    def: &'a FlatFormatterD
+    def: &'a FlatFormatterD,
 }
 
-impl <'a> FlatFormatter<'a> {
+impl<'a> FlatFormatter<'a> {
     pub fn new(def: &'a FlatFormatterD) -> Self {
         Self { def }
     }
 }
 
-impl <'a> Formatter for FlatFormatter<'a> {
-
+impl<'a> Formatter for FlatFormatter<'a> {
     fn format_timestamp(&self, timestamp: &Timestamp) -> String {
         timestamp.format(&self.def.timestamp_format)
     }
@@ -37,5 +39,4 @@ impl <'a> Formatter for FlatFormatter<'a> {
     fn format(&self, t: &Template, template_name: &str) -> Result<String> {
         t.render(template_name)
     }
-
 }
