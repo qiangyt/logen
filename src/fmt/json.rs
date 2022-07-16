@@ -2,7 +2,7 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 
-use crate::{tpl::Template, ts::Timestamp};
+use crate::{Template, Timestamp};
 
 use super::{bunyan, Formatter};
 

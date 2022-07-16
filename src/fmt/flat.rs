@@ -2,8 +2,7 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    tpl::{Template, TemplateEngine},
-    ts::Timestamp,
+    Template, TemplateEngine, Timestamp,
 };
 
 use super::Formatter;

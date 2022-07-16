@@ -1,5 +1,5 @@
 use logen::cfg;
-use logen::tpl::TemplateEngine;
+use logen::TemplateEngine;
 
 fn main() {
     if let Some(mut app) = cfg::with_cli_args().unwrap() {

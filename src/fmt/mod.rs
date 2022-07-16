@@ -6,9 +6,9 @@ pub use flat::FlatFormatter;
 mod json;
 pub use json::JsonFormatter;
 
-mod bunyan;
+pub mod bunyan;
 
-use crate::{tpl::Template, ts::Timestamp};
+use crate::{Template, Timestamp};
 
 pub trait Formatter {
     fn format_timestamp(&self, timestamp: &Timestamp) -> String;
