@@ -5,9 +5,12 @@ pub use flat::FlatFormatterD;
 
 pub mod json;
 pub use json::JsonFormatterD;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
-use crate::{template::{Template, TemplateEngine}, timestamp::Timestamp};
+use crate::{
+    template::{Template, TemplateEngine},
+    timestamp::Timestamp,
+};
 
 use self::{flat::FlatFormatter, json::JsonFormatter};
 

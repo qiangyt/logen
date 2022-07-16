@@ -1,7 +1,6 @@
 use chrono::{DateTime, Duration, Utc};
 use rand::Rng;
-use serde::{Serialize, Deserialize};
-
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -9,14 +8,6 @@ pub struct TimestampD {
     pub begin: DateTime<Utc>, //rfc3339
     pub end: DateTime<Utc>,
 }
-
-impl TimestampD {
-    pub fn new(begin: DateTime<Utc>, end: DateTime<Utc>) -> Self {
-        TimestampD { begin, end }
-    }
-}
-
-
 
 pub struct Timestamp<'a> {
     def: &'a TimestampD,

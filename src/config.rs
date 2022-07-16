@@ -1,5 +1,5 @@
+use crate::app::AppD;
 use crate::assets::Asset;
-use crate::def::AppD;
 use anyhow::Context;
 use anyhow::Result;
 use clap::Parser;
