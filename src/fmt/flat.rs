@@ -18,6 +18,15 @@ pub struct FlatFormatter {
     pattern: String,
 }
 
+impl Default for FlatFormatter {
+    fn default() -> Self {
+        Self {
+            time_format: FlatFormatter::default_time_format(),
+            pattern: FlatFormatter::default_pattern()
+        }
+    }
+}
+
 impl FlatFormatter {
     pub fn default_time_format() -> String {
         "%Y-%m-%d %H:%M:%S".to_string()

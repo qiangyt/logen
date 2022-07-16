@@ -23,11 +23,23 @@ pub enum Level {
     Fatal,
 }
 
+impl Default for Level {
+    fn default() -> Self {
+        Level::Info
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum Output {
     Flat(FlatFormatter),
     Json(JsonFormatter),
+}
+
+impl Default for Output {
+    fn default() -> Self {
+        Output::Flat(FlatFormatter::default())
+    }
 }
 
 impl Output {

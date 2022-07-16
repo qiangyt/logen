@@ -17,6 +17,8 @@ pub struct Message {
     pub file: String,
     pub line: usize,
     pub method: String,
+
+    #[serde(default)]
     pub level: Level,
 }
 
@@ -113,7 +115,10 @@ impl Logger {
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct App {
     name: String,
+
+    #[serde(default)]
     output: Output,
+
     num_of_lines: u64,
     begin_time: DateTime<Utc>, //rfc3339
     end_time: DateTime<Utc>,

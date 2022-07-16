@@ -1,7 +1,4 @@
 name: nginx
-output:
-  json:
-    style: bunyan
 num_of_lines: 10
 begin_time: 2014-11-28T21:00:09+08:00
 end_time: 2014-11-28T22:00:09+08:00
@@ -18,7 +15,6 @@ logger:
     file: req_handler.c
     line: 11
     method: main
-    level: info
   - template: request end
     file: req_handler.c
     line: 71
