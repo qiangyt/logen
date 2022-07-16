@@ -1,63 +1,13 @@
 use anyhow::{anyhow, Result};
-use chrono::prelude::*;
-use chrono::Utc;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
-use crate::formatter::flat::FlatFormatter;
-use crate::formatter::json::JsonFormatter;
-use crate::formatter::FlatFormatterD;
-use crate::formatter::Formatter;
-use crate::formatter::JsonFormatterD;
-use crate::template::TemplateEngine;
+use crate::Level;
+use crate::fmt::FormatterD;
+use crate::template::{TemplateEngine, Template};
+use crate::timestamp::{TimestampD, Timestamp};
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub enum Level {
-    Fine,
-    Trace,
-    Debug,
-    Info,
-    Warn,
-    Error,
-    Fatal,
-}
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub enum FormatterD {
-    Flat(FlatFormatterD),
-    Json(JsonFormatterD),
-}
-
-impl FormatterD {
-    pub fn with_template(&self, tmpl_name: &str, tmpl: &mut TemplateEngine) -> Result<()> {
-        match self {
-            FormatterD::Flat(flat) => flat.with_template(tmpl_name, tmpl),
-            FormatterD::Json(_) => Ok(()),
-        }
-    }
-
-    pub fn new_formatter<'a>(&'a self) -> Box<dyn Formatter + 'a> {
-        match self {
-            FormatterD::Flat(f) => Box::new(FlatFormatter::new(f)),
-            FormatterD::Json(j) => Box::new(JsonFormatter::new(j)),
-        }
-    }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub struct TimestampD {
-    pub begin: DateTime<Utc>, //rfc3339
-    pub end: DateTime<Utc>,
-}
-
-impl TimestampD {
-    pub fn new(begin: DateTime<Utc>, end: DateTime<Utc>) -> Self {
-        TimestampD { begin, end }
-    }
-}
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -211,6 +161,68 @@ impl AppD {
 
         return &self.logger[0];
     }
+
+    pub fn generate(&self, template_engine: &TemplateEngine) -> Result<()> {
+        let f = self.formatter.new_formatter();
+        let mut ts = Timestamp::new(&self.timestamp, self.num_of_lines);
+
+        for i in 0..self.num_of_lines {
+            ts.inc();
+
+            let t = &mut self.new_template(i, template_engine);
+            t.set("timestamp", &f.format_timestamp(&ts));
+
+            let l = self.choose_logger();
+            let m = l.choose_message();
+
+            self.populate_logger(t, l)?;
+            self.populate_message(t, m)?;
+
+            println!("{}", f.format(t, &self.name)?);
+        }
+
+        Ok(())
+    }
+    //
+    fn new_template<'a>(&'a self, index: u64, template_engine: &'a TemplateEngine) -> Template {
+        let mut r = Template::new(template_engine);
+
+        r.set("app", &self.name);
+        r.set("index", &index);
+        r.set("host", self.choose_host());
+        r.set("pid", &rand::thread_rng().gen::<u16>());
+
+        r
+    }
+
+    fn populate_logger(&self, t: &mut Template, d: &LoggerD) -> Result<()> {
+        t.set("logger", &d.name);
+        Ok(())
+    }
+
+    fn populate_message(&self, t: &mut Template, d: &MessageD) -> Result<()> {
+        t.set("file", &d.file);
+        t.set("line", &d.line);
+        t.set("method", &d.method);
+        t.set(
+            "level",
+            match d.level {
+                Level::Fine => "FINE",
+                Level::Trace => "TRACE",
+                Level::Debug => "DEBUG",
+                Level::Info => "INFO",
+                Level::Warn => "WARN",
+                Level::Error => "ERROR",
+                Level::Fatal => "FATAL",
+            },
+        );
+
+        let msg_text = t.render(&d.id)?;
+        t.set("message", &msg_text);
+
+        Ok(())
+    }
+
 }
 
 #[cfg(test)]
