@@ -87,20 +87,20 @@ impl MessageD {
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct LoggerD {
     pub name: String,
-    pub messages: Vec<MessageD>,
+    pub message: Vec<MessageD>,
 }
 
 impl LoggerD {
     pub fn post_init(&self, id: &str, tmpl: &mut Template) -> Result<()> {
-        self.post_init_messagess(id, tmpl)
+        self.post_init_message(id, tmpl)
     }
 
-    pub fn post_init_messagess(&self, id: &str, tmpl: &mut Template) -> Result<()> {
-        if self.messages.len() == 0 {
+    pub fn post_init_message(&self, id: &str, tmpl: &mut Template) -> Result<()> {
+        if self.message.len() == 0 {
             return Err(anyhow!("app {} should configure at least 1 message", self.name));
         }
 
-        for (i, message_d) in self.messages.iter().enumerate() {
+        for (i, message_d) in self.message.iter().enumerate() {
             let msg_id = format!("{}/{}", id, i);
             message_d.post_init(&msg_id, tmpl)?;
         }

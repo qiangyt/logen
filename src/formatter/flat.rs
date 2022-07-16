@@ -18,6 +18,7 @@ impl FlatFormatterD {
 }
 
 pub struct FlatFormatter<'a> {
+    #[allow(dead_code)]
     def: &'a FlatFormatterD
 }
 

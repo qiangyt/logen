@@ -12,7 +12,7 @@ timestamp:
 
 loggers:
 - name: req
-  messages:
+  message:
   - template: request begin
     file: req_handler.c
     line: 11
@@ -24,7 +24,7 @@ loggers:
     method: main
     level: warn
 - name: resp
-  messages:
+  message:
   - template: response begin
     file: resp_handler.c
     line: 18
@@ -36,7 +36,7 @@ loggers:
     method: main
     level: debug
 - name: session
-  messages:
+  message:
   - template: session created
     file: session_handler.c
     line: 25

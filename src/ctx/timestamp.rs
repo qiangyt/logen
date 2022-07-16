@@ -19,7 +19,7 @@ impl<'a> Timestamp<'a> {
         }
     }
 
-    pub fn next(&mut self) -> String {
+    pub fn inc(&mut self) -> String {
         let mut i = 0;
         let max = self.interval;
         while i < 10 {

@@ -15,13 +15,13 @@ pub struct App<'a> {
 impl <'a> App<'a> {
 
     pub fn new(def: &'a AppD) -> Result<App<'a>> {
-        let mut template = Template::new();
-        def.post_init(&mut template)?;
+        let mut t = Template::new();
+        def.post_init(&mut t)?;
 
         Ok(App {
             def,
             formatter: def.formatter.new_formatter(),
-            template,
+            template: t,
             loggers: {
                 let mut v = Vec::new();
                 for (i, logger_d) in def.loggers.iter().enumerate() {
@@ -38,41 +38,40 @@ impl <'a> App<'a> {
     }
 
     fn choose_logger(&self) -> &Logger {
-        let mut i = 0;
+        let mut k = 0;
         let max = self.loggers.len();
         let mut rng = rand::thread_rng();
 
-        while i < 10 {
-            let index = rng.gen_range(0..max * 2);
-            if index < max {
-                return &self.loggers[index];
+        while k < 10 {
+            let i = rng.gen_range(0..max * 2);
+            if i < max {
+                return &self.loggers[i];
             }
 
-            i = i+1;
+            k = k+1;
         }
 
         return &self.loggers[0];
     }
 
     pub fn generate(&mut self) -> Result<()> {
-        let def = self.def;
-        let formatter = self.formatter.as_ref();
-        let mut timestamp = Timestamp::new(&def.timestamp, def.num_of_lines);
+        let d = self.def;
+        let f = self.formatter.as_ref();
+        let mut ts = Timestamp::new(&d.timestamp, d.num_of_lines);
 
-        for i in 0..def.num_of_lines {
-            let line = self.new_line(i, &mut timestamp)?;
-            let line_text = formatter.format(&line)?;
-            println!("{}", line_text);
+        for i in 0..d.num_of_lines {
+            let ln = self.new_line(i, &mut ts)?;
+            println!("{}", f.format(&ln)?);
         }
 
         Ok(())
     }
 
     pub fn new_line(&self, line_index: u64, timestamp: &mut Timestamp) -> Result<Line> {
-        let timestamp = timestamp.next();
-        let mut line = Line::new(line_index, self, &self.template, &timestamp);
-        self.choose_logger().render(&mut line)?;
-        Ok(line)
+        let ts = timestamp.inc();
+        let mut r = Line::new(line_index, self, &self.template, &ts);
+        self.choose_logger().render(&mut r)?;
+        Ok(r)
     }
 
 }
