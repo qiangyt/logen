@@ -115,7 +115,7 @@ pub struct AppD {
     pub num_of_lines: u64,
     pub formatter: FormatterD,
     pub timestamp: TimestampD,
-    pub loggers: Vec<LoggerD>,
+    pub logger: Vec<LoggerD>,
 }
 
 impl AppD {
@@ -125,17 +125,17 @@ impl AppD {
     }
 
     pub fn post_init(&self, tmpl: &mut Template) -> Result<()> {
-        self.post_init_loggers(tmpl)
+        self.post_init_logger(tmpl)
     }
 
-    pub fn post_init_loggers(&self, tmpl: &mut Template) -> Result<()> {
+    pub fn post_init_logger(&self, tmpl: &mut Template) -> Result<()> {
         self.formatter.with_template(&self.name, tmpl)?;
 
-        if self.loggers.len() == 0 {
+        if self.logger.len() == 0 {
             return Err(anyhow!("app {} should configure at least 1 logger", self.name));
         }
 
-        for (i, logger_d) in self.loggers.iter().enumerate() {
+        for (i, logger_d) in self.logger.iter().enumerate() {
             let logger_id = format!("{}/{}", self.name, i);
             logger_d.post_init(&logger_id, tmpl)?;
         }

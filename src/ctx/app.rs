@@ -9,7 +9,7 @@ pub struct App<'a> {
     def: &'a AppD,
     formatter: Box<dyn Formatter + 'a>,
     template: Template,
-    loggers: Vec<Logger<'a>>,
+    logger: Vec<Logger<'a>>,
 }
 
 impl <'a> App<'a> {
@@ -22,9 +22,9 @@ impl <'a> App<'a> {
             def,
             formatter: def.formatter.new_formatter(),
             template: t,
-            loggers: {
+            logger: {
                 let mut v = Vec::new();
-                for (i, logger_d) in def.loggers.iter().enumerate() {
+                for (i, logger_d) in def.logger.iter().enumerate() {
                     let logger_id = format!("{}/{}", def.name, i);
                     v.push(Logger::new(logger_d, logger_id));
                 }
@@ -39,19 +39,19 @@ impl <'a> App<'a> {
 
     fn choose_logger(&self) -> &Logger {
         let mut k = 0;
-        let max = self.loggers.len();
+        let max = self.logger.len();
         let mut rng = rand::thread_rng();
 
         while k < 10 {
             let i = rng.gen_range(0..max * 2);
             if i < max {
-                return &self.loggers[i];
+                return &self.logger[i];
             }
 
             k = k+1;
         }
 
-        return &self.loggers[0];
+        return &self.logger[0];
     }
 
     pub fn generate(&mut self) -> Result<()> {
