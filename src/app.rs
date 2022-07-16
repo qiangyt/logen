@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::tpl::{Template, TemplateEngine};
 use crate::ts::Timestamp;
-use crate::{Level, Output};
+use crate::{base::level::Level, base::output::Output};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -36,18 +36,7 @@ impl Message {
         t.set("file", &self.file);
         t.set("line", &self.line);
         t.set("method", &self.method);
-        t.set(
-            "level",
-            match self.level {
-                Level::Fine => "FINE",
-                Level::Trace => "TRACE",
-                Level::Debug => "DEBUG",
-                Level::Info => "INFO",
-                Level::Warn => "WARN",
-                Level::Error => "ERROR",
-                Level::Fatal => "FATAL",
-            },
-        );
+        t.set("level", self.level.name());
 
         let msg_text = t.render(&self.id)?;
         t.set("message", &msg_text);
@@ -132,12 +121,11 @@ impl App {
     }
 
     pub fn init(&mut self, tmpl: &mut TemplateEngine) -> Result<()> {
+        self.output.init(&self.name, tmpl)?;
         self.init_logger(tmpl)
     }
 
     pub fn init_logger(&mut self, tmpl: &mut TemplateEngine) -> Result<()> {
-        self.output.with_template(&self.name, tmpl)?;
-
         if self.host.len() == 0 {
             return Err(anyhow!(
                 "app {} should configure at least 1 host",

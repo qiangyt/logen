@@ -1,10 +1,12 @@
 use anyhow::Result;
 
-pub mod flat;
+mod flat;
 pub use flat::FlatFormatter;
 
-pub mod json;
+mod json;
 pub use json::JsonFormatter;
+
+mod bunyan;
 
 use crate::{tpl::Template, ts::Timestamp};
 

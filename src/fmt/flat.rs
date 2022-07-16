@@ -8,6 +8,9 @@ use crate::{
 
 use super::Formatter;
 
+pub const DEFAULT_TIME_FORMAT: &str = "%Y-%m-%d %H:%M:%S";
+pub const DEFAULT_PATTERN: &str = "{{timestamp}} <{{level | upper | align_left(width=5)}}> {{logger}} {{file}}/{{line}} {{method}} - {{message}}";
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct FlatFormatter {
@@ -22,21 +25,21 @@ impl Default for FlatFormatter {
     fn default() -> Self {
         Self {
             time_format: FlatFormatter::default_time_format(),
-            pattern: FlatFormatter::default_pattern()
+            pattern: FlatFormatter::default_pattern(),
         }
     }
 }
 
 impl FlatFormatter {
     pub fn default_time_format() -> String {
-        "%Y-%m-%d %H:%M:%S".to_string()
+        DEFAULT_TIME_FORMAT.to_string()
     }
 
     pub fn default_pattern() -> String {
-        "{{timestamp}} <{{level | upper | align_left(width=5)}}> {{logger}} {{file}}/{{line}} {{method}} - {{message}}".to_string()
+        DEFAULT_PATTERN.to_string()
     }
 
-    pub fn with_template(&self, tmpl_name: &str, tmpl: &mut TemplateEngine) -> Result<()> {
+    pub fn init(&self, tmpl_name: &str, tmpl: &mut TemplateEngine) -> Result<()> {
         tmpl.add_template(tmpl_name, &self.pattern)
     }
 }

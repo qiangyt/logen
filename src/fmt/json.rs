@@ -4,20 +4,13 @@ use serde_json::json;
 
 use crate::{tpl::Template, ts::Timestamp};
 
-use super::Formatter;
+use super::{bunyan, Formatter};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum JsonStyle {
     Bunyan,
 }
-
-static BUNYAN_TRACE: u8 = 10;
-static BUNYAN_DEBUG: u8 = 20;
-static BUNYAN_INFO: u8 = 30;
-static BUNYAN_WARN: u8 = 40;
-static BUNYAN_ERROR: u8 = 50;
-static BUNYAN_FATAL: u8 = 60;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -28,7 +21,7 @@ pub struct JsonFormatter {
 impl Formatter for JsonFormatter {
     fn format_timestamp(&self, timestamp: &Timestamp) -> String {
         let ts_format = match self.style {
-            JsonStyle::Bunyan => "%Y-%m-%dT%H:%M:%S%.3f", //2020-07-09T17:47:21.918Z
+            JsonStyle::Bunyan => bunyan::TIME_FORMAT,
         };
 
         timestamp.format(ts_format)
@@ -41,14 +34,14 @@ impl Formatter for JsonFormatter {
         };
 
         let level = match lv {
-            "FINE" => BUNYAN_TRACE,
-            "TRACE" => BUNYAN_TRACE,
-            "DEBUG" => BUNYAN_DEBUG,
-            "INFO" => BUNYAN_INFO,
-            "WARN" => BUNYAN_WARN,
-            "ERROR" => BUNYAN_ERROR,
-            "FATAL" => BUNYAN_FATAL,
-            _ => BUNYAN_INFO,
+            "FINE" => bunyan::LEVEL_TRACE,
+            "TRACE" => bunyan::LEVEL_TRACE,
+            "DEBUG" => bunyan::LEVEL_DEBUG,
+            "INFO" => bunyan::LEVEL_INFO,
+            "WARN" => bunyan::LEVEL_WARN,
+            "ERROR" => bunyan::LEVEL_ERROR,
+            "FATAL" => bunyan::LEVEL_FATAL,
+            _ => bunyan::LEVEL_DEFAULT,
         };
 
         let j = json!({
