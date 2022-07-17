@@ -6,7 +6,7 @@ use clap::Parser;
 use std::fs;
 use std::str;
 
-static ASSET_EXAMPLE_CONFIG_FILE: &str = "logen.config.example.yaml";
+static ASSET_SIMPLE_EXAMPLE_FILE: &str = "simple.example.yaml";
 static ARG_EXAMPLE_CONFIG_FILE: &str = "<example>";
 
 /// Log generator
@@ -26,7 +26,7 @@ pub fn with_cli_args() -> Result<Option<App>> {
     let args = CliArgs::parse();
 
     if args.example {
-        let a = Asset::get(ASSET_EXAMPLE_CONFIG_FILE).unwrap();
+        let a = Asset::get(ASSET_SIMPLE_EXAMPLE_FILE).unwrap();
         let yaml = String::from_utf8(a.data.as_ref().to_vec()).unwrap();
         return Ok(Some(App::from_yaml(&yaml)));
     }
@@ -34,7 +34,7 @@ pub fn with_cli_args() -> Result<Option<App>> {
     let f = args.config_file;
     if f == ARG_EXAMPLE_CONFIG_FILE {
         // output embedded example configuration
-        let a = Asset::get(ASSET_EXAMPLE_CONFIG_FILE).unwrap();
+        let a = Asset::get(ASSET_SIMPLE_EXAMPLE_FILE).unwrap();
         println!("{}", String::from_utf8(a.data.as_ref().to_vec())?);
         return Ok(None);
     }

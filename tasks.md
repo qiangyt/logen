@@ -1,6 +1,7 @@
 - ~~json formatter~~
 - ~~contextual fields~~
 - multi app
+- test
 - imitate nginx log
 - imitate k8s event log
 - imitate bizx log
