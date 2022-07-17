@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use serde::Serialize;
-use std::collections::{HashMap,BTreeMap};
+use std::collections::{BTreeMap, HashMap};
 use tera::{to_value, try_get_value, Tera, Value};
 
 pub const KEY_LEVEL: &str = "level";
@@ -24,8 +24,10 @@ impl TemplateEngine {
 
     pub fn register_default_filters(&mut self) {
         self.tera.register_filter("map", tera_filter_map);
-        self.tera.register_filter("align_left", tera_filter_align_left);
-        self.tera.register_filter("align_right", tera_filter_align_right);
+        self.tera
+            .register_filter("align_left", tera_filter_align_left);
+        self.tera
+            .register_filter("align_right", tera_filter_align_right);
     }
 
     pub fn add_template(&mut self, template_name: &str, content: &str) -> Result<()> {
@@ -41,24 +43,24 @@ impl TemplateEngine {
     }
 }
 
-
-pub fn tera_filter_map(
-    value: &Value,
-    args: &HashMap<String, Value>,
-) -> tera::Result<Value> {
+pub fn tera_filter_map(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
     let value = try_get_value!("map", "value", BTreeMap<String,Value>, value);
 
     let mut sep = match args.get("sep") {
         Some(sep) => try_get_value!("map", "sep", String, sep),
-        None => "=".to_string()
+        None => "=".to_string(),
     };
-    if sep.len() == 0 { sep = "=".to_string(); }
+    if sep.len() == 0 {
+        sep = "=".to_string();
+    }
 
     let mut delimit = match args.get("delimit") {
         Some(delimit) => try_get_value!("map", "delimit", String, delimit),
-        None => ",".to_string()
+        None => ",".to_string(),
     };
-    if delimit.len() == 0 { delimit = ",".to_string(); }
+    if delimit.len() == 0 {
+        delimit = ",".to_string();
+    }
 
     let mut r = String::with_capacity(value.len() * 64);
     let mut first = true;
@@ -76,10 +78,7 @@ pub fn tera_filter_map(
     return Ok(to_value(r).unwrap());
 }
 
-pub fn tera_filter_align_left(
-    value: &Value,
-    args: &HashMap<String, Value>,
-) -> tera::Result<Value> {
+pub fn tera_filter_align_left(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
     let mut value = try_get_value!("align_left", "value", String, value);
 
     let width = match args.get("width") {
