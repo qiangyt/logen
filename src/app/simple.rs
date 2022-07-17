@@ -1,14 +1,17 @@
+use std::collections::BTreeMap;
+
 use anyhow::{anyhow, Result};
 use chrono::{DateTime, Utc};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 use crate::*;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 struct Message {
-    #[serde(skip_serializing, skip_deserializing)]
+    #[serde(skip)]
     id: String,
 
     template: String,
@@ -46,7 +49,7 @@ impl Message {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct Logger {
-    #[serde(skip_serializing, skip_deserializing)]
+    #[serde(skip)]
     id: String,
 
     name: String,
@@ -99,12 +102,16 @@ impl Logger {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", deny_unknown_fields)]
+#[serde(rename_all = "snake_case")]
 pub struct App {
     name: String,
 
     #[serde(default)]
     output: Output,
+
+    //#[serde(flatten)]
+    #[serde(default)]
+    mdc: BTreeMap<String, Value>,
 
     num_of_lines: u64,
     begin_time: DateTime<Utc>, //rfc3339
@@ -207,6 +214,7 @@ impl App {
         r.set("index", &index);
         r.set("host", self.choose_host());
         r.set("pid", &rand::thread_rng().gen::<u16>());
+        r.set("mdc", &self.mdc);
 
         r
     }

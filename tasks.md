@@ -1,6 +1,4 @@
-- JSON formatter
 - contextual fields
-- default value
 - multi app
 - imitate nginx log
 - imitate k8s event log

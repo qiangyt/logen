@@ -6,7 +6,7 @@ use crate::{Template, TemplateEngine, Timestamp};
 use super::Formatter;
 
 pub const DEFAULT_TIME_FORMAT: &str = "%Y-%m-%d %H:%M:%S";
-pub const DEFAULT_PATTERN: &str = "{{timestamp}} <{{level | upper | align_left(width=5)}}> {{logger}} {{file}}/{{line}} {{method}} - {{message}}";
+pub const DEFAULT_PATTERN: &str = r#"{{timestamp}} <{{level | upper | align_left(width=5)}}> [{{mdc | map}}] {{logger}} {{file}}/{{line}} {{method}} - {{message}}"#;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]

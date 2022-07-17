@@ -8,6 +8,9 @@ host:
 - app3
 - lb1
 - lb2
+mdc:
+  USER_ID: qiangyt
+  USER_ROLE: admin
 logger:
 - name: req
   message:
