@@ -11,7 +11,9 @@ pub struct TemplateEngine {
 
 impl TemplateEngine {
     pub fn new() -> Self {
-        TemplateEngine { tera: teras::default() }
+        TemplateEngine {
+            tera: teras::default(),
+        }
     }
 
     pub fn add_template(&mut self, template_name: &str, content: &str) -> Result<()> {
@@ -26,7 +28,6 @@ impl TemplateEngine {
             .with_context(|| format!("failed to render template '{}': {:?}", template_name, data))
     }
 }
-
 
 pub struct Template<'a> {
     data: tera::Context,
