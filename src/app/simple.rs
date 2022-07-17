@@ -79,20 +79,7 @@ impl Logger {
     }
 
     fn choose_message(&self) -> &Message {
-        let mut i = 0;
-        let max = self.message.len();
-        let mut rng = rand::thread_rng();
-
-        while i < 10 {
-            let index = rng.gen_range(0..max * 2);
-            if index < max {
-                return &self.message[index];
-            }
-
-            i = i + 1;
-        }
-
-        &self.message[0]
+        util::rand::choose_arr(&self.message)
     }
 
     fn populate(&self, t: &mut Template) -> Result<()> {
@@ -154,37 +141,11 @@ impl App {
     }
 
     fn choose_host(&self) -> &str {
-        let mut k = 0;
-        let max = self.host.len();
-        let mut rng = rand::thread_rng();
-
-        while k < 10 {
-            let i = rng.gen_range(0..max * 2);
-            if i < max {
-                return &self.host[i];
-            }
-
-            k = k + 1;
-        }
-
-        return &self.host[0];
+        &util::rand::choose_arr(&self.host)
     }
 
     fn choose_logger(&self) -> &Logger {
-        let mut k = 0;
-        let max = self.logger.len();
-        let mut rng = rand::thread_rng();
-
-        while k < 10 {
-            let i = rng.gen_range(0..max * 2);
-            if i < max {
-                return &self.logger[i];
-            }
-
-            k = k + 1;
-        }
-
-        return &self.logger[0];
+        util::rand::choose_arr(&self.logger)
     }
 
     pub fn generate(&self, template_engine: &TemplateEngine) -> Result<()> {

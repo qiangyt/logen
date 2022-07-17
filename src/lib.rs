@@ -6,3 +6,5 @@ pub use base::{level, tpl, Level, Output, Template, TemplateEngine, Timestamp};
 
 pub mod cfg;
 pub mod fmt;
+
+pub mod util;

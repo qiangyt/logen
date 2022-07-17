@@ -1,3 +1,4 @@
+use crate::util::text;
 use anyhow::{Context, Result};
 use serde::Serialize;
 use std::collections::{BTreeMap, HashMap};
@@ -79,10 +80,10 @@ pub fn tera_filter_map(value: &Value, args: &HashMap<String, Value>) -> tera::Re
 }
 
 pub fn tera_filter_align_left(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
-    let mut value = try_get_value!("align_left", "value", String, value);
+    let value = try_get_value!("align_left", "value", String, value);
 
     let width = match args.get("width") {
-        Some(width) => try_get_value!("align_left", "width", i32, width),
+        Some(width) => try_get_value!("align_left", "width", usize, width),
         None => {
             return Err(tera::Error::msg(
                 "filter `align_left` expected an arg called `width`",
@@ -90,26 +91,18 @@ pub fn tera_filter_align_left(value: &Value, args: &HashMap<String, Value>) -> t
         }
     };
 
-    let mut len = 0;
-    for _ in value.chars() {
-        len = len + 1;
-    }
-    while len < width {
-        value.push(' ');
-        len = len + 1;
-    }
-
-    return Ok(to_value(value).unwrap());
+    let r = text::align_left(&value, width);
+    return Ok(to_value(r).unwrap());
 }
 
 pub fn tera_filter_align_right(
     value: &Value,
     args: &HashMap<String, Value>,
 ) -> tera::Result<Value> {
-    let mut value = try_get_value!("align_right", "value", String, value);
+    let value = try_get_value!("align_right", "value", String, value);
 
     let width = match args.get("width") {
-        Some(width) => try_get_value!("align_right", "width", i32, width),
+        Some(width) => try_get_value!("align_right", "width", usize, width),
         None => {
             return Err(tera::Error::msg(
                 "filter `align_right` expected an arg called `width`",
@@ -117,16 +110,8 @@ pub fn tera_filter_align_right(
         }
     };
 
-    let mut len = 0;
-    for _ in value.chars() {
-        len = len + 1;
-    }
-    while len < width {
-        value.insert(0, ' ');
-        len = len + 1;
-    }
-
-    return Ok(to_value(value).unwrap());
+    let r = text::align_right(&value, width);
+    return Ok(to_value(r).unwrap());
 }
 
 pub struct Template<'a> {
