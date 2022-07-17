@@ -6,7 +6,7 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::*;
+use crate::{cfg::AppType, *};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -91,7 +91,11 @@ impl Logger {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub struct App {
+    #[serde(skip)]
     name: String,
+
+    #[serde(rename = "type")]
+    typ: AppType,
 
     #[serde(default)]
     output: Output,
@@ -108,13 +112,14 @@ pub struct App {
 }
 
 impl App {
-    pub fn from_yaml(yaml: &str) -> Self {
-        serde_yaml::from_str::<Self>(yaml).expect(&format!("failed to parse config yaml: {}", yaml))
-    }
-
-    pub fn init(&mut self, tmpl: &mut TemplateEngine) -> Result<()> {
+    pub fn init(&mut self, name: String, tmpl: &mut TemplateEngine) -> Result<()> {
+        self.name = name;
         self.output.init(&self.name, tmpl)?;
         self.init_logger(tmpl)
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
     }
 
     fn init_logger(&mut self, tmpl: &mut TemplateEngine) -> Result<()> {

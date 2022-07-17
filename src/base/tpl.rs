@@ -5,6 +5,7 @@ use tera::{to_value, Tera, Value};
 
 pub const KEY_LEVEL: &str = "level";
 
+#[derive(Debug)]
 pub struct TemplateEngine {
     tera: Tera,
 }
@@ -26,6 +27,12 @@ impl TemplateEngine {
         self.tera
             .render(template_name, data)
             .with_context(|| format!("failed to render template '{}': {:?}", template_name, data))
+    }
+}
+
+impl Default for TemplateEngine {
+    fn default() -> Self {
+        TemplateEngine::new()
     }
 }
 
