@@ -2,7 +2,8 @@ pub mod app;
 pub mod assets;
 
 pub mod base;
-use std::collections::HashMap;
+use std::sync::mpsc::Sender;
+use std::{collections::HashMap, sync::mpsc};
 use std::thread;
 
 use anyhow::{Context, Result};
@@ -24,7 +25,7 @@ pub enum AppType {
 pub trait AppT {
     fn init(&mut self, name: &str) -> Result<()>;
     fn name(&self) -> &str;
-    fn generate(&self) -> Result<()>;
+    fn generate(&self, sender: Sender<String>) -> Result<()>;
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -48,22 +49,38 @@ impl Logen {
     }
 
     pub fn generate(&'static self) -> Result<()> {
-        let mut thread_handles = vec![];
+        let mut app_handles = vec![];
         let apps = &self.apps;
+        let (sender, rx) = mpsc::channel();
+
+        let console_h = thread::spawn(move || {
+            loop {
+                match rx.recv() {
+                    Err(_) => return,
+                    Ok(log_line) => println!("{}", log_line)
+                }
+            }
+        });
+
         for (_, app) in apps {
-            let h = thread::spawn(move || {
+            let app_sender = sender.clone();
+            let app_h = thread::spawn(move || {
                 let app_name = app.name().to_string();
-                match app.generate() {
+                match app.generate(app_sender) {
                     Err(err) => println!("failed to generate log from app: {}, error is {}", app_name, err),
                     Ok(()) => {}
                 };
             });
-            thread_handles.push(h);
+            app_handles.push(app_h);
         }
 
-        for h in thread_handles {
-            h.join().unwrap(); //TODO
+        drop(sender);
+
+        for app_h in app_handles {
+            app_h.join().unwrap(); //TODO
         }
+
+        console_h.join().unwrap();//TODO
 
         Ok(())
     }

@@ -125,7 +125,7 @@ impl AppT for App {
         &self.name
     }
 
-    fn generate(&self) -> Result<()> {
+    fn generate(&self, sender: Sender<String>) -> Result<()> {
         let f = self.output.formatter();
         let mut ts = Timestamp::new(&self.begin_time, &self.end_time, self.num_of_lines);
 
@@ -139,7 +139,7 @@ impl AppT for App {
             logger.populate(t)?;
             logger.choose_message().populate(t)?;
 
-            println!("{}", f.format(t, &self.name)?);
+            sender.send(f.format(t, &self.name)?)?;
         }
 
         Ok(())
