@@ -114,17 +114,40 @@ pub struct App {
     logger: Vec<Logger>,
 }
 
-impl App {
-    pub fn init(&mut self, name: &str) -> Result<()> {
+impl AppT for App {
+    fn init(&mut self, name: &str) -> Result<()> {
         self.name = name.to_string();
         self.output.init(&self.name, &mut self.template_engine)?;
         self.init_logger()
     }
 
-    pub fn name(&self) -> &str {
+    fn name(&self) -> &str {
         &self.name
     }
 
+    fn generate(&self) -> Result<()> {
+        let f = self.output.formatter();
+        let mut ts = Timestamp::new(&self.begin_time, &self.end_time, self.num_of_lines);
+
+        for i in 0..self.num_of_lines {
+            ts.inc();
+
+            let t = &mut self.new_template(i);
+            t.set("timestamp", &f.format_timestamp(&ts));
+
+            let logger = self.choose_logger();
+            logger.populate(t)?;
+            logger.choose_message().populate(t)?;
+
+            println!("{}", f.format(t, &self.name)?);
+        }
+
+        Ok(())
+    }
+
+}
+
+impl App {
     fn init_logger(&mut self) -> Result<()> {
         if self.host.len() == 0 {
             return Err(anyhow!(
@@ -154,27 +177,6 @@ impl App {
 
     fn choose_logger(&self) -> &Logger {
         util::rand::choose_arr(&self.logger)
-    }
-
-    pub fn g(&self) {}
-    pub fn generate(&self) -> Result<()> {
-        let f = self.output.formatter();
-        let mut ts = Timestamp::new(&self.begin_time, &self.end_time, self.num_of_lines);
-
-        for i in 0..self.num_of_lines {
-            ts.inc();
-
-            let t = &mut self.new_template(i);
-            t.set("timestamp", &f.format_timestamp(&ts));
-
-            let logger = self.choose_logger();
-            logger.populate(t)?;
-            logger.choose_message().populate(t)?;
-
-            println!("{}", f.format(t, &self.name)?);
-        }
-
-        Ok(())
     }
 
     fn new_template<'a>(&'a self, index: u64) -> Template {
