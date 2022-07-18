@@ -54,11 +54,8 @@ impl Logen {
         let (sender, rx) = mpsc::channel();
 
         let console_h = thread::spawn(move || {
-            loop {
-                match rx.recv() {
-                    Err(_) => return,
-                    Ok(log_line) => println!("{}", log_line)
-                }
+            for log_line in rx {
+                println!("{}", log_line);
             }
         });
 
