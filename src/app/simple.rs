@@ -94,6 +94,9 @@ pub struct App {
     #[serde(skip)]
     name: String,
 
+    #[serde(skip, default)]
+    template_engine: TemplateEngine,
+
     #[serde(rename = "type")]
     typ: AppType,
 
@@ -112,17 +115,17 @@ pub struct App {
 }
 
 impl App {
-    pub fn init(&mut self, name: String, tmpl: &mut TemplateEngine) -> Result<()> {
-        self.name = name;
-        self.output.init(&self.name, tmpl)?;
-        self.init_logger(tmpl)
+    pub fn init(&mut self, name: &str) -> Result<()> {
+        self.name = name.to_string();
+        self.output.init(&self.name, &mut self.template_engine)?;
+        self.init_logger()
     }
 
     pub fn name(&self) -> &str {
         &self.name
     }
 
-    fn init_logger(&mut self, tmpl: &mut TemplateEngine) -> Result<()> {
+    fn init_logger(&mut self) -> Result<()> {
         if self.host.len() == 0 {
             return Err(anyhow!(
                 "app {} should configure at least 1 host",
@@ -137,9 +140,9 @@ impl App {
             ));
         }
 
-        for (i, logger_d) in self.logger.iter_mut().enumerate() {
+        for (i, logger) in self.logger.iter_mut().enumerate() {
             let logger_id = format!("{}/{}", self.name, i);
-            logger_d.init(logger_id, tmpl)?;
+            logger.init(logger_id, &mut self.template_engine)?;
         }
 
         return Ok(());
@@ -153,14 +156,15 @@ impl App {
         util::rand::choose_arr(&self.logger)
     }
 
-    pub fn generate(&self, template_engine: &TemplateEngine) -> Result<()> {
+    pub fn g(&self) {}
+    pub fn generate(&self) -> Result<()> {
         let f = self.output.formatter();
         let mut ts = Timestamp::new(&self.begin_time, &self.end_time, self.num_of_lines);
 
         for i in 0..self.num_of_lines {
             ts.inc();
 
-            let t = &mut self.new_template(i, template_engine);
+            let t = &mut self.new_template(i);
             t.set("timestamp", &f.format_timestamp(&ts));
 
             let logger = self.choose_logger();
@@ -173,8 +177,8 @@ impl App {
         Ok(())
     }
 
-    fn new_template<'a>(&'a self, index: u64, template_engine: &'a TemplateEngine) -> Template {
-        let mut r = Template::new(template_engine);
+    fn new_template<'a>(&'a self, index: u64) -> Template {
+        let mut r = Template::new(&&self.template_engine);
 
         r.set("app", &self.name);
         r.set("index", &index);
