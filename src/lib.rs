@@ -35,8 +35,8 @@ pub struct Logen {
 
 impl Logen {
     pub fn from_yaml(yaml: &str) -> Box<Self> {
-        Box::new(serde_yaml::from_str::<Self>(yaml)
-            .expect(&format!("failed to parse config yaml: {}", yaml)))
+        serde_yaml::from_str(yaml)
+            .expect(&format!("failed to parse config yaml: {}", yaml))
     }
 
     pub fn init(&mut self) -> Result<()> {
