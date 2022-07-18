@@ -3,7 +3,13 @@ use logen::{cli, Logen};
 fn main() {
     if let Some(yaml) = cli::yaml_with_args().unwrap() {
         let mut logen = Logen::from_yaml(&yaml);
-        logen.init().unwrap();        
-        Box::leak(logen).generate().unwrap();
+        logen.init().unwrap();
+
+        let logen = Box::leak(logen);
+        logen.generate().unwrap();
+
+        unsafe {
+            Box::from_raw(logen);
+        }
     }
 }
