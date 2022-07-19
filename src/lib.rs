@@ -38,7 +38,7 @@ pub trait AppT {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub struct Logen {
-    apps: HashMap<String, simple::App>,
+    apps: HashMap<String, Box<simple::App>>,
 }
 
 impl Logen {
@@ -89,24 +89,4 @@ impl Logen {
         Ok(())
     }
 
-    /*pub fn generate(&mut self) -> Result<()> {
-        let mut thread_handles = vec![];
-        let apps = &mut self.apps;
-        for (_, app) in apps.drain() {
-            let h = thread::spawn(move || {
-                let app_name = app.name().to_string();
-                match app.generate() {
-                    Err(err) => println!("failed to generate log from app: {}, error is {}", app_name, err),
-                    Ok(()) => {}
-                };
-            });
-            thread_handles.push(h);
-        }
-
-        for h in thread_handles {
-            h.join().unwrap(); //TODO
-        }
-
-        Ok(())
-    }*/
 }
