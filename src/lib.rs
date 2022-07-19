@@ -7,6 +7,7 @@ use std::{collections::HashMap, sync::mpsc};
 use std::thread;
 
 use anyhow::{Context, Result};
+use chrono::{DateTime, Utc};
 use app::simple;
 pub use base::{level, tpl, Level, Output, Template, TemplateEngine, Timestamp};
 use serde::{Deserialize, Serialize};
@@ -22,10 +23,16 @@ pub enum AppType {
     Simple,
 }
 
+pub struct Line {
+    name: String,
+    timestamp: DateTime<Utc>,
+    text: String,
+}
+
 pub trait AppT {
     fn init(&mut self, name: &str) -> Result<()>;
     fn name(&self) -> &str;
-    fn generate(&self, sender: Sender<String>) -> Result<()>;
+    fn generate(&self, sender: Sender<Line>) -> Result<()>;
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -51,11 +58,11 @@ impl Logen {
     pub fn generate(&'static self) -> Result<()> {
         let mut app_handles = vec![];
         let apps = &self.apps;
-        let (sender, rx) = mpsc::channel();
+        let (sender, rx) = mpsc::channel::<Line>();
 
         let console_h = thread::spawn(move || {
-            for log_line in rx {
-                println!("{}", log_line);
+            for line in rx {
+                println!("{} | {}", line.name, line.text);
             }
         });
 

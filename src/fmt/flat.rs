@@ -1,7 +1,8 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
+use chrono::{DateTime, Utc};
 
-use crate::{Template, TemplateEngine, Timestamp};
+use crate::{Template, TemplateEngine};
 
 use super::Formatter;
 
@@ -42,8 +43,8 @@ impl FlatFormatter {
 }
 
 impl Formatter for FlatFormatter {
-    fn format_timestamp(&self, timestamp: &Timestamp) -> String {
-        timestamp.format(&self.time_format)
+    fn format_timestamp(&self, timestamp: &DateTime<Utc>) -> String {
+        timestamp.format(&self.time_format).to_string()
     }
 
     fn format(&self, t: &Template, template_name: &str) -> Result<String> {

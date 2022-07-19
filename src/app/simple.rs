@@ -125,21 +125,25 @@ impl AppT for App {
         &self.name
     }
 
-    fn generate(&self, sender: Sender<String>) -> Result<()> {
+    fn generate(&self, sender: Sender<Line>) -> Result<()> {
         let f = self.output.formatter();
         let mut ts = Timestamp::new(&self.begin_time, &self.end_time, self.num_of_lines);
 
         for i in 0..self.num_of_lines {
-            ts.inc();
+            let timetamp = ts.inc();
 
             let t = &mut self.new_template(i);
-            t.set("timestamp", &f.format_timestamp(&ts));
+            t.set("timestamp", &f.format_timestamp(&timetamp));
 
             let logger = self.choose_logger();
             logger.populate(t)?;
             logger.choose_message().populate(t)?;
 
-            sender.send(f.format(t, &self.name)?)?;
+            sender.send(Line {
+                name: self.name().to_string(),
+                timestamp: *timetamp,
+                text: f.format(t, &self.name)?
+            })?;
         }
 
         Ok(())

@@ -17,11 +17,11 @@ impl Timestamp {
         }
     }
 
-    pub fn format(&self, format: &str) -> String {
-        self.current.format(format).to_string()
+    pub fn current(&self) -> &DateTime<Utc> {
+        &self.current
     }
 
-    pub fn inc(&mut self) {
+    pub fn inc(&mut self) -> &DateTime<Utc> {
         let mut i = 0;
         let max = self.interval;
         while i < 10 {
@@ -29,12 +29,13 @@ impl Timestamp {
             let new_value = self.current + Duration::milliseconds(itvl);
             if new_value < self.end {
                 self.current = new_value;
-                return;
+                return &self.current;
             }
 
             i = i + 1;
         }
 
         self.current = self.end;
+        return &self.current;
     }
 }

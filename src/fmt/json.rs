@@ -1,7 +1,8 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
+use chrono::{DateTime, Utc};
 
-use crate::{tpl::KEY_LEVEL, Template, Timestamp};
+use crate::{tpl::KEY_LEVEL, Template};
 
 use super::{bunyan, Formatter};
 
@@ -18,12 +19,12 @@ pub struct JsonFormatter {
 }
 
 impl Formatter for JsonFormatter {
-    fn format_timestamp(&self, timestamp: &Timestamp) -> String {
+    fn format_timestamp(&self, timestamp: &DateTime<Utc>) -> String {
         let ts_format = match self.style {
             JsonStyle::Bunyan => bunyan::TIME_FORMAT,
         };
 
-        timestamp.format(ts_format)
+        timestamp.format(ts_format).to_string()
     }
 
     fn format(&self, t: &Template, _: &str) -> Result<String> {
