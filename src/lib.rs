@@ -29,16 +29,15 @@ pub struct Line {
 }
 
 #[typetag::serde(tag = "type")]
-pub trait AppT: Sync {
+pub trait App: Sync {
     fn init(&mut self, name: &str) -> Result<()>;
-    fn name(&self) -> &str;
     fn generate(&self, sender: Sender<Line>) -> Result<()>;
 }
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub struct Logen {
-    apps: HashMap<String, Box<dyn AppT>>,
+    apps: HashMap<String, Box<dyn App>>,
 }
 
 impl Logen {
@@ -66,10 +65,9 @@ impl Logen {
             }
         });
 
-        for (_, app) in apps {
+        for (app_name, app) in apps {
             let app_sender = sender.clone();
             let app_h = thread::spawn(move || {
-                let app_name = app.name().to_string();
                 match app.generate(app_sender) {
                     Err(err) => println!("failed to generate log from app: {}, error is {}", app_name, err),
                     Ok(()) => {}

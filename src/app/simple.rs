@@ -112,15 +112,11 @@ pub struct App {
 }
 
 #[typetag::serde(name = "simple")]
-impl AppT for App {
+impl crate::App for App {
     fn init(&mut self, name: &str) -> Result<()> {
         self.name = name.to_string();
         self.output.init(&self.name, &mut self.template_engine)?;
         self.init_logger()
-    }
-
-    fn name(&self) -> &str {
-        &self.name
     }
 
     fn generate(&self, sender: Sender<Line>) -> Result<()> {
@@ -138,7 +134,7 @@ impl AppT for App {
             logger.choose_message().populate(t)?;
 
             sender.send(Line {
-                name: self.name().to_string(),
+                name: self.name.to_string(),
                 timestamp: *timetamp,
                 text: f.format(t, &self.name)?
             })?;

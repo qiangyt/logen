@@ -85,3 +85,7 @@
 - https://github.com/rust-phf/rust-phf:Compile time static maps for Rust 
 - https://github.com/jaemk/cached:Rust cache structures and easy function memoization 
 - https://github.com/whatisaphone/genawaiter:stackless generators (aka coroutines) in stable Rust. Instead of using yield, which won't be stabilized anytime soon, you use async/await, which is stable today.
+- https://github.com/carllerche/codegen：A Rust library providing a builder API to generate Rust code. 
+- https://github.com/carllerche/pidfile-rust：Handles managing a pidfile for daemon mutual exclusion 
+- https://github.com/carllerche/pool：A pool of reusable values 
+- https://github.com/sfackler/r2d2：A generic connection pool for Rust 
