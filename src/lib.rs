@@ -29,16 +29,17 @@ pub struct Line {
     text: String,
 }
 
-pub trait AppT {
+#[typetag::serde(tag = "type")]
+pub trait AppT: Sync {
     fn init(&mut self, name: &str) -> Result<()>;
     fn name(&self) -> &str;
     fn generate(&self, sender: Sender<Line>) -> Result<()>;
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub struct Logen {
-    apps: HashMap<String, Box<simple::App>>,
+    apps: HashMap<String, Box<dyn AppT>>,
 }
 
 impl Logen {

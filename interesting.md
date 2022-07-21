@@ -44,3 +44,44 @@
 - !!! andylokandy/simsearch-rs - A simple and lightweight fuzzy search engine that works in memory, searching for similar strings (a pun here).
 - !!! Keats/tera - A template engine for Rust based on Jinja2/Django
 - !!! djc/askama - Type-safe, compiled Jinja-like templates for Rust
+- https://github.com/dtolnay/quote - Rust quasi-quoting - provides the quote! macro for turning Rust syntax tree data structures into tokens of source code.
+- https://github.com/dtolnay/bootstrap - This repo contains a minimal reliable setup for compiling the most recent stable Rust compiler from source on Linux i.e. without downloading any already compiled Rust binaries from the internet.
+- https://github.com/dtolnay/async-trait: Type erasure for async trait methods 
+- https://github.com/dtolnay/remain: Compile-time checks that an enum or match is written in sorted order 
+- https://github.com/dtolnay/case-studies - Analysis of various tricky Rust code
+- https://github.com/dtolnay/monostate - Type that deserializes only from one specific value
+- https://github.com/dtolnay/no-panic
+- https://github.com/fusion-engineering/inline-python - Inline Python code directly in your Rust code 
+- https://github.com/bluss/indexmap: A hash table with consistent order and fast iteration; access items by key or sequence index 
+- https://github.com/hyperium/hyper: An HTTP library for Rust 
+- https://github.com/seanmonstar/warp: A super-easy, composable, web server framework for warp speeds.
+- https://github.com/seanmonstar/reqwest: An easy and powerful Rust HTTP Client
+- https://github.com/seanmonstar/httparse: A push parser for the HTTP 1.x protocol in Rust.
+- https://github.com/seanmonstar/try-lock: A lightweight lock protected by an atomic boolean
+- https://github.com/quinn-rs/quinn: Async-friendly QUIC implementation in Rust 
+- https://github.com/carllerche/mock-io: Rust mock type implementing io::Read & io::Write 
+- https://github.com/tokio-rs/bytes: Utilities for working with bytes 
+- https://github.com/paritytech/substrate: Substrate: The platform for blockchain innovators 
+- https://github.com/petgraph/petgraph: Graph data structure library for Rust. 
+- https://github.com/bluss/scopeguard: Rust crate for a convenient RAII scope guard. 
+- https://github.com/bluss/twoway: Twoway / Fast substring search for strings and byte strings (Rust) / Also assorted benchmarks and string search snippets 
+- https://github.com/bluss/defmac: A macro to define lambda-like macros inline. 
+- https://github.com/servo/rust-smallvec: "Small vector" optimization for Rust: store up to a small number of items on the stack 
+- https://github.com/servo/servo: The Servo Browser Engine 
+- https://github.com/bluss/galil-seiferas: Galil-Seiferas algorithm: String search in constant space, linear time, for nonorderable alphabets 
+- https://github.com/jni-rs/jni-rs： Rust bindings to the Java Native Interface — JNI 
+- https://github.com/hyperium/http-body： Asynchronous HTTP body trait
+- https://github.com/johannhof/difference.rs： Rust text diffing and assertion library 
+- https://github.com/koute/stdweb： A standard library for the client-side Web 
+- https://github.com/hobofan/cargo-nono：Check your crate for (possible) no_std compatibility 
+- https://github.com/actix/actix-web： Actix Web is a powerful, pragmatic, and extremely fast web framework for Rust. 
+- https://github.com/diesel-rs/diesel：A safe, extensible ORM and Query Builder for Rust 
+- https://github.com/softprops/screenprints：reprints for your terminal screen 
+- https://github.com/kbknapp/cargo-graph"A cargo subcommand for creating GraphViz DOT files and dependency graphs :
+- https://github.com/jonathan-s/serde-prefix：Allows you to use a macro prefix_all to prefix every attribute in structs and enums on serialization 
+- https://github.com/becheran/wildmatch: Simple string matching with questionmark- and star-wildcard operator 
+- https://github.com/GuillaumeGomez/process-viewer:A process viewer GUI in rust 
+- https://github.com/eugene-bulkin/rust-bk-tree: A BK-tree implementation in Rust.  
+- https://github.com/rust-phf/rust-phf:Compile time static maps for Rust 
+- https://github.com/jaemk/cached:Rust cache structures and easy function memoization 
+- https://github.com/whatisaphone/genawaiter:stackless generators (aka coroutines) in stable Rust. Instead of using yield, which won't be stabilized anytime soon, you use async/await, which is stable today.

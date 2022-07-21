@@ -97,9 +97,6 @@ pub struct App {
     #[serde(skip, default)]
     template_engine: TemplateEngine,
 
-    #[serde(rename = "type")]
-    typ: AppType,
-
     #[serde(default)]
     output: Output,
 
@@ -114,6 +111,7 @@ pub struct App {
     logger: Vec<Logger>,
 }
 
+#[typetag::serde(name = "simple")]
 impl AppT for App {
     fn init(&mut self, name: &str) -> Result<()> {
         self.name = name.to_string();
