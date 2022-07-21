@@ -8,7 +8,6 @@ use std::thread;
 
 use anyhow::{Context, Result};
 use chrono::{DateTime, Utc};
-use app::simple;
 pub use base::{level, tpl, Level, Output, Template, TemplateEngine, Timestamp};
 use serde::{Deserialize, Serialize};
 
