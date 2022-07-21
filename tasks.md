@@ -1,7 +1,6 @@
 - ~~json formatter~~
 - ~~contextual fields~~
 - multi app
-- https://github.com/dtolnay/automod: Pull in every source file in a directory as a module
 - test
 - imitate nginx log
 - imitate k8s event log
