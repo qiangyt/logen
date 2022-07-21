@@ -8,7 +8,7 @@ use std::{collections::HashMap, sync::mpsc};
 use std::thread;
 
 use anyhow::{Context, Result};
-use appender::console::TargetConsole;
+use appender::console::SenderConsole;
 use chrono::{DateTime, Utc};
 pub use base::{level, tpl, Level, Output, Template, TemplateEngine, Timestamp};
 use serde::{Deserialize, Serialize};
@@ -32,7 +32,7 @@ pub struct Line {
 #[typetag::serde(tag = "type")]
 pub trait App: Sync {
     fn init(&mut self, name: &str) -> Result<()>;
-    fn generate(&self, console: TargetConsole) -> Result<()>;
+    fn generate(&self, console: SenderConsole) -> Result<()>;
 }
 
 #[derive(Serialize, Deserialize)]
@@ -67,7 +67,7 @@ impl Logen {
         });
 
         for (app_name, app) in apps {
-            let target_console = TargetConsole::new(sender.clone());
+            let target_console = SenderConsole::new(sender.clone());
             let app_h = thread::spawn(move || {
                 match app.generate(target_console) {
                     Err(err) => println!("failed to generate log from app: {}, error is {}", app_name, err),

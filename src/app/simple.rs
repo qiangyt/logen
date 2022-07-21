@@ -119,7 +119,7 @@ impl crate::App for App {
         self.init_logger()
     }
 
-    fn generate(&self, console: TargetConsole) -> Result<()> {
+    fn generate(&self, console: SenderConsole) -> Result<()> {
         let appender = ConsoleAppender::new(console);
         let f = self.output.formatter();
         let mut ts = Timestamp::new(&self.begin_time, &self.end_time, self.num_of_lines);
