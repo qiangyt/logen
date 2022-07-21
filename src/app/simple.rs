@@ -6,7 +6,7 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::*;
+use crate::{*, appender::{console::ConsoleAppender, Appender}};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -119,7 +119,8 @@ impl crate::App for App {
         self.init_logger()
     }
 
-    fn generate(&self, sender: Sender<Line>) -> Result<()> {
+    fn generate(&self, console: TargetConsole) -> Result<()> {
+        let appender = ConsoleAppender::new(console);
         let f = self.output.formatter();
         let mut ts = Timestamp::new(&self.begin_time, &self.end_time, self.num_of_lines);
 
@@ -133,7 +134,7 @@ impl crate::App for App {
             logger.populate(t)?;
             logger.choose_message().populate(t)?;
 
-            sender.send(Line {
+            appender.append(Line {
                 name: self.name.to_string(),
                 timestamp: *timetamp,
                 text: f.format(t, &self.name)?
