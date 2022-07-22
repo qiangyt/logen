@@ -6,7 +6,7 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::{*, appender::{console::ConsoleAppender, Appender}};
+use crate::{*, appenders::{console::ConsoleAppender, Appender}, base::Line};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -112,7 +112,7 @@ pub struct App {
 }
 
 #[typetag::serde(name = "simple")]
-impl crate::App for App {
+impl crate::base::App for App {
     fn init(&mut self, name: &str) -> Result<()> {
         self.name = name.to_string();
         self.output.init(&self.name, &mut self.template_engine)?;

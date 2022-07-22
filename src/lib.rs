@@ -1,5 +1,5 @@
-pub mod app;
-pub mod appender;
+pub mod apps;
+pub mod appenders;
 pub mod assets;
 
 pub mod base;
@@ -7,8 +7,8 @@ use std::{collections::HashMap, sync::mpsc};
 use std::thread;
 
 use anyhow::{Context, Result};
-use appender::console::SenderConsole;
-use chrono::{DateTime, Utc};
+use appenders::console::SenderConsole;
+use base::{App, Line};
 pub use base::{level, tpl, Level, Output, Template, TemplateEngine, Timestamp};
 use serde::{Deserialize, Serialize};
 
@@ -16,23 +16,6 @@ pub mod cli;
 pub mod fmt;
 pub mod util;
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub enum AppType {
-    Simple,
-}
-
-pub struct Line {
-    name: String,
-    timestamp: DateTime<Utc>,
-    text: String,
-}
-
-#[typetag::serde(tag = "type")]
-pub trait App: Sync {
-    fn init(&mut self, name: &str) -> Result<()>;
-    fn generate(&self, console: SenderConsole) -> Result<()>;
-}
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]

@@ -1,6 +1,6 @@
 use std::sync::mpsc::Sender;
 use anyhow::{Result, Context};
-use crate::{Line};
+use crate::base::Line;
 
 use super::Appender;
 
@@ -14,7 +14,7 @@ impl SenderConsole {
         Self {sender: sender}
     }
 
-    pub fn write(&self, line: crate::Line) -> Result<()> {
+    pub fn write(&self, line: Line) -> Result<()> {
         self.sender.send(line).with_context(|| "failed to write to console")
     }
 }
@@ -26,7 +26,7 @@ pub struct ConsoleAppender {
 
 impl Appender for ConsoleAppender {
 
-    fn append(&mut self, line: crate::Line) -> anyhow::Result<()> {
+    fn append(&mut self, line: Line) -> anyhow::Result<()> {
         self.console.write(line)
     }
 

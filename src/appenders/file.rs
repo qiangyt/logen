@@ -12,7 +12,7 @@ pub struct FileAppender {
 
 impl Appender for FileAppender {
 
-    fn append(&mut self, line: crate::Line) -> Result<()> {
+    fn append(&mut self, line: crate::base::Line) -> Result<()> {
         let data = format!("{}\n", line.text);
         self.file.write_all(data.as_bytes()).with_context(|| format!("failed to write to file: {}", self.path))
     }

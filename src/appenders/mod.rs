@@ -1,4 +1,4 @@
-use crate::Line;
+use crate::base::Line;
 
 use anyhow::Result;
 pub mod console;
