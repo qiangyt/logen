@@ -3,7 +3,6 @@ pub mod appender;
 pub mod assets;
 
 pub mod base;
-use std::sync::mpsc::Sender;
 use std::{collections::HashMap, sync::mpsc};
 use std::thread;
 
