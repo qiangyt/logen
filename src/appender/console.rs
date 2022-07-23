@@ -12,8 +12,8 @@ pub struct ConsoleSender {
 
 impl ConsoleSender {
 
-    pub fn new(sender: Sender<Arc<Line>>) -> Self {
-        Self {sender: sender}
+    pub fn new(sender: &Sender<Arc<Line>>) -> Self {
+        Self {sender: sender.clone()}
     }
 
     pub fn write(&self, line: Arc<Line>) -> Result<()> {

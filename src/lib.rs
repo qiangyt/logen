@@ -53,7 +53,7 @@ impl Logen {
         });
 
         for (app_name, app) in apps {
-            let target_console = ConsoleSender::new(sender.clone());
+            let target_console = ConsoleSender::new(&sender);
             let app_h = thread::spawn(move || {
                 match app.generate(target_console) {
                     Err(err) => println!("failed to generate log from app: {}, error is {}", app_name, err),
@@ -63,12 +63,11 @@ impl Logen {
             app_handles.push(app_h);
         }
 
-        drop(sender);
-
         for app_h in app_handles {
             app_h.join().unwrap(); //TODO
         }
 
+        drop(sender);
         console_h.join().unwrap();//TODO
 
         Ok(())
