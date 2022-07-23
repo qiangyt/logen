@@ -9,7 +9,7 @@ use std::thread;
 
 use anyhow::{Context, Result};
 use appender::console::SenderConsole;
-use base::{App, Line};
+use base::{AppT, Line};
 pub use base::{level, tpl, Level, Output, Template, TemplateEngine, Timestamp};
 use serde::{Deserialize, Serialize};
 
@@ -21,7 +21,7 @@ pub mod util;
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub struct Logen {
-    apps: HashMap<String, Box<dyn App>>,
+    apps: HashMap<String, Box<dyn AppT>>,
 }
 
 impl Logen {

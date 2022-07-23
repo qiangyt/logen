@@ -2,7 +2,7 @@ use std::sync::{mpsc::Sender, Arc};
 use serde::{Serialize, Deserialize};
 use anyhow::{Result, Context};
 
-use super::Appender;
+use super::AppenderT;
 use crate::base::Line;
 
 
@@ -37,7 +37,7 @@ impl <'a> ConsoleAppender<'a> {
 
 }
 
-impl <'a> Appender for ConsoleAppender<'a> {
+impl <'a> AppenderT for ConsoleAppender<'a> {
 
     fn append(&mut self, line: Arc<Line>) -> anyhow::Result<()> {
         self.console.write(line)

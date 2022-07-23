@@ -11,7 +11,7 @@ pub mod bunyan;
 
 use crate::Template;
 
-pub trait Formatter {
+pub trait FormatterT {
     fn format_timestamp(&self, timestamp: &DateTime<Utc>) -> String;
     fn format(&self, t: &Template, template_name: &str) -> Result<String>;
 }

@@ -25,7 +25,7 @@ impl Default for AppenderDef {
 }
 
 impl AppenderDef {
-    pub fn build_appender<'a>(&'a self, console: &'a SenderConsole) -> Result<Box<dyn Appender + 'a>> {
+    pub fn build_appender<'a>(&'a self, console: &'a SenderConsole) -> Result<Box<dyn AppenderT + 'a>> {
         match self {
             AppenderDef::Console(c) => Ok(ConsoleAppender::new(c, console)),
             AppenderDef::File(f) => Ok(FileAppender::new(f)?)
@@ -33,6 +33,6 @@ impl AppenderDef {
     }
 }
 
-pub trait Appender {
+pub trait AppenderT {
     fn append(&mut self, line: Arc<Line>) -> Result<()>;
 }

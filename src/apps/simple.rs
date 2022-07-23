@@ -115,7 +115,7 @@ pub struct App {
 }
 
 #[typetag::serde(name = "simple")]
-impl crate::base::App for App {
+impl AppT for App {
     fn init(&mut self, name: &str) -> Result<()> {
         self.name = name.to_string();
         self.output.init(&self.name, &mut self.template_engine)?;

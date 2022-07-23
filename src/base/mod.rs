@@ -32,7 +32,7 @@ pub struct Line {
 }
 
 #[typetag::serde(tag = "type")]
-pub trait App: Sync {
+pub trait AppT: Sync {
     fn init(&mut self, name: &str) -> Result<()>;
     fn generate(&self, console: SenderConsole) -> Result<()>;
 }

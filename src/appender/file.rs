@@ -6,7 +6,7 @@ use std::sync::Arc;
 
 use crate::base::Line;
 
-use super::Appender;
+use super::AppenderT;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FileAppenderDef {
@@ -31,7 +31,7 @@ impl <'a> FileAppender<'a> {
 
 }
 
-impl <'a> Appender for FileAppender<'a> {
+impl <'a> AppenderT for FileAppender<'a> {
 
     fn append(&mut self, line: Arc<Line>) -> Result<()> {
         let data = format!("{}\n", line.text);

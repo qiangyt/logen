@@ -4,7 +4,7 @@ use chrono::{DateTime, Utc};
 
 use crate::{tpl::KEY_LEVEL, Template};
 
-use super::{bunyan, Formatter};
+use super::{bunyan, FormatterT};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -18,7 +18,7 @@ pub struct JsonFormatter {
     pub style: JsonStyle,
 }
 
-impl Formatter for JsonFormatter {
+impl FormatterT for JsonFormatter {
     fn format_timestamp(&self, timestamp: &DateTime<Utc>) -> String {
         let ts_format = match self.style {
             JsonStyle::Bunyan => bunyan::TIME_FORMAT,

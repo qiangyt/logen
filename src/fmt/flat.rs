@@ -4,7 +4,7 @@ use chrono::{DateTime, Utc};
 
 use crate::{Template, TemplateEngine};
 
-use super::Formatter;
+use super::FormatterT;
 
 pub const DEFAULT_TIME_FORMAT: &str = "%Y-%m-%d %H:%M:%S";
 pub const DEFAULT_PATTERN: &str = r#"{{timestamp}} <{{level | upper | align_left(width=5)}}> [{{mdc | map}}] {{logger}} {{file}}/{{line}} {{method}} - {{message}}"#;
@@ -42,7 +42,7 @@ impl FlatFormatter {
     }
 }
 
-impl Formatter for FlatFormatter {
+impl FormatterT for FlatFormatter {
     fn format_timestamp(&self, timestamp: &DateTime<Utc>) -> String {
         timestamp.format(&self.time_format).to_string()
     }

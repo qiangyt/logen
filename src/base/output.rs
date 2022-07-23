@@ -3,8 +3,8 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    fmt::{FlatFormatter, Formatter, JsonFormatter},
-    appender::{Appender, AppenderDef, SenderConsole},
+    fmt::{FlatFormatter, FormatterT, JsonFormatter},
+    appender::{AppenderT, AppenderDef, SenderConsole},
     TemplateEngine,
 };
 
@@ -30,7 +30,7 @@ impl OutputFormat {
         }
     }
 
-    pub fn build_formatter(&self) -> &dyn Formatter {
+    pub fn build_formatter(&self) -> &dyn FormatterT {
         match self {
             OutputFormat::Flat(f) => f,
             OutputFormat::Json(j) => j,
@@ -67,11 +67,11 @@ impl Output {
         vec!(AppenderDef::default())
     }
 
-    pub fn build_formatter(&self) -> &dyn Formatter {
+    pub fn build_formatter(&self) -> &dyn FormatterT {
         self.format.build_formatter()
     }
 
-    pub fn build_appenders<'a>(&'a self, console: &'a SenderConsole) -> Result<Vec<Box<dyn Appender + 'a>>> {
+    pub fn build_appenders<'a>(&'a self, console: &'a SenderConsole) -> Result<Vec<Box<dyn AppenderT + 'a>>> {
         let mut r = Vec::with_capacity(self.appenders.len());
         for appenderD in &self.appenders {
             r.push(appenderD.build_appender(console)?);
