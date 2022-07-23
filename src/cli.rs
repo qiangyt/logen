@@ -11,7 +11,7 @@ static ARG_EXAMPLE_CONFIG_FILE: &str = "<example>";
 /// Log generator
 #[derive(Parser, Debug)]
 #[clap(version, about, long_about = None)]
-pub struct CliArgs {
+pub struct Args {
     /// Path of the configuration file
     #[clap(value_parser, required = false, default_value = ARG_EXAMPLE_CONFIG_FILE)]
     pub config_file: String,
@@ -22,7 +22,7 @@ pub struct CliArgs {
 }
 
 pub fn yaml_with_args() -> Result<Option<String>> {
-    let args = CliArgs::parse();
+    let args = Args::parse();
 
     if args.example {
         let a = Asset::get(ASSET_EXAMPLE_FILE).unwrap();

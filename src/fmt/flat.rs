@@ -4,31 +4,31 @@ use chrono::{DateTime, Utc};
 
 use crate::{Template, TemplateEngine};
 
-use super::FormatterT;
+use crate::FormatterT;
 
 pub const DEFAULT_TIME_FORMAT: &str = "%Y-%m-%d %H:%M:%S";
 pub const DEFAULT_PATTERN: &str = r#"{{timestamp}} <{{level | upper | align_left(width=5)}}> [{{mdc | map}}] {{logger}} {{file}}/{{line}} {{method}} - {{message}}"#;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub struct FlatFormatter {
-    #[serde(default = "FlatFormatter::default_time_format")]
+pub struct Formatter {
+    #[serde(default = "Formatter::default_time_format")]
     time_format: String,
 
-    #[serde(default = "FlatFormatter::default_pattern")]
+    #[serde(default = "Formatter::default_pattern")]
     pattern: String,
 }
 
-impl Default for FlatFormatter {
+impl Default for Formatter {
     fn default() -> Self {
         Self {
-            time_format: FlatFormatter::default_time_format(),
-            pattern: FlatFormatter::default_pattern(),
+            time_format: Self::default_time_format(),
+            pattern: Self::default_pattern(),
         }
     }
 }
 
-impl FlatFormatter {
+impl Formatter {
     pub fn default_time_format() -> String {
         DEFAULT_TIME_FORMAT.to_string()
     }
@@ -42,7 +42,7 @@ impl FlatFormatter {
     }
 }
 
-impl FormatterT for FlatFormatter {
+impl FormatterT for Formatter {
     fn format_timestamp(&self, timestamp: &DateTime<Utc>) -> String {
         timestamp.format(&self.time_format).to_string()
     }

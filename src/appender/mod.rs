@@ -4,13 +4,14 @@ use std::sync::Arc;
 use serde::{Serialize, Deserialize};
 use anyhow::Result;
 
-use crate::base::Line;
-
-pub use self::console::{ConsoleAppender, ConsoleAppenderDef, ConsoleSender};
-pub use self::file::{FileAppender, FileAppenderDef};
+use crate::Line;
 
 pub mod console;
+pub use console::{Appender as ConsoleAppender, AppenderDef as ConsoleAppenderDef, ConsoleSender};
+
 pub mod file;
+pub use file::{Appender as FileAppender, AppenderDef as FileAppenderDef};
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum AppenderDef {

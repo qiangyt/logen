@@ -2,10 +2,10 @@ use anyhow::Result;
 use chrono::{DateTime, Utc};
 
 mod flat;
-pub use flat::FlatFormatter;
+pub use flat::Formatter as FlatFormatter;
 
 mod json;
-pub use json::JsonFormatter;
+pub use json::Formatter as JsonFormatter;
 
 pub mod bunyan;
 

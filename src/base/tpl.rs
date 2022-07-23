@@ -6,13 +6,13 @@ use tera::{to_value, Tera, Value};
 pub const KEY_LEVEL: &str = "level";
 
 #[derive(Debug)]
-pub struct TemplateEngine {
+pub struct Engine {
     tera: Tera,
 }
 
-impl TemplateEngine {
+impl Engine {
     pub fn new() -> Self {
-        TemplateEngine {
+        Self {
             tera: teras::default(),
         }
     }
@@ -30,19 +30,19 @@ impl TemplateEngine {
     }
 }
 
-impl Default for TemplateEngine {
+impl Default for Engine {
     fn default() -> Self {
-        TemplateEngine::new()
+        Self::new()
     }
 }
 
 pub struct Template<'a> {
     data: tera::Context,
-    engine: &'a TemplateEngine,
+    engine: &'a Engine,
 }
 
 impl<'a> Template<'a> {
-    pub fn new(engine: &'a TemplateEngine) -> Self {
+    pub fn new(engine: &'a Engine) -> Self {
         Self {
             data: tera::Context::new(),
             engine,

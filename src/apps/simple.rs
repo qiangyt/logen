@@ -7,7 +7,8 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::appender::console::ConsoleSender;
+use crate::ConsoleSender;
+use crate::AppT;
 use crate::base::*;
 use crate::util;
 

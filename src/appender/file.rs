@@ -9,20 +9,20 @@ use crate::base::Line;
 use super::AppenderT;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct FileAppenderDef {
+pub struct AppenderDef {
     path: String,
     append: bool
 }
 
-pub struct FileAppender<'a> {
-    def: &'a FileAppenderDef,
+pub struct Appender<'a> {
+    def: &'a AppenderDef,
     file: File,
 }
 
-impl <'a> FileAppender<'a> {
+impl <'a> Appender<'a> {
 
-    pub fn new(def: &FileAppenderDef) -> Result<Box<FileAppender>> {
-        Ok(Box::new(FileAppender {
+    pub fn new(def: &'a AppenderDef) -> Result<Box<Appender>> {
+        Ok(Box::new(Self {
             def,
             file: File::options().append(def.append).open(&def.path)
                     .with_context(|| format!("failed to open file: {}", def.path))?,
@@ -31,7 +31,7 @@ impl <'a> FileAppender<'a> {
 
 }
 
-impl <'a> AppenderT for FileAppender<'a> {
+impl <'a> AppenderT for Appender<'a> {
 
     fn append(&mut self, line: Arc<Line>) -> Result<()> {
         let data = format!("{}\n", line.text);

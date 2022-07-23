@@ -22,22 +22,22 @@ impl ConsoleSender {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct ConsoleAppenderDef {}
+pub struct AppenderDef {}
 
-pub struct ConsoleAppender<'a> {
-    def: &'a ConsoleAppenderDef,
+pub struct Appender<'a> {
+    def: &'a AppenderDef,
     console: &'a ConsoleSender,
 }
 
-impl <'a> ConsoleAppender<'a> {
+impl <'a> Appender<'a> {
 
-    pub fn new(def: &'a ConsoleAppenderDef, console: &'a ConsoleSender) -> Box<ConsoleAppender<'a>> {
-        Box::new(ConsoleAppender { def, console })
+    pub fn new(def: &'a AppenderDef, console: &'a ConsoleSender) -> Box<Appender<'a>> {
+        Box::new(Self { def, console })
     }
 
 }
 
-impl <'a> AppenderT for ConsoleAppender<'a> {
+impl <'a> AppenderT for Appender<'a> {
 
     fn append(&mut self, line: Arc<Line>) -> anyhow::Result<()> {
         self.console.write(line)

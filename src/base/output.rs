@@ -3,37 +3,37 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    fmt::{FlatFormatter, FormatterT, JsonFormatter},
-    appender::{AppenderT, AppenderDef, ConsoleSender},
+    FlatFormatter, FormatterT, JsonFormatter,
+    AppenderT, AppenderDef, ConsoleSender,
     TemplateEngine,
 };
 
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub enum OutputFormat {
+pub enum Format {
     Flat(FlatFormatter),
     Json(JsonFormatter),
 }
 
-impl Default for OutputFormat {
+impl Default for Format {
     fn default() -> Self {
-        OutputFormat::Flat(FlatFormatter::default())
+        Format::Flat(FlatFormatter::default())
     }
 }
 
-impl OutputFormat {
+impl Format {
     pub fn init(&self, tmpl_name: &str, tmpl: &mut TemplateEngine) -> Result<()> {
         match self {
-            OutputFormat::Flat(flat) => flat.init(tmpl_name, tmpl),
-            OutputFormat::Json(_) => Ok(()),
+            Format::Flat(flat) => flat.init(tmpl_name, tmpl),
+            Format::Json(_) => Ok(()),
         }
     }
 
     pub fn build_formatter(&self) -> &dyn FormatterT {
         match self {
-            OutputFormat::Flat(f) => f,
-            OutputFormat::Json(j) => j,
+            Format::Flat(f) => f,
+            Format::Json(j) => j,
         }
     }
 }
@@ -43,7 +43,7 @@ impl OutputFormat {
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct Output {
     #[serde(default)]
-    format: OutputFormat,
+    format: Format,
 
     #[serde(default = "Output::default_appenders")]
     appenders: Vec<AppenderDef>,
@@ -52,7 +52,7 @@ pub struct Output {
 impl Default for Output {
     fn default() -> Self {
         Self { 
-            format: OutputFormat::default(), 
+            format: Format::default(), 
             appenders: Output::default_appenders(),
         }
     }
