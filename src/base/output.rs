@@ -39,14 +39,23 @@ impl OutputFormat {
 }
 
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct Output {
     #[serde(default)]
     format: OutputFormat,
 
-    #[serde(default)]
-    appender: AppenderDef,
+    #[serde(default = "Output::default_appenders")]
+    appenders: Vec<AppenderDef>,
+}
+
+impl Default for Output {
+    fn default() -> Self {
+        Self { 
+            format: OutputFormat::default(), 
+            appenders: Output::default_appenders(),
+        }
+    }
 }
 
 impl Output {
@@ -62,7 +71,12 @@ impl Output {
         self.format.build_formatter()
     }
 
-    pub fn build_appender<'a>(&'a self, console: SenderConsole) -> Result<Box<dyn Appender + 'a>> {
-        self.appender.build_appender(console)
+    pub fn build_appenders<'a>(&'a self, console: &'a SenderConsole) -> Result<Vec<Box<dyn Appender + 'a>>> {
+        let mut r = Vec::with_capacity(self.appenders.len());
+        for appenderD in &self.appenders {
+            r.push(appenderD.build_appender(console)?);
+        }
+
+        Ok(r)
     }
 }

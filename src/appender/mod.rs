@@ -1,6 +1,10 @@
 
+use std::sync::Arc;
+
 use serde::{Serialize, Deserialize};
 use anyhow::Result;
+
+use crate::base::Line;
 
 pub use self::console::{ConsoleAppender, ConsoleAppenderDef, SenderConsole};
 pub use self::file::{FileAppender, FileAppenderDef};
@@ -21,7 +25,7 @@ impl Default for AppenderDef {
 }
 
 impl AppenderDef {
-    pub fn build_appender<'a>(&'a self, console: SenderConsole) -> Result<Box<dyn Appender + 'a>> {
+    pub fn build_appender<'a>(&'a self, console: &'a SenderConsole) -> Result<Box<dyn Appender + 'a>> {
         match self {
             AppenderDef::Console(c) => Ok(ConsoleAppender::new(c, console)),
             AppenderDef::File(f) => Ok(FileAppender::new(f)?)
@@ -30,5 +34,5 @@ impl AppenderDef {
 }
 
 pub trait Appender {
-    fn append(&mut self, line: crate::base::Line) -> Result<()>;
+    fn append(&mut self, line: Arc<Line>) -> Result<()>;
 }

@@ -1,4 +1,5 @@
 use std::collections::BTreeMap;
+use std::sync::Arc;
 
 use anyhow::{anyhow, Result};
 use chrono::{DateTime, Utc};
@@ -6,7 +7,6 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::appender::console::ConsoleAppender;
 use crate::appender::console::SenderConsole;
 use crate::base::*;
 use crate::util;
@@ -123,7 +123,7 @@ impl crate::base::App for App {
     }
 
     fn generate(&self, console: SenderConsole) -> Result<()> {
-        let mut appender = self.output.build_appender(console)?;
+        let mut appenders = self.output.build_appenders(&console)?;
         let f = self.output.build_formatter();
         let mut ts = Timestamp::new(&self.begin_time, &self.end_time, self.num_of_lines);
 
@@ -137,11 +137,14 @@ impl crate::base::App for App {
             logger.populate(t)?;
             logger.choose_message().populate(t)?;
 
-            appender.append(Line {
-                name: self.name.to_string(),
-                timestamp: *timetamp,
-                text: f.format(t, &self.name)?
-            })?;
+            for appender in &mut appenders {
+                let line = Arc::new(Line {
+                    name: self.name.to_string(),
+                    timestamp: *timetamp,
+                    text: f.format(t, &self.name)?
+                });
+                appender.append(line)?;
+            }
         }
 
         Ok(())
