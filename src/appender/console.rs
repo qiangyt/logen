@@ -6,11 +6,11 @@ use super::AppenderT;
 use crate::base::Line;
 
 
-pub struct SenderConsole {
+pub struct ConsoleSender {
     sender: Sender<Arc<Line>>,
 }
 
-impl SenderConsole {
+impl ConsoleSender {
 
     pub fn new(sender: Sender<Arc<Line>>) -> Self {
         Self {sender: sender}
@@ -26,12 +26,12 @@ pub struct ConsoleAppenderDef {}
 
 pub struct ConsoleAppender<'a> {
     def: &'a ConsoleAppenderDef,
-    console: &'a SenderConsole,
+    console: &'a ConsoleSender,
 }
 
 impl <'a> ConsoleAppender<'a> {
 
-    pub fn new(def: &'a ConsoleAppenderDef, console: &'a SenderConsole) -> Box<ConsoleAppender<'a>> {
+    pub fn new(def: &'a ConsoleAppenderDef, console: &'a ConsoleSender) -> Box<ConsoleAppender<'a>> {
         Box::new(ConsoleAppender { def, console })
     }
 

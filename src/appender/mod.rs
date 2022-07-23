@@ -6,7 +6,7 @@ use anyhow::Result;
 
 use crate::base::Line;
 
-pub use self::console::{ConsoleAppender, ConsoleAppenderDef, SenderConsole};
+pub use self::console::{ConsoleAppender, ConsoleAppenderDef, ConsoleSender};
 pub use self::file::{FileAppender, FileAppenderDef};
 
 pub mod console;
@@ -25,7 +25,7 @@ impl Default for AppenderDef {
 }
 
 impl AppenderDef {
-    pub fn build_appender<'a>(&'a self, console: &'a SenderConsole) -> Result<Box<dyn AppenderT + 'a>> {
+    pub fn build_appender<'a>(&'a self, console: &'a ConsoleSender) -> Result<Box<dyn AppenderT + 'a>> {
         match self {
             AppenderDef::Console(c) => Ok(ConsoleAppender::new(c, console)),
             AppenderDef::File(f) => Ok(FileAppender::new(f)?)

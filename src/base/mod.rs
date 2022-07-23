@@ -16,7 +16,7 @@ pub use tpl::{Template, TemplateEngine};
 mod ts;
 pub use ts::Timestamp;
 
-use crate::appender::console::SenderConsole;
+use crate::appender::console::ConsoleSender;
 
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -34,7 +34,7 @@ pub struct Line {
 #[typetag::serde(tag = "type")]
 pub trait AppT: Sync {
     fn init(&mut self, name: &str) -> Result<()>;
-    fn generate(&self, console: SenderConsole) -> Result<()>;
+    fn generate(&self, console: ConsoleSender) -> Result<()>;
 }
 
 

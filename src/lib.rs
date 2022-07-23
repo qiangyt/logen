@@ -8,7 +8,7 @@ use std::{collections::HashMap, sync::mpsc};
 use std::thread;
 
 use anyhow::{Context, Result};
-use appender::console::SenderConsole;
+use appender::console::ConsoleSender;
 use base::{AppT, Line};
 pub use base::{level, tpl, Level, Output, Template, TemplateEngine, Timestamp};
 use serde::{Deserialize, Serialize};
@@ -50,7 +50,7 @@ impl Logen {
         });
 
         for (app_name, app) in apps {
-            let target_console = SenderConsole::new(sender.clone());
+            let target_console = ConsoleSender::new(sender.clone());
             let app_h = thread::spawn(move || {
                 match app.generate(target_console) {
                     Err(err) => println!("failed to generate log from app: {}, error is {}", app_name, err),

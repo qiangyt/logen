@@ -7,7 +7,7 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::appender::console::SenderConsole;
+use crate::appender::console::ConsoleSender;
 use crate::base::*;
 use crate::util;
 
@@ -122,7 +122,7 @@ impl AppT for App {
         self.init_logger()
     }
 
-    fn generate(&self, console: SenderConsole) -> Result<()> {
+    fn generate(&self, console: ConsoleSender) -> Result<()> {
         let mut appenders = self.output.build_appenders(&console)?;
         let f = self.output.build_formatter();
         let mut ts = Timestamp::new(&self.begin_time, &self.end_time, self.num_of_lines);
