@@ -1,5 +1,5 @@
 pub mod apps;
-pub mod appenders;
+pub mod appender;
 pub mod assets;
 
 pub mod base;
@@ -7,7 +7,7 @@ use std::{collections::HashMap, sync::mpsc};
 use std::thread;
 
 use anyhow::{Context, Result};
-use appenders::console::SenderConsole;
+use appender::console::SenderConsole;
 use base::{App, Line};
 pub use base::{level, tpl, Level, Output, Template, TemplateEngine, Timestamp};
 use serde::{Deserialize, Serialize};

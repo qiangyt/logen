@@ -8,7 +8,7 @@ pub mod level;
 pub use level::Level;
 
 mod output;
-pub use output::Output;
+pub use output::{Output,OutputFormat};
 
 pub mod tpl;
 pub use tpl::{Template, TemplateEngine};
@@ -16,7 +16,7 @@ pub use tpl::{Template, TemplateEngine};
 mod ts;
 pub use ts::Timestamp;
 
-use crate::appenders::console::SenderConsole;
+use crate::appender::console::SenderConsole;
 
 
 #[derive(Debug, Serialize, Deserialize)]
