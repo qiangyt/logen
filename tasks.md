@@ -1,7 +1,7 @@
 - ~~json formatter~~
 - ~~contextual fields~~
-- multi app
-- file output
+- ~~multi app~~
+- ~~file output~~
 - https://github.com/dtolnay/thiserror: derive(Error) for struct and enum error types 
 - https://github.com/dtolnay/serde-ignored: Find out about keys that are ignored when deserializing data 
 - https://github.com/dtolnay/inventory: Typed distributed plugin registration
