@@ -1,5 +1,5 @@
-use serde::{Serialize, Deserialize};
 use anyhow::Result;
+use serde::{Deserialize, Serialize};
 
 use crate::Line;
 
@@ -8,7 +8,6 @@ pub use console::{Appender as ConsoleAppender, ConsoleSender};
 
 pub mod file;
 pub use file::{Appender as FileAppender, AppenderDef as FileAppenderDef};
-
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum AppenderDef {
@@ -23,10 +22,13 @@ impl Default for AppenderDef {
 }
 
 impl AppenderDef {
-    pub fn build_appender<'a>(&'a self, console: &'a ConsoleSender) -> Result<Box<dyn AppenderT + 'a>> {
+    pub fn build_appender<'a>(
+        &'a self,
+        console: &'a ConsoleSender,
+    ) -> Result<Box<dyn AppenderT + 'a>> {
         match self {
             AppenderDef::Console => Ok(ConsoleAppender::new(console)),
-            AppenderDef::File(f) => Ok(FileAppender::new(f)?)
+            AppenderDef::File(f) => Ok(FileAppender::new(f)?),
         }
     }
 }

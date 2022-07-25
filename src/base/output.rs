@@ -3,11 +3,8 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    FlatFormatter, FormatterT, JsonFormatter,
-    AppenderT, AppenderDef, ConsoleSender,
-    TemplateEngine,
+    AppenderDef, AppenderT, ConsoleSender, FlatFormatter, FormatterT, JsonFormatter, TemplateEngine,
 };
-
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -38,7 +35,6 @@ impl Format {
     }
 }
 
-
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct Output {
@@ -51,8 +47,8 @@ pub struct Output {
 
 impl Default for Output {
     fn default() -> Self {
-        Self { 
-            format: Format::default(), 
+        Self {
+            format: Format::default(),
             appenders: Output::default_appenders(),
         }
     }
@@ -64,14 +60,17 @@ impl Output {
     }
 
     pub fn default_appenders() -> Vec<AppenderDef> {
-        vec!(AppenderDef::default())
+        vec![AppenderDef::default()]
     }
 
     pub fn build_formatter(&self) -> &dyn FormatterT {
         self.format.build_formatter()
     }
 
-    pub fn build_appenders<'a>(&'a self, console: &'a ConsoleSender) -> Result<Vec<Box<dyn AppenderT + 'a>>> {
+    pub fn build_appenders<'a>(
+        &'a self,
+        console: &'a ConsoleSender,
+    ) -> Result<Vec<Box<dyn AppenderT + 'a>>> {
         let mut r = Vec::with_capacity(self.appenders.len());
         for appender_d in &self.appenders {
             r.push(appender_d.build_appender(console)?);

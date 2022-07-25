@@ -7,10 +7,10 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::ConsoleSender;
-use crate::AppT;
 use crate::base::*;
 use crate::util;
+use crate::AppT;
+use crate::ConsoleSender;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -142,7 +142,7 @@ impl AppT for App {
                 let line = Arc::new(Line {
                     name: self.name.to_string(),
                     timestamp: *timetamp,
-                    text: f.format(t, &self.name)?
+                    text: f.format(t, &self.name)?,
                 });
                 appender.append(&line)?;
             }
@@ -150,7 +150,6 @@ impl AppT for App {
 
         Ok(())
     }
-
 }
 
 impl App {

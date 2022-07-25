@@ -13,12 +13,11 @@ pub use fmt::*;
 pub mod util;
 pub use util::*;
 
-use std::{collections::HashMap, sync::mpsc};
 use std::thread;
+use std::{collections::HashMap, sync::mpsc};
 
 use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
-
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -28,8 +27,7 @@ pub struct Logen {
 
 impl Logen {
     pub fn from_yaml(yaml: &str) -> Box<Self> {
-        serde_yaml::from_str(yaml)
-            .expect(&format!("failed to parse config yaml: {}", yaml))
+        serde_yaml::from_str(yaml).expect(&format!("failed to parse config yaml: {}", yaml))
     }
 
     pub fn init(&mut self) -> Result<()> {
@@ -47,7 +45,7 @@ impl Logen {
 
         let console_h = thread::spawn(move || {
             for line in rx {
-                println!("{} | {}", line.name, line.text); 
+                println!("{} | {}", line.name, line.text);
             }
         });
 
@@ -55,7 +53,10 @@ impl Logen {
             let target_console = ConsoleSender::new(&sender);
             let app_h = thread::spawn(move || {
                 match app.generate(target_console) {
-                    Err(err) => println!("failed to generate log from app: {}, error is {}", app_name, err),
+                    Err(err) => println!(
+                        "failed to generate log from app: {}, error is {}",
+                        app_name, err
+                    ),
                     Ok(()) => {}
                 };
             });
@@ -67,9 +68,8 @@ impl Logen {
         }
 
         drop(sender);
-        console_h.join().unwrap();//TODO
+        console_h.join().unwrap(); //TODO
 
         Ok(())
     }
-
 }
