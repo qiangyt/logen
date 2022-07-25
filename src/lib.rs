@@ -38,6 +38,16 @@ impl Logen {
         Ok(())
     }
 
+    pub fn amount_of_apps_which_needs_console(&self) -> u32 {
+        let mut r = 0 as u32;
+        for app in self.apps.values() {
+            if app.need_console() {
+                r += 1;
+            }
+        }
+        return r;
+    }
+
     pub fn generate(&'static self) -> Result<()> {
         let mut app_handles = vec![];
         let apps = &self.apps;
@@ -45,7 +55,11 @@ impl Logen {
 
         let console_h = thread::spawn(move || {
             for line in rx {
-                println!("{} | {}", line.name, line.text);
+                if self.amount_of_apps_which_needs_console() == 1 {
+                    println!("{}", line.text);
+                } else {
+                    println!("{} | {}", line.name, line.text);
+                }
             }
         });
 
@@ -54,7 +68,7 @@ impl Logen {
             let app_h = thread::spawn(move || {
                 match app.generate(target_console) {
                     Err(err) => println!(
-                        "failed to generate log from app: {}, error is {}",
+                        "failed to generate log from app `{}`, cause: {}",
                         app_name, err
                     ),
                     Ok(()) => {}

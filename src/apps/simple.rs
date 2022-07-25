@@ -150,6 +150,10 @@ impl AppT for App {
 
         Ok(())
     }
+
+    fn need_console(&self) -> bool {
+        self.output.need_console()
+    }
 }
 
 impl App {

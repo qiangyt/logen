@@ -8,9 +8,12 @@ use crate::base::Line;
 use super::AppenderT;
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct AppenderDef {
     path: String,
-    append: bool,
+
+    #[serde(default)]
+    truncate: bool,
 }
 
 pub struct Appender<'a> {
@@ -22,10 +25,17 @@ impl<'a> Appender<'a> {
     pub fn new(def: &'a AppenderDef) -> Result<Box<Appender>> {
         Ok(Box::new(Self {
             def,
-            file: File::options()
-                .append(def.append)
-                .open(&def.path)
-                .with_context(|| format!("failed to open file: {}", def.path))?,
+            file: {
+                let mut opts = File::options();  
+                opts.create(true);
+                if def.truncate {
+                    opts.write(true).truncate(def.truncate);
+                } else {
+                    opts.append(true);
+                }
+                opts.open(&def.path)
+                .with_context(|| format!("failed to open file: {}", def.path))?
+            }
         }))
     }
 }

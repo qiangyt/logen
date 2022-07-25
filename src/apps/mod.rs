@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 pub trait AppT: Sync {
     fn init(&mut self, name: &str) -> Result<()>;
     fn generate(&self, console: ConsoleSender) -> Result<()>;
+    fn need_console(&self) -> bool;
 }
 
 #[derive(Debug, Serialize, Deserialize)]

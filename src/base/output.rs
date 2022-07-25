@@ -78,4 +78,15 @@ impl Output {
 
         Ok(r)
     }
+
+    pub fn need_console(&self) -> bool {
+        for appender_d in &self.appenders {
+            match appender_d {
+                AppenderDef::Console => return true,
+                _ => {},
+            }
+        }
+
+        return false;
+    }
 }

@@ -10,6 +10,7 @@ pub mod file;
 pub use file::{Appender as FileAppender, AppenderDef as FileAppenderDef};
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum AppenderDef {
     Console,
     File(FileAppenderDef),
