@@ -2,7 +2,6 @@ use anyhow::{Result, Context};
 use serde::{Serialize, Deserialize};
 use std::fs::File;
 use std::io::Write;
-use std::sync::Arc;
 
 use crate::base::Line;
 
@@ -33,7 +32,7 @@ impl <'a> Appender<'a> {
 
 impl <'a> AppenderT for Appender<'a> {
 
-    fn append(&mut self, line: Arc<Line>) -> Result<()> {
+    fn append(&mut self, line: &Line) -> Result<()> {
         let data = format!("{}\n", line.text);
         self.file.write_all(data.as_bytes())
             .with_context(|| format!("failed to write to file: {}", self.def.path))

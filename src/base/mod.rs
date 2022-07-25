@@ -13,6 +13,7 @@ mod ts;
 pub use ts::Timestamp;
 
 
+#[derive(Clone)]
 pub struct Line {
     pub name: String,
     pub timestamp: DateTime<Utc>,

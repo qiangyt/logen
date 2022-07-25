@@ -13,7 +13,6 @@ pub use fmt::*;
 pub mod util;
 pub use util::*;
 
-use std::sync::Arc;
 use std::{collections::HashMap, sync::mpsc};
 use std::thread;
 
@@ -44,7 +43,7 @@ impl Logen {
     pub fn generate(&'static self) -> Result<()> {
         let mut app_handles = vec![];
         let apps = &self.apps;
-        let (sender, rx) = mpsc::channel::<Arc<Line>>();
+        let (sender, rx) = mpsc::channel::<Line>();
 
         let console_h = thread::spawn(move || {
             for line in rx {

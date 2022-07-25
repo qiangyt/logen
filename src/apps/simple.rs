@@ -144,7 +144,7 @@ impl AppT for App {
                     timestamp: *timetamp,
                     text: f.format(t, &self.name)?
                 });
-                appender.append(line)?;
+                appender.append(&line)?;
             }
         }
 
