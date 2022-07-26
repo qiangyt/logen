@@ -2,11 +2,10 @@
 - ~~contextual fields~~
 - ~~multi app~~
 - ~~file output~~
-- https://github.com/dtolnay/thiserror: derive(Error) for struct and enum error types 
-- https://github.com/dtolnay/serde-ignored: Find out about keys that are ignored when deserializing data 
-- https://github.com/dtolnay/inventory: Typed distributed plugin registration
-- https://github.com/dtolnay/path-to-error: Find out path at which a deserialization error occurred 
-- https://github.com/dtolnay/automod: Pull in every source file in a directory as a module
+- story
+- splunk client
+- elk client
+- noise (non log)
 - test
 - imitate nginx log
 - imitate k8s event log
@@ -14,40 +13,41 @@
 - imitate mysql log
 - imitate kafka log
 - imitate redis log
-- noise (non log)
-- story
-- splunk client
-- elk client
-- https://github.com/seanmonstar/num_cpus: Get the number of CPUs in Rust 
+- https://github.com/seanmonstar/num_cpus: Get the number of CPUs in Rust
 - https://github.com/tokio-rs/mio:  a fast, low-level I/O library for Rust focusing on non-blocking APIs and event notification for building high performance I/O apps with as little overhead as possible over the OS abstractions.
-- https://github.com/hyperium/h2: HTTP 2.0 client & server implementation for Rust. 
-- https://github.com/tokio-rs/tokio: A runtime for writing reliable asynchronous applications with Rust. Provides I/O, networking, scheduling, timers, ... 
-- https://github.com/tower-rs/tower: async fn(Request) -> Result<Response, Error> 
-- https://github.com/servo/string-cache: String interning for Rust 
-- https://github.com/servo/rust-url: URL parser for Rust 
-- https://github.com/servo/tendril: Compact string type for zero-copy parsing 
-- https://github.com/mcarton/rust-derivative: A set of alternative `derive` attributes for Rust 
-- https://github.com/crossbeam-rs/crossbeam: Tools for concurrent programming in Rust 
-- https://github.com/bluss/unchecked-index： Unchecked indexing and debug-assertion checked indexing through the regular index syntax. 
-- https://github.com/websockets-rs/rust-websocket： A WebSocket (RFC6455) library written in Rust 
-- https://github.com/stanislav-tkach/os_info： Rust library to detect the operating system type 
+- https://github.com/hyperium/h2: HTTP 2.0 client & server implementation for Rust.
+- https://github.com/tokio-rs/tokio: A runtime for writing reliable asynchronous applications with Rust. Provides I/O, networking, scheduling, timers, ...
+- https://github.com/tower-rs/tower: async fn(Request) -> Result<Response, Error>
+- https://github.com/servo/string-cache: String interning for Rust
+- https://github.com/servo/rust-url: URL parser for Rust
+- https://github.com/servo/tendril: Compact string type for zero-copy parsing
+- https://github.com/mcarton/rust-derivative: A set of alternative `derive` attributes for Rust
+- https://github.com/crossbeam-rs/crossbeam: Tools for concurrent programming in Rust
+- https://github.com/bluss/unchecked-index： Unchecked indexing and debug-assertion checked indexing through the regular index syntax.
+- https://github.com/websockets-rs/rust-websocket： A WebSocket (RFC6455) library written in Rust
+- https://github.com/stanislav-tkach/os_info： Rust library to detect the operating system type
 - https://github.com/facebook/rocksdb： A Persistent Key-Value Store for Flash and RAM Storage
-- https://github.com/AltSysrq/proptest： Hypothesis-like property testing for Rust 
+- https://github.com/AltSysrq/proptest： Hypothesis-like property testing for Rust
 - https://github.com/rust-cli/human-panic： Panic messages for humans.
-- https://github.com/colin-kiegel/rust-pretty-assertions： Overwrite `assert_eq!` with a drop-in replacement, adding a colorful diff. 
-- https://github.com/colin-kiegel/rust-derive-builder： derive builder implementation for rust structs 
-- https://github.com/becheran/mlc： Check for broken links in markup files 
-- https://github.com/GuillaumeGomez/sysinfo： 
-- https://github.com/deadlinks/cargo-deadlinks：Cargo subcommand for checking your documentation for broken links 
+- https://github.com/colin-kiegel/rust-pretty-assertions： Overwrite `assert_eq!` with a drop-in replacement, adding a colorful diff.
+- https://github.com/colin-kiegel/rust-derive-builder： derive builder implementation for rust structs
+- https://github.com/becheran/mlc： Check for broken links in markup files
+- https://github.com/GuillaumeGomez/sysinfo：
+- https://github.com/deadlinks/cargo-deadlinks：Cargo subcommand for checking your documentation for broken links
 - https://github.com/mozilla/cargo-vet：a tool to help projects ensure that third-party Rust dependencies have been audited by a trusted source. It strives to be lightweight and easy to integrate.
-- https://github.com/tov/min-max-heap-rs： A double-ended priority queue 
-- https://github.com/rust-lang/hashbrown： Rust port of Google's SwissTable hash map 
-- https://github.com/kriomant/mockers： Mocking library for Rust 
-- https://github.com/BurntSushi/fst： Represent large sets and maps compactly with finite state transducers. 
-- https://github.com/BurntSushi/rust-snappy：Snappy compression implemented in Rust (including the Snappy frame format). 
-- https://github.com/hobofan/ambassador: Delegation of trait implementations via procedural macros 
-- https://github.com/xacrimon/dashmap: Blazing fast concurrent HashMap for Rust. 
-- https://github.com/xacrimon/uvth: Efficient threadpool for Rust. 
-- https://github.com/crossterm-rs/crossterm： Cross platform terminal library rust 
+- https://github.com/tov/min-max-heap-rs： A double-ended priority queue
+- https://github.com/rust-lang/hashbrown： Rust port of Google's SwissTable hash map
+- https://github.com/kriomant/mockers： Mocking library for Rust
+- https://github.com/BurntSushi/fst： Represent large sets and maps compactly with finite state transducers.
+- https://github.com/BurntSushi/rust-snappy：Snappy compression implemented in Rust (including the Snappy frame format).
+- https://github.com/hobofan/ambassador: Delegation of trait implementations via procedural macros
+- https://github.com/xacrimon/dashmap: Blazing fast concurrent HashMap for Rust.
+- https://github.com/xacrimon/uvth: Efficient threadpool for Rust.
+- https://github.com/crossterm-rs/crossterm： Cross platform terminal library rust
 - https://github.com/tov/weak-table-rs：Weak hash tables for rust
-- https://github.com/rkyv/rkyv： Zero-copy deserialization framework for Rust 
+- https://github.com/rkyv/rkyv： Zero-copy deserialization framework for Rust
+- https://github.com/dtolnay/thiserror: derive(Error) for struct and enum error types
+- https://github.com/dtolnay/serde-ignored: Find out about keys that are ignored when deserializing data
+- https://github.com/dtolnay/inventory: Typed distributed plugin registration
+- https://github.com/dtolnay/path-to-error: Find out path at which a deserialization error occurred
+- https://github.com/dtolnay/automod: Pull in every source file in a directory as a module
