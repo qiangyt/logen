@@ -1,0 +1,11 @@
+docker run --name es01 --net elastic -p 9200:9200 -p 9300:9300 -it docker.elastic.co/elasticsearch/elasticsearch:8.3.2
+docker exec -it es01 bin/elasticsearch-reset-password -u elastic
+_Im-_TmeqKWjoaleiNa*
+curl --cacert http_ca.crt -u elastic https://localhost:9200
+
+
+# docker exec -it es01 /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node
+docker exec -it es01 /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node
+
+
+

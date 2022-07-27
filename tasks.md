@@ -2,10 +2,8 @@
 - ~~contextual fields~~
 - ~~multi app~~
 - ~~file output~~
-- story
 - splunk client
 - elk client
-- noise (non log)
 - test
 - imitate nginx log
 - imitate k8s event log
@@ -13,6 +11,8 @@
 - imitate mysql log
 - imitate kafka log
 - imitate redis log
+- noise (non log)
+- story
 - https://github.com/seanmonstar/num_cpus: Get the number of CPUs in Rust
 - https://github.com/tokio-rs/mio:  a fast, low-level I/O library for Rust focusing on non-blocking APIs and event notification for building high performance I/O apps with as little overhead as possible over the OS abstractions.
 - https://github.com/hyperium/h2: HTTP 2.0 client & server implementation for Rust.
