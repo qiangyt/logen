@@ -1,0 +1,3 @@
+###
+GET https://localhost:9200/_autoscaling/capacity
+Authorization: ApiKey NWwxUmNZSUJDcHZKVWJmTmVKZjc6bm5uZ3doWC1TLWVud1Q0LUx3dXM1QQ==
