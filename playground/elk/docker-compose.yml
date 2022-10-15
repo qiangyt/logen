@@ -1,6 +1,23 @@
 version: "2.2"
 
 services:
+  proxy:
+    build:
+      context: ../../../proxy
+    ports:
+      - 9999:9999
+
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.3.3
+    volumes:
+      - ./logstash/pipeline/:/usr/share/logstash/pipeline/
+      - ./logstash/config/:/usr/share/logstash/config/
+    command: bin/logstash -f config/demo.conf
+    ports:
+      - 5044:5044
+      - 5000:5000
+
   setup:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     volumes:
